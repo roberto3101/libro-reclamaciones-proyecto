@@ -1,0 +1,54 @@
+.bloque {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.conMarco {
+  padding: 16px;
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-superficie);
+}
+
+.cabecera {
+  margin-bottom: var(--ui-e-3);
+}
+
+.titulo {
+  margin: 0;
+  font-size: var(--ui-t-lg);
+  font-weight: 600;
+  color: var(--ui-texto);
+}
+
+.subtitulo {
+  margin: 3px 0 0;
+  font-size: var(--ui-t-sm);
+  color: var(--ui-texto-2);
+}
+
+.lienzo {
+  min-width: 0;
+}
+
+/* Ejes, marcas y leyenda del SVG. La librería los pinta con el color del
+   tema de MUI, que ya sale de los tokens, pero las líneas de rejilla y el
+   texto necesitan un empujón para no quedar demasiado marcados en oscuro. */
+.lienzo :global(.MuiChartsAxis-line),
+.lienzo :global(.MuiChartsAxis-tick) {
+  stroke: var(--ui-borde);
+}
+
+.lienzo :global(.MuiChartsAxis-tickLabel),
+.lienzo :global(.MuiChartsLegend-label) {
+  fill: var(--ui-texto-2);
+}
+
+.lienzo :global(.MuiChartsAxis-label) {
+  fill: var(--ui-texto);
+}
+
+.lienzo :global(.MuiChartsGrid-line) {
+  stroke: var(--ui-borde-sutil);
+}

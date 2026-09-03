@@ -1,0 +1,89 @@
+---
+import site from '../data/site.json';
+---
+<header class="nav">
+  <div class="shell nav-in">
+    <a href="/" class="marca">
+      <span class="sello" aria-hidden="true"></span>
+      <span class="marca-txt">{site.marcaCorta}</span>
+    </a>
+
+    <nav class="enlaces" aria-label="Principal">
+      {site.nav.map((n) => <a href={n.href}>{n.texto}</a>)}
+    </nav>
+
+    <div class="acciones">
+      <button id="tema" type="button" class="tema" aria-label="Cambiar entre modo claro y oscuro">
+        <span class="tema-txt mono">Tema</span>
+      </button>
+      <a href={site.ctaPrimario.href} class="btn nav-btn">{site.ctaPrimario.texto}</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-in {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 4vw, 48px);
+    height: 68px;
+  }
+  .marca { display: flex; align-items: center; gap: 10px; margin-right: auto; }
+  .sello {
+    width: 13px; height: 13px;
+    border: 2px solid var(--carmine);
+    border-radius: 50%;
+    flex: none;
+  }
+  .marca-txt {
+    font-family: var(--f-display);
+    font-size: 19px;
+    letter-spacing: -0.015em;
+  }
+  .enlaces { display: flex; gap: clamp(14px, 2vw, 30px); }
+  .enlaces a {
+    font-size: 14.5px;
+    color: var(--ink-2);
+    transition: color 140ms ease;
+  }
+  .enlaces a:hover { color: var(--ink); }
+
+  .acciones { display: flex; align-items: center; gap: 12px; }
+  .tema {
+    background: none;
+    border: 1px solid var(--rule-2);
+    color: var(--ink-2);
+    padding: 8px 12px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 140ms ease, border-color 140ms ease;
+  }
+  .tema:hover { color: var(--carmine); border-color: var(--carmine); }
+  .nav-btn { padding: 10px 18px; font-size: 14px; }
+
+  @media (max-width: 900px) { .enlaces { display: none; } }
+  @media (max-width: 520px) { .tema { display: none; } }
+</style>
+
+<script is:inline>
+  document.getElementById('tema')?.addEventListener('click', () => {
+    const raiz = document.documentElement;
+    const oscuroAhora =
+      raiz.getAttribute('data-tema') === 'oscuro' ||
+      (!raiz.getAttribute('data-tema') &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const siguiente = oscuroAhora ? 'claro' : 'oscuro';
+    raiz.setAttribute('data-tema', siguiente);
+    try { localStorage.setItem('tema', siguiente); } catch (e) {}
+  });
+</script>

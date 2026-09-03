@@ -1,0 +1,127 @@
+.cargando {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-e-2);
+  color: var(--ui-primario);
+}
+
+.vertical {
+  flex-direction: column;
+}
+
+.cargando[data-color='secundario']  { color: var(--ui-texto-2); }
+.cargando[data-color='error']       { color: var(--ui-peligro); }
+.cargando[data-color='info']        { color: var(--ui-info); }
+.cargando[data-color='exito']       { color: var(--ui-exito); }
+.cargando[data-color='advertencia'] { color: var(--ui-adv); }
+.cargando[data-color='gris']        { color: var(--ui-texto-3); }
+/* `blanco` es absoluto a propósito: se usa sobre botones y velos de color,
+   donde el token de texto del tema no aplica. */
+.cargando[data-color='blanco']      { color: #ffffff; }
+
+.etiqueta {
+  font-size: var(--ui-t-sm);
+  color: var(--ui-texto-2);
+}
+
+/* ── Anillo ────────────────────────────────────────────────────────── */
+
+.anillo {
+  display: block;
+  flex: none;
+  box-sizing: border-box;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: giro 640ms linear infinite;
+}
+
+@keyframes giro {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Puntos ────────────────────────────────────────────────────────── */
+
+.puntos {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.puntos i {
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  background: currentColor;
+  animation: rebote 1.05s ease-in-out infinite;
+}
+
+.puntos i:nth-child(2) { animation-delay: 0.14s; }
+.puntos i:nth-child(3) { animation-delay: 0.28s; }
+
+@keyframes rebote {
+  0%, 80%, 100% { opacity: 0.35; transform: translateY(0); }
+  40%           { opacity: 1;    transform: translateY(-0.35em); }
+}
+
+/* ── Pulso ─────────────────────────────────────────────────────────── */
+
+.pulso {
+  display: block;
+  flex: none;
+  border-radius: 50%;
+  background: currentColor;
+  animation: latir 1.15s ease-in-out infinite;
+}
+
+@keyframes latir {
+  0%, 100% { opacity: 0.28; transform: scale(0.75); }
+  50%      { opacity: 1;    transform: scale(1); }
+}
+
+/* ── Líneas ────────────────────────────────────────────────────────── */
+
+.lineas {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.lineas i {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: currentColor;
+  animation: estirar 0.95s ease-in-out infinite;
+}
+
+.lineas i:nth-child(2) { animation-delay: 0.12s; }
+.lineas i:nth-child(3) { animation-delay: 0.24s; }
+
+@keyframes estirar {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.5; }
+  50%      { transform: scaleY(1);   opacity: 1; }
+}
+
+/* ── Pantalla completa ─────────────────────────────────────────────── */
+
+.velo {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ui-z-velo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ui-velo);
+  backdrop-filter: blur(2px);
+}
+
+/* Con movimiento reducido se mantiene la señal de actividad, pero suave:
+   quitar la animación por completo dejaría un indicador estático que
+   parece un elemento roto. */
+@media (prefers-reduced-motion: reduce) {
+  .anillo { animation-duration: 2.4s; }
+  .puntos i,
+  .pulso,
+  .lineas i { animation-duration: 2.4s; }
+}

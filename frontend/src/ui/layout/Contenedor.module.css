@@ -1,0 +1,48 @@
+.contenedor {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--ui-e-4);
+  box-sizing: border-box;
+}
+
+@media (min-width: 600px) {
+  .contenedor {
+    padding-inline: var(--ui-e-6);
+  }
+}
+
+/* Anchos máximos alineados con los breakpoints del sistema. */
+.contenedor[data-ancho='xs'] { max-width: 444px; }
+.contenedor[data-ancho='sm'] { max-width: 600px; }
+.contenedor[data-ancho='md'] { max-width: 900px; }
+.contenedor[data-ancho='lg'] { max-width: 1200px; }
+.contenedor[data-ancho='xl'] { max-width: 1536px; }
+
+.sinMargenes {
+  padding-inline: 0;
+}
+
+.paginaCentrada {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* `fijo` congela el ancho en el escalón actual en lugar de dejarlo crecer. */
+.fijo {
+  max-width: 600px;
+}
+
+@media (min-width: 900px) {
+  .fijo { max-width: 900px; }
+}
+
+@media (min-width: 1200px) {
+  .fijo { max-width: 1200px; }
+}
+
+@media (min-width: 1536px) {
+  .fijo { max-width: 1536px; }
+}

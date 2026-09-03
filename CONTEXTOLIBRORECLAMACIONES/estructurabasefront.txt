@@ -1,0 +1,67 @@
+Listado de rutas de carpetas
+El n·mero de serie del volumen es D2AB-208D
+C:.
+|   estructura_src.txt
+|   main.tsx
+|   
++---api
+|       auth.ts
+|       http.ts
+|       
++---aplicacion
+|   |   Enrutador.tsx
+|   |   ProtectorRutas.tsx
+|   |   
+|   +---estado
+|   |       estadoAuth.ts
+|   |       
+|   +---ganchos
+|   |       usarAuth.ts
+|   |       
+|   +---helpers
+|   |       confirmar.ts
+|   |       errores.ts
+|   |       jwt.ts
+|   |       sesion.ts
+|   |       toast.ts
+|   |       
+|   \---layouts
+|           LayoutPrincipal.tsx
+|           LayoutPublico.tsx
+|           
++---componentes
+|   \---ui
+|           Boton.tsx
+|           Entrada.tsx
+|           ModalSesionExpirada.tsx
+|           Tarjeta.tsx
+|           
++---estilos
+|       boton.css
+|       entrada.css
+|       global.css
+|       limpieza.css
+|       tarjeta.css
+|       
++---modulos
+|   \---vendedores
+|       +---api
+|       |       vendedores.api.ts
+|       |       
+|       +---ganchos
+|       |       usarVendedores.ts
+|       |       
+|       +---modulos
+|       \---paginas
+|               PaginaVendedores.tsx
+|               
+\---paginas
+    +---acceso
+    |       PaginaLogin.tsx
+    |       
+    +---inicio
+    |       PaginaInicio.tsx
+    |       
+    \---panel
+            PaginaPanel.tsx
+            

@@ -1,0 +1,22 @@
+{
+  "eyebrow": "Conforme al D.S. 006-2014-PCM",
+  "titulo": "Tu libro de reclamaciones, en regla y sin papel.",
+  "entrada": "Todo negocio que venda a consumidores finales en Perú está obligado a tener libro de reclamaciones. El virtual reemplaza al físico y se gestiona solo: hoja con código único, QR a la vista del cliente y aviso antes de que venza el plazo.",
+  "datos": [
+    { "valor": "S/ 2 750", "etiqueta": "Multa mínima por incumplir", "nota": "0,5 UIT — UIT 2026: S/ 5 500" },
+    { "valor": "15", "etiqueta": "Días hábiles para responder", "nota": "Plazo que fija INDECOPI" },
+    { "valor": "S/ 19,90", "etiqueta": "Desde, al mes", "nota": "Sedes y reclamos ilimitados" }
+  ],
+  "hoja": {
+    "titulo": "HOJA DE RECLAMACIÓN",
+    "codigo": "RC-2026-000481",
+    "campos": [
+      { "k": "Establecimiento", "v": "Sede Miraflores" },
+      { "k": "Tipo", "v": "Reclamo" },
+      { "k": "Fecha", "v": "31/08/2026" },
+      { "k": "Vence", "v": "22/09/2026" },
+      { "k": "Estado", "v": "Recibido" }
+    ],
+    "pie": "Verificable públicamente con el código y el QR"
+  }
+}

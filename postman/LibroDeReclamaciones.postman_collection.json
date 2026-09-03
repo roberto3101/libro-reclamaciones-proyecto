@@ -1,0 +1,3444 @@
+{
+  "info": {
+    "_postman_id": "f4a16646-0c12-4d57-b8d1-dc0066c8c327",
+    "name": "LibroDeReclamaciones",
+    "description": "Coleccion completa del sistema SaaS Libro de Reclamaciones.\n\n130+ endpoints organizados por modulo funcional (25 carpetas).\n\nPasos para usar:\n1. Importar el environment (LibroDeReclamaciones - Local)\n2. Ejecutar IniciarSesion (ya tiene credenciales pre-cargadas)\n3. El token se guarda automaticamente en la variable TOKEN\n4. Probar cualquier endpoint\n\nVariables auto-guardadas: TOKEN, USUARIO_ID, TENANT_SLUG, SEDE_ID\n\nPara Bot API: configurar BOT_API_KEY con la API key generada.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "00 - SaludDelSistema",
+      "item": [
+        {
+          "name": "VerificarSaludDelSistema",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/health",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["health"]
+            },
+            "description": "Verificar el estado de salud de la API y la conexion a base de datos."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "01 - Autenticacion",
+      "item": [
+        {
+          "name": "IniciarSesion (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('TOKEN', jsonData.data.token);",
+                  "    pm.environment.set('TOKEN', jsonData.data.token);",
+                  "    console.log('Token guardado exitosamente');",
+                  "}",
+                  "if (jsonData.data && jsonData.data.user) {",
+                  "    var user = jsonData.data.user;",
+                  "    pm.collectionVariables.set('USUARIO_ID', user.id);",
+                  "    pm.environment.set('USUARIO_ID', user.id);",
+                  "    if (user.tenant_slug) {",
+                  "        pm.collectionVariables.set('TENANT_SLUG', user.tenant_slug);",
+                  "        pm.environment.set('TENANT_SLUG', user.tenant_slug);",
+                  "    }",
+                  "    if (user.sede_id) {",
+                  "        pm.collectionVariables.set('SEDE_ID', user.sede_id);",
+                  "        pm.environment.set('SEDE_ID', user.sede_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@demo.com\",\n    \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/auth/login",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "Iniciar sesion como ADMIN. Guarda automaticamente TOKEN, USUARIO_ID, TENANT_SLUG y SEDE_ID."
+          },
+          "response": []
+        },
+        {
+          "name": "IniciarSesion (Soporte)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('TOKEN', jsonData.data.token);",
+                  "    pm.environment.set('TOKEN', jsonData.data.token);",
+                  "    console.log('Token guardado exitosamente');",
+                  "}",
+                  "if (jsonData.data && jsonData.data.user) {",
+                  "    var user = jsonData.data.user;",
+                  "    pm.collectionVariables.set('USUARIO_ID', user.id);",
+                  "    pm.environment.set('USUARIO_ID', user.id);",
+                  "    if (user.tenant_slug) {",
+                  "        pm.collectionVariables.set('TENANT_SLUG', user.tenant_slug);",
+                  "        pm.environment.set('TENANT_SLUG', user.tenant_slug);",
+                  "    }",
+                  "    if (user.sede_id) {",
+                  "        pm.collectionVariables.set('SEDE_ID', user.sede_id);",
+                  "        pm.environment.set('SEDE_ID', user.sede_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"jose0686534@gmail.com\",\n    \"password\": \"rocos2alar31\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/auth/login",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "Iniciar sesion como SOPORTE. Guarda automaticamente TOKEN, USUARIO_ID, TENANT_SLUG y SEDE_ID."
+          },
+          "response": []
+        },
+        {
+          "name": "CerrarSesion",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/auth/logout",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            },
+            "description": "Cerrar la sesion del usuario autenticado."
+          },
+          "response": []
+        },
+        {
+          "name": "SeleccionarTenant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('TOKEN', jsonData.data.token);",
+                  "    pm.environment.set('TOKEN', jsonData.data.token);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.user) {",
+                  "    var user = jsonData.data.user;",
+                  "    if (user.tenant_slug) {",
+                  "        pm.collectionVariables.set('TENANT_SLUG', user.tenant_slug);",
+                  "        pm.environment.set('TENANT_SLUG', user.tenant_slug);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@demo.com\",\n    \"password\": \"admin123\",\n    \"tenant_id\": \"a0000000-0000-0000-0000-000000000001\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/auth/seleccionar-tenant",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "auth", "seleccionar-tenant"]
+            },
+            "description": "Seleccionar empresa cuando el usuario pertenece a multiples tenants. Retorna JWT con el tenant seleccionado. Requiere rate limit: 10/min."
+          },
+          "response": []
+        },
+        {
+          "name": "CambiarEmpresa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('TOKEN', jsonData.data.token);",
+                  "    pm.environment.set('TOKEN', jsonData.data.token);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.user) {",
+                  "    var user = jsonData.data.user;",
+                  "    if (user.tenant_slug) {",
+                  "        pm.collectionVariables.set('TENANT_SLUG', user.tenant_slug);",
+                  "        pm.environment.set('TENANT_SLUG', user.tenant_slug);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"tenant_id\": \"a0000000-0000-0000-0000-000000000002\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/auth/cambiar-empresa",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "auth", "cambiar-empresa"]
+            },
+            "description": "Cambiar al contexto de otra empresa a la que pertenece el usuario autenticado. Requiere JWT valido. Retorna nuevo JWT con el nuevo tenant."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Onboarding",
+      "item": [
+        {
+          "name": "RegistrarNuevoTenant",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"razon_social\": \"Mi Empresa SAC\",\n    \"ruc\": \"20123456789\",\n    \"email\": \"admin@miempresa.com\",\n    \"password\": \"contrasenya_segura_123\",\n    \"nombre_admin\": \"Juan Perez\",\n    \"telefono\": \"999888777\",\n    \"dias_trial\": 30\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/onboarding",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "onboarding"]
+            },
+            "description": "Registrar un nuevo tenant (empresa) con su administrador inicial."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Reclamos",
+      "item": [
+        {
+          "name": "ListarReclamos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos?page=1&per_page=20",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "per_page", "value": "20" },
+                { "key": "sede_id", "value": "{{SEDE_ID}}", "disabled": true },
+                { "key": "periodo", "value": "hoy", "disabled": true },
+                { "key": "fecha_desde", "value": "2024-01-01", "disabled": true },
+                { "key": "fecha_hasta", "value": "2024-12-31", "disabled": true },
+                { "key": "estado", "value": "PENDIENTE", "disabled": true }
+              ]
+            },
+            "description": "Obtener todos los reclamos con paginacion y filtros opcionales. Filtros: sede_id, periodo (hoy/semana/mes/anio), fecha_desde, fecha_hasta, estado."
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerReclamoEspecifico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/{{RECLAMO_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "{{RECLAMO_ID}}"]
+            },
+            "description": "Obtener los detalles completos de un reclamo especifico por su ID."
+          },
+          "response": []
+        },
+        {
+          "name": "CambiarEstadoDeReclamo",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"estado\": \"EN_PROCESO\",\n    \"comentario\": \"Se inicio la revision del caso\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/{{RECLAMO_ID}}/estado",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "{{RECLAMO_ID}}", "estado"]
+            },
+            "description": "Actualizar el estado de un reclamo. Estados: PENDIENTE, EN_PROCESO, RESUELTO, CERRADO, RECHAZADO."
+          },
+          "response": []
+        },
+        {
+          "name": "AsignarReclamoAUsuario",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"admin_id\": \"{{USUARIO_ID}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/{{RECLAMO_ID}}/asignar",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "{{RECLAMO_ID}}", "asignar"]
+            },
+            "description": "Asignar un reclamo a un usuario administrador o soporte."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - RespuestasDeReclamos",
+      "item": [
+        {
+          "name": "ObtenerRespuestasDeReclamo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/{{RECLAMO_ID}}/respuestas",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "{{RECLAMO_ID}}", "respuestas"]
+            },
+            "description": "Obtener todas las respuestas oficiales de la empresa para un reclamo."
+          },
+          "response": []
+        },
+        {
+          "name": "CrearRespuestaOficial",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"respuesta_empresa\": \"Estimado cliente, hemos verificado su reclamo y procederemos con el cambio del equipo.\",\n    \"accion_tomada\": \"Se coordino con almacen el envio de un equipo de reemplazo.\",\n    \"compensacion_ofrecida\": \"Cambio de equipo sin costo adicional.\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/{{RECLAMO_ID}}/respuestas",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "{{RECLAMO_ID}}", "respuestas"]
+            },
+            "description": "Crear respuesta oficial de la empresa al reclamo."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 - MensajesDeReclamos",
+      "item": [
+        {
+          "name": "ObtenerMensajesDeReclamo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/{{RECLAMO_ID}}/mensajes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "{{RECLAMO_ID}}", "mensajes"]
+            },
+            "description": "Obtener todos los mensajes de comunicacion entre empresa y cliente sobre un reclamo."
+          },
+          "response": []
+        },
+        {
+          "name": "EnviarMensajeDeSeguimiento",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"mensaje\": \"Estimado cliente, le informamos que su reclamo esta siendo procesado.\",\n    \"tipo_mensaje\": \"EMPRESA\",\n    \"archivo_url\": \"\",\n    \"archivo_nombre\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/{{RECLAMO_ID}}/mensajes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "{{RECLAMO_ID}}", "mensajes"]
+            },
+            "description": "Enviar un mensaje de seguimiento de la empresa al cliente."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06 - ExportarPDF",
+      "item": [
+        {
+          "name": "ExportarPDFSinFiltros",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/pdf",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "pdf"]
+            },
+            "description": "Exportar todos los reclamos a PDF sin filtros."
+          },
+          "response": []
+        },
+        {
+          "name": "ExportarPDFHoy",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/pdf?periodo=hoy",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "pdf"],
+              "query": [{ "key": "periodo", "value": "hoy" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ExportarPDFSemana",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/pdf?periodo=semana",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "pdf"],
+              "query": [{ "key": "periodo", "value": "semana" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ExportarPDFMes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/pdf?periodo=mes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "pdf"],
+              "query": [{ "key": "periodo", "value": "mes" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ExportarPDFAnio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/pdf?periodo=anio",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "pdf"],
+              "query": [{ "key": "periodo", "value": "anio" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ExportarPDFFechasPersonalizadas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/pdf?fecha_desde=2024-01-01&fecha_hasta=2024-12-31",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "pdf"],
+              "query": [
+                { "key": "fecha_desde", "value": "2024-01-01" },
+                { "key": "fecha_hasta", "value": "2024-12-31" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ExportarPDFPorSede",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/pdf?sede_id={{SEDE_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "pdf"],
+              "query": [{ "key": "sede_id", "value": "{{SEDE_ID}}" }]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "07 - ExportarExcel",
+      "item": [
+        {
+          "name": "ExportarExcelSinFiltros",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/excel",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "excel"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ExportarExcelHoy",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/excel?periodo=hoy",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "excel"],
+              "query": [{ "key": "periodo", "value": "hoy" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ExportarExcelSemana",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/excel?periodo=semana",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "excel"],
+              "query": [{ "key": "periodo", "value": "semana" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ExportarExcelMes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/excel?periodo=mes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "excel"],
+              "query": [{ "key": "periodo", "value": "mes" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ExportarExcelAnio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/reclamos/exportar/excel?periodo=anio",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "reclamos", "exportar", "excel"],
+              "query": [{ "key": "periodo", "value": "anio" }]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "08 - Sedes",
+      "item": [
+        {
+          "name": "ListarSedes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/sedes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "sedes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerSedeEspecifica",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/sedes/{{SEDE_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "sedes", "{{SEDE_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CrearSede",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Sede San Isidro\",\n    \"slug\": \"sede-san-isidro\",\n    \"codigo_sede\": \"SSI-001\",\n    \"direccion\": \"Av. Javier Prado Este 1234\",\n    \"departamento\": \"Lima\",\n    \"provincia\": \"Lima\",\n    \"distrito\": \"San Isidro\",\n    \"referencia\": \"Frente al parque El Olivar\",\n    \"telefono\": \"+51938192665\",\n    \"email\": \"sede@miempresa.com\",\n    \"responsable_nombre\": \"Maria Garcia\",\n    \"responsable_cargo\": \"Gerente de Sede\",\n    \"horario_atencion\": [{\"dia\": \"Lunes\", \"inicio\": \"08:00\", \"fin\": \"18:00\"}],\n    \"latitud\": -12.0977,\n    \"longitud\": -77.0365,\n    \"es_principal\": false\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/sedes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "sedes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarSede",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Sede San Isidro Actualizada\",\n    \"slug\": \"sede-san-isidro\",\n    \"codigo_sede\": \"SSI-001\",\n    \"direccion\": \"Av. Javier Prado Este 1234, Piso 2\",\n    \"departamento\": \"Lima\",\n    \"provincia\": \"Lima\",\n    \"distrito\": \"San Isidro\",\n    \"referencia\": \"Frente al parque El Olivar\",\n    \"telefono\": \"+51938192665\",\n    \"email\": \"sede@miempresa.com\",\n    \"responsable_nombre\": \"Maria Garcia\",\n    \"responsable_cargo\": \"Gerente de Sede\",\n    \"horario_atencion\": [{\"dia\": \"Lunes\", \"inicio\": \"09:00\", \"fin\": \"19:00\"}],\n    \"latitud\": -12.0977,\n    \"longitud\": -77.0365,\n    \"es_principal\": false\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/sedes/{{SEDE_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "sedes", "{{SEDE_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DesactivarSede",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/sedes/{{SEDE_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "sedes", "{{SEDE_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ReactivarSede",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/sedes/{{SEDE_ID}}/reactivar",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "sedes", "{{SEDE_ID}}", "reactivar"]
+            },
+            "description": "Reactivar una sede previamente desactivada."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "09 - Usuarios",
+      "item": [
+        {
+          "name": "ListarUsuarios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/usuarios",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "usuarios"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerUsuarioEspecifico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/usuarios/{{USUARIO_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "usuarios", "{{USUARIO_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CrearUsuario",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"soporte@miempresa.com\",\n    \"nombre_completo\": \"Carlos Lopez\",\n    \"password\": \"contrasenya_segura_123\",\n    \"rol\": \"SOPORTE\",\n    \"sede_id\": \"{{SEDE_ID}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/usuarios",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "usuarios"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarUsuario",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_completo\": \"Carlos Lopez Actualizado\",\n    \"rol\": \"SOPORTE\",\n    \"sede_id\": \"{{SEDE_ID}}\",\n    \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/usuarios/{{USUARIO_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "usuarios", "{{USUARIO_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CambiarContraseniaPropia",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"current_password\": \"rocos2alar31\",\n    \"new_password\": \"nueva_contrasenya_segura\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/usuarios/password",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "usuarios", "password"]
+            },
+            "description": "Cambiar la contrasenia del usuario autenticado actualmente."
+          },
+          "response": []
+        },
+        {
+          "name": "ResetearContraseniaDeUsuario",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"password\": \"nueva_contrasenya_123\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/usuarios/{{USUARIO_ID}}/password",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "usuarios", "{{USUARIO_ID}}", "password"]
+            },
+            "description": "Admin resetea la contrasenia de otro usuario."
+          },
+          "response": []
+        },
+        {
+          "name": "DesactivarUsuario",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/usuarios/{{USUARIO_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "usuarios", "{{USUARIO_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ReactivarUsuario",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/usuarios/{{USUARIO_ID}}/reactivar",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "usuarios", "{{USUARIO_ID}}", "reactivar"]
+            },
+            "description": "Reactivar un usuario previamente desactivado."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "10 - Roles y Permisos",
+      "item": [
+        {
+          "name": "ObtenerMisPermisos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/roles/mis-permisos",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "roles", "mis-permisos"]
+            },
+            "description": "Obtener los permisos del usuario autenticado actualmente."
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerDefinicionDeRoles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/roles/definicion",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "roles", "definicion"]
+            },
+            "description": "Obtener la definicion de todos los modulos y acciones disponibles para configurar permisos."
+          },
+          "response": []
+        },
+        {
+          "name": "ListarRoles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/roles",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "roles"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerRolEspecifico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/roles/{{ROL_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "roles", "{{ROL_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CrearRol",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Supervisor\",\n    \"descripcion\": \"Rol de supervisor con acceso a reportes\",\n    \"color\": \"#3B82F6\",\n    \"permisos\": {\n        \"reclamos\": { \"ver\": true, \"cambiar_estado\": true, \"asignar\": true, \"exportar\": true },\n        \"dashboard\": { \"ver\": true },\n        \"usuarios\": { \"ver\": true },\n        \"sedes\": { \"ver\": true }\n    },\n    \"es_admin\": false\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/roles",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "roles"]
+            },
+            "description": "Crear un nuevo rol con permisos personalizados."
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarRol",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Supervisor Actualizado\",\n    \"descripcion\": \"Rol de supervisor con permisos ampliados\",\n    \"color\": \"#10B981\",\n    \"permisos\": {\n        \"reclamos\": { \"ver\": true, \"cambiar_estado\": true, \"asignar\": true, \"exportar\": true },\n        \"dashboard\": { \"ver\": true },\n        \"usuarios\": { \"ver\": true, \"crear\": true },\n        \"sedes\": { \"ver\": true }\n    },\n    \"es_admin\": false\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/roles/{{ROL_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "roles", "{{ROL_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "EliminarRol",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/roles/{{ROL_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "roles", "{{ROL_ID}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "11 - Tenant (Empresa)",
+      "item": [
+        {
+          "name": "ObtenerDatosDeTenant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/tenant",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "tenant"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarDatosDeTenant",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"razon_social\": \"Mi Empresa SAC\",\n    \"ruc\": \"20123456789\",\n    \"nombre_comercial\": \"Mi Empresa\",\n    \"direccion_legal\": \"Peru - Los Olivos Urb Parque Naranjal\",\n    \"departamento\": \"Lima\",\n    \"provincia\": \"Lima\",\n    \"distrito\": \"Los Olivos\",\n    \"telefono\": \"+51938192665\",\n    \"email_contacto\": \"contacto@miempresa.com\",\n    \"sitio_web\": \"https://miempresa.com\",\n    \"color_primario\": \"#10cb93\",\n    \"plazo_respuesta_dias\": 30,\n    \"notificar_whatsapp\": true,\n    \"notificar_email\": true,\n    \"logo_url\": \"\",\n    \"mensaje_confirmacion\": \"Gracias por registrar su reclamo.\",\n    \"version\": 1\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/tenant",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "tenant"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "12 - Planes y Suscripcion",
+      "item": [
+        {
+          "name": "ListarPlanesActivos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/planes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "planes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerPlanEspecifico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/planes/{{PLAN_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "planes", "{{PLAN_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerSuscripcionActiva",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/suscripcion",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "suscripcion"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerUsoDelTenant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/suscripcion/uso",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "suscripcion", "uso"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerHistorialDeSuscripciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/suscripcion/historial",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "suscripcion", "historial"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CambiarPlan",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plan_id\": \"{{PLAN_ID}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/suscripcion/cambiar-plan",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "suscripcion", "cambiar-plan"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "13 - AdminPlanes",
+      "item": [
+        {
+          "name": "ListarTodosLosPlanes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/admin/planes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "admin", "planes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CrearPlan",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"codigo\": \"PRO\",\n    \"nombre\": \"Plan Profesional\",\n    \"descripcion\": \"Plan ideal para empresas medianas\",\n    \"precio_mensual\": 99.90,\n    \"precio_anual\": 999.00,\n    \"precio_sede_extra\": 29.90,\n    \"precio_usuario_extra\": 19.90,\n    \"max_sedes\": 5,\n    \"max_usuarios\": 10,\n    \"max_reclamos_mes\": 500,\n    \"max_chatbots\": 3,\n    \"max_canales_whatsapp\": 2,\n    \"permite_chatbot\": true,\n    \"permite_whatsapp\": true,\n    \"permite_email\": true,\n    \"permite_reportes_pdf\": true,\n    \"permite_exportar_excel\": true,\n    \"permite_api\": true,\n    \"permite_marca_blanca\": false,\n    \"permite_multi_idioma\": false,\n    \"permite_asistente_ia\": true,\n    \"permite_atencion_vivo\": true,\n    \"max_storage_mb\": 5120,\n    \"orden\": 2,\n    \"activo\": true,\n    \"destacado\": true\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/admin/planes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "admin", "planes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarPlan",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Plan Profesional Actualizado\",\n    \"precio_mensual\": 109.90,\n    \"max_sedes\": 7,\n    \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/admin/planes/{{PLAN_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "admin", "planes", "{{PLAN_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ActivarPlan",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/admin/planes/{{PLAN_ID}}/activar",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "admin", "planes", "{{PLAN_ID}}", "activar"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DesactivarPlan",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/admin/planes/{{PLAN_ID}}/desactivar",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "admin", "planes", "{{PLAN_ID}}", "desactivar"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "14 - Dashboard",
+      "item": [
+        {
+          "name": "ObtenerUsoDashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/dashboard/uso",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "dashboard", "uso"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerMetricas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/dashboard/metricas",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "dashboard", "metricas"],
+              "query": [
+                { "key": "sede_id", "value": "{{SEDE_ID}}", "disabled": true }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "15 - Chatbots",
+      "item": [
+        {
+          "name": "ObtenerProveedoresIA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots/ai-providers",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots", "ai-providers"]
+            },
+            "description": "Obtener los proveedores de IA disponibles para configurar chatbots."
+          },
+          "response": []
+        },
+        {
+          "name": "ListarChatbots",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerChatbot",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots/{{CHATBOT_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots", "{{CHATBOT_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CrearChatbot",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Asistente de Reclamos\",\n    \"tipo\": \"ASISTENTE_IA\",\n    \"descripcion\": \"Chatbot para atender reclamos automaticamente\",\n    \"modelo_ia\": \"gpt-4\",\n    \"prompt_sistema\": \"Eres un asistente de atencion al cliente especializado en resolver reclamos.\",\n    \"temperatura\": 0.7,\n    \"max_tokens_respuesta\": 1024\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarChatbot",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Asistente de Reclamos v2\",\n    \"tipo\": \"ASISTENTE_IA\",\n    \"descripcion\": \"Chatbot mejorado\",\n    \"activo\": true,\n    \"modelo_ia\": \"gpt-4\",\n    \"prompt_sistema\": \"Eres un asistente experto.\",\n    \"temperatura\": 0.5,\n    \"max_tokens_respuesta\": 2048,\n    \"puede_leer_reclamos\": true,\n    \"puede_responder\": true,\n    \"puede_cambiar_estado\": false,\n    \"puede_enviar_mensajes\": true,\n    \"puede_leer_metricas\": true,\n    \"requiere_aprobacion\": true\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots/{{CHATBOT_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots", "{{CHATBOT_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "EliminarChatbot",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots/{{CHATBOT_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots", "{{CHATBOT_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DesactivarChatbot",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots/{{CHATBOT_ID}}/deactivate",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots", "{{CHATBOT_ID}}", "deactivate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ReactivarChatbot",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots/{{CHATBOT_ID}}/reactivate",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots", "{{CHATBOT_ID}}", "reactivate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "VerificarSaludChatbot",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots/{{CHATBOT_ID}}/health",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots", "{{CHATBOT_ID}}", "health"]
+            },
+            "description": "Verificar que el chatbot puede conectarse a su proveedor de IA."
+          },
+          "response": []
+        },
+        {
+          "name": "HealthStreamChatbot (SSE)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "text/event-stream" }
+            ],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots/{{CHATBOT_ID}}/health/stream",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots", "{{CHATBOT_ID}}", "health", "stream"]
+            },
+            "description": "Stream SSE de salud del chatbot en tiempo real. Envia un health check cada 30 segundos. Respuesta: data: {online, checks[], errores[], checked_at}."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "16 - LlavesAPIChatbots",
+      "item": [
+        {
+          "name": "ObtenerLlavesAPI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots/{{CHATBOT_ID}}/api-keys",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots", "{{CHATBOT_ID}}", "api-keys"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GenerarLlaveAPI",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Llave de Produccion\",\n    \"entorno\": \"LIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots/{{CHATBOT_ID}}/api-keys",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots", "{{CHATBOT_ID}}", "api-keys"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RevocarLlaveAPI",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/chatbots/{{CHATBOT_ID}}/api-keys/{{API_KEY_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "chatbots", "{{CHATBOT_ID}}", "api-keys", "{{API_KEY_ID}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "17 - AsistenteIA",
+      "item": [
+        {
+          "name": "EnviarMensajeAlAsistente",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"message\": \"Cuantos reclamos pendientes tenemos esta semana?\",\n    \"conversacion_id\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/assistant/chat",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "assistant", "chat"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarConversaciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/assistant/conversations",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "assistant", "conversations"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerMensajesDeConversacion",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/assistant/conversations/{{CONVERSACION_ID}}/messages",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "assistant", "conversations", "{{CONVERSACION_ID}}", "messages"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "EliminarConversacion",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/assistant/conversations/{{CONVERSACION_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "assistant", "conversations", "{{CONVERSACION_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "VerificarSaludAsistente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/assistant/health",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "assistant", "health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerProveedoresDisponibles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/assistant/providers",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "assistant", "providers"]
+            },
+            "description": "Obtener los proveedores de IA disponibles para el asistente."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "18 - SolicitudesAsesorEnVivo",
+      "item": [
+        {
+          "name": "ListarSolicitudesAbiertas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ContarPendientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/pendientes/count",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "pendientes", "count"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "MisSolicitudesAsignadas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/mis-solicitudes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "mis-solicitudes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FiltrarPorEstadoPendiente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/estado/PENDIENTE",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "estado", "PENDIENTE"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FiltrarPorEstadoResuelto",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/estado/RESUELTO",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "estado", "RESUELTO"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerDetalleSolicitud",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/{{SOLICITUD_ASESOR_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "{{SOLICITUD_ASESOR_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CrearSolicitud",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Juan Perez\",\n    \"telefono\": \"+51987654321\",\n    \"motivo\": \"Necesito ayuda con mi reclamo sobre un producto defectuoso\",\n    \"canal_origen\": \"WHATSAPP\",\n    \"prioridad\": \"NORMAL\",\n    \"resumen_conversacion\": \"Cliente contacto por WhatsApp indicando que recibio un producto daniado.\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AsignarAsesor",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"asignado_a\": \"{{USUARIO_ID}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/{{SOLICITUD_ASESOR_ID}}/asignar",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "{{SOLICITUD_ASESOR_ID}}", "asignar"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TomarSolicitud",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/{{SOLICITUD_ASESOR_ID}}/tomar",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "{{SOLICITUD_ASESOR_ID}}", "tomar"]
+            },
+            "description": "El usuario autenticado toma la solicitud para atenderla."
+          },
+          "response": []
+        },
+        {
+          "name": "ResolverSolicitud",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nota_interna\": \"Se resolvio el caso del cliente satisfactoriamente.\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/{{SOLICITUD_ASESOR_ID}}/resolver",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "{{SOLICITUD_ASESOR_ID}}", "resolver"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CancelarSolicitud",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nota_interna\": \"Cliente no respondio despues de varios intentos.\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/{{SOLICITUD_ASESOR_ID}}/cancelar",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "{{SOLICITUD_ASESOR_ID}}", "cancelar"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CambiarPrioridad",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"prioridad\": \"ALTA\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/{{SOLICITUD_ASESOR_ID}}/prioridad",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "{{SOLICITUD_ASESOR_ID}}", "prioridad"]
+            },
+            "description": "Cambiar prioridad: BAJA, NORMAL, ALTA, URGENTE."
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarNotaInterna",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nota_interna\": \"Cliente muy molesto, tratar con cuidado.\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/{{SOLICITUD_ASESOR_ID}}/nota",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "{{SOLICITUD_ASESOR_ID}}", "nota"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerMensajesChat",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/{{SOLICITUD_ASESOR_ID}}/mensajes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "{{SOLICITUD_ASESOR_ID}}", "mensajes"]
+            },
+            "description": "Obtener mensajes del chat en vivo de la solicitud."
+          },
+          "response": []
+        },
+        {
+          "name": "EnviarMensajeChat",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"mensaje\": \"Hola, en que puedo ayudarle?\",\n    \"tipo_mensaje\": \"EMPRESA\",\n    \"archivo_url\": \"\",\n    \"archivo_nombre\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/{{SOLICITUD_ASESOR_ID}}/mensajes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "{{SOLICITUD_ASESOR_ID}}", "mensajes"]
+            },
+            "description": "Enviar mensaje en el chat en vivo de atencion."
+          },
+          "response": []
+        },
+        {
+          "name": "ListarPaginado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/solicitudes-asesor/paginado?page=1&per_page=20",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "solicitudes-asesor", "paginado"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "per_page", "value": "20" },
+                { "key": "estado", "value": "PENDIENTE", "disabled": true },
+                { "key": "prioridad", "value": "ALTA", "disabled": true }
+              ]
+            },
+            "description": "Listar solicitudes de asesor con paginacion completa. A diferencia de ListarSolicitudesAbiertas, incluye todas y soporta filtros avanzados."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "19 - Notificaciones",
+      "item": [
+        {
+          "name": "ListarNotificaciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/notificaciones?limite=30",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "notificaciones"],
+              "query": [
+                { "key": "limite", "value": "30" },
+                { "key": "cursor", "value": "", "disabled": true }
+              ]
+            },
+            "description": "Listar notificaciones del usuario. Soporta paginacion con cursor."
+          },
+          "response": []
+        },
+        {
+          "name": "ContarSinLeer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/notificaciones/sin-leer/total",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "notificaciones", "sin-leer", "total"]
+            },
+            "description": "Obtener el total de notificaciones sin leer."
+          },
+          "response": []
+        },
+        {
+          "name": "MarcarComoLeida",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/notificaciones/{{NOTIFICACION_ID}}/leida",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "notificaciones", "{{NOTIFICACION_ID}}", "leida"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "MarcarTodasComoLeidas",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/notificaciones/marcar-todas-leidas",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "notificaciones", "marcar-todas-leidas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerDefinicionTipos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/notificaciones/definicion-tipos",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "notificaciones", "definicion-tipos"]
+            },
+            "description": "Obtener todos los tipos de notificacion disponibles y sus descripciones."
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerConfiguracionPorRol",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/notificaciones/configuracion/rol/{{ROL_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "notificaciones", "configuracion", "rol", "{{ROL_ID}}"]
+            },
+            "description": "Obtener la configuracion de notificaciones para un rol especifico. Requiere permiso roles.ver."
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarConfiguracionPorRol",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"configuraciones\": [\n        {\n            \"tipo_notificacion\": \"SOLICITUD_ATENCION_NUEVA\",\n            \"habilitado\": true\n        },\n        {\n            \"tipo_notificacion\": \"SOLICITUD_ATENCION_SIN_ATENDER\",\n            \"habilitado\": true\n        },\n        {\n            \"tipo_notificacion\": \"MENSAJE_ATENCION_CLIENTE_RECIBIDO\",\n            \"habilitado\": true\n        },\n        {\n            \"tipo_notificacion\": \"RECLAMO_NUEVO_REGISTRADO\",\n            \"habilitado\": true\n        },\n        {\n            \"tipo_notificacion\": \"RECLAMO_MENSAJE_CLIENTE_RECIBIDO\",\n            \"habilitado\": true\n        },\n        {\n            \"tipo_notificacion\": \"RECLAMO_ATENDIDO_POR_USUARIO\",\n            \"habilitado\": false\n        },\n        {\n            \"tipo_notificacion\": \"RECLAMO_ESTADO_CAMBIADO\",\n            \"habilitado\": true\n        },\n        {\n            \"tipo_notificacion\": \"RECLAMO_RESUELTO_CON_RESPUESTA\",\n            \"habilitado\": true\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/notificaciones/configuracion/rol/{{ROL_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "notificaciones", "configuracion", "rol", "{{ROL_ID}}"]
+            },
+            "description": "Actualizar la configuracion de notificaciones para un rol. Requiere permiso roles.editar."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "20 - CanalesWhatsApp",
+      "item": [
+        {
+          "name": "ListarCanalesWhatsApp",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/canales/whatsapp",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "canales", "whatsapp"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerCanalWhatsApp",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/canales/whatsapp/{{CANAL_WHATSAPP_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "canales", "whatsapp", "{{CANAL_WHATSAPP_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CrearCanalWhatsApp",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"phone_number_id\": \"123456789012345\",\n    \"display_phone\": \"+51987654321\",\n    \"access_token\": \"EAAxxxxxxxxxxxxxxx\",\n    \"verify_token\": \"mi_token_de_verificacion\",\n    \"nombre_canal\": \"WhatsApp Principal\",\n    \"chatbot_id\": null\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/canales/whatsapp",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "canales", "whatsapp"]
+            },
+            "description": "Crear un canal de WhatsApp Business. Requiere phone_number_id y access_token de Meta."
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarCanalWhatsApp",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"phone_number_id\": \"123456789012345\",\n    \"display_phone\": \"+51987654321\",\n    \"access_token\": \"EAAxxxxxxxxxxxxxxx\",\n    \"verify_token\": \"mi_token_de_verificacion\",\n    \"nombre_canal\": \"WhatsApp Principal Actualizado\",\n    \"chatbot_id\": null,\n    \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/canales/whatsapp/{{CANAL_WHATSAPP_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "canales", "whatsapp", "{{CANAL_WHATSAPP_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DesactivarCanalWhatsApp",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/canales/whatsapp/{{CANAL_WHATSAPP_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "canales", "whatsapp", "{{CANAL_WHATSAPP_ID}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "21 - PlantillasEmail",
+      "item": [
+        {
+          "name": "ObtenerDefinicionPlantillas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/plantillas-email/definicion",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "plantillas-email", "definicion"]
+            },
+            "description": "Obtener la definicion de todas las plantillas de email disponibles y sus variables."
+          },
+          "response": []
+        },
+        {
+          "name": "ListarPlantillas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/plantillas-email",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "plantillas-email"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerPlantillaEspecifica",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/plantillas-email/{{PLANTILLA_EMAIL_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "plantillas-email", "{{PLANTILLA_EMAIL_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarPlantilla",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"asunto\": \"Su reclamo #{{codigo}} ha sido registrado\",\n    \"saludo\": \"Estimado/a {{nombre}},\",\n    \"cuerpo_principal\": \"Le informamos que su reclamo ha sido registrado exitosamente en nuestro sistema. Nuestro equipo revisara su caso y le daremos respuesta dentro del plazo establecido.\",\n    \"texto_pie\": \"Si tiene alguna consulta adicional, no dude en contactarnos.\",\n    \"texto_boton\": \"Ver mi reclamo\",\n    \"activa\": true\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/plantillas-email/{{PLANTILLA_EMAIL_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "plantillas-email", "{{PLANTILLA_EMAIL_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RestaurarPlantillaPorDefecto",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/plantillas-email/{{PLANTILLA_EMAIL_ID}}/restaurar",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "plantillas-email", "{{PLANTILLA_EMAIL_ID}}", "restaurar"]
+            },
+            "description": "Restaurar una plantilla de email a sus valores por defecto."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "22 - LibroPublico (Sin Auth)",
+      "item": [
+        {
+          "name": "ObtenerInfoTenant",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/libro/{{TENANT_SLUG}}/tenant",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["libro", "{{TENANT_SLUG}}", "tenant"]
+            },
+            "description": "Obtener info publica del tenant para el formulario de reclamos. Rate limit: 30/min."
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerSedesPublicas",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/libro/{{TENANT_SLUG}}/sedes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["libro", "{{TENANT_SLUG}}", "sedes"]
+            },
+            "description": "Obtener sedes disponibles para el libro publico. Rate limit: 30/min."
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarReclamoPublico",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"tipo_solicitud\": \"RECLAMO\",\n    \"nombre_completo\": \"Maria Gonzalez\",\n    \"tipo_documento\": \"DNI\",\n    \"numero_documento\": \"12345678\",\n    \"telefono\": \"+51987654321\",\n    \"email\": \"maria@gmail.com\",\n    \"domicilio\": \"Av. Los Pinos 456\",\n    \"departamento\": \"Lima\",\n    \"provincia\": \"Lima\",\n    \"distrito\": \"Miraflores\",\n    \"menor_de_edad\": false,\n    \"tipo_bien\": \"PRODUCTO\",\n    \"monto_reclamado\": 150.00,\n    \"descripcion_bien\": \"Laptop HP modelo X\",\n    \"numero_pedido\": \"PED-2024-001\",\n    \"fecha_incidente\": \"2024-03-10\",\n    \"detalle_reclamo\": \"El producto llego con la pantalla danada y no enciende correctamente.\",\n    \"pedido_consumidor\": \"Solicito el cambio del producto o la devolucion del dinero.\",\n    \"firma_digital\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/libro/{{TENANT_SLUG}}/reclamos",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["libro", "{{TENANT_SLUG}}", "reclamos"]
+            },
+            "description": "Registrar un reclamo desde el formulario publico. Rate limit: 3/min."
+          },
+          "response": []
+        },
+        {
+          "name": "SeguimientoDeReclamo",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/libro/{{TENANT_SLUG}}/seguimiento/{{CODIGO_SEGUIMIENTO}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["libro", "{{TENANT_SLUG}}", "seguimiento", "{{CODIGO_SEGUIMIENTO}}"]
+            },
+            "description": "Consultar estado de un reclamo por codigo de seguimiento. Rate limit: 30/min."
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerMensajesPublicos",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/libro/{{TENANT_SLUG}}/seguimiento/{{CODIGO_SEGUIMIENTO}}/mensajes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["libro", "{{TENANT_SLUG}}", "seguimiento", "{{CODIGO_SEGUIMIENTO}}", "mensajes"]
+            },
+            "description": "Obtener mensajes del reclamo desde el seguimiento publico. Rate limit: 30/min."
+          },
+          "response": []
+        },
+        {
+          "name": "EnviarMensajePublico",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"mensaje\": \"Quisiera saber el estado actualizado de mi reclamo.\",\n    \"archivo_url\": \"\",\n    \"archivo_nombre\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/libro/{{TENANT_SLUG}}/seguimiento/{{CODIGO_SEGUIMIENTO}}/mensajes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["libro", "{{TENANT_SLUG}}", "seguimiento", "{{CODIGO_SEGUIMIENTO}}", "mensajes"]
+            },
+            "description": "Enviar mensaje desde seguimiento publico. Rate limit: 5/min."
+          },
+          "response": []
+        },
+        {
+          "name": "ConsultarDocumento",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/libro/{{TENANT_SLUG}}/consulta-documento/12345678",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["libro", "{{TENANT_SLUG}}", "consulta-documento", "12345678"]
+            },
+            "description": "Verificar numero de documento de identidad. Rate limit: 30/hora."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "23 - WebhookWhatsApp",
+      "item": [
+        {
+          "name": "VerificarWebhook (Meta Verification)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/webhook/whatsapp?hub.mode=subscribe&hub.verify_token=mi_token_de_verificacion&hub.challenge=challenge_string_123",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["webhook", "whatsapp"],
+              "query": [
+                { "key": "hub.mode", "value": "subscribe" },
+                { "key": "hub.verify_token", "value": "mi_token_de_verificacion" },
+                { "key": "hub.challenge", "value": "challenge_string_123" }
+              ]
+            },
+            "description": "Verificacion de webhook de Meta/WhatsApp. Meta envia este GET para validar el endpoint. hub.verify_token debe coincidir con el configurado en el canal WhatsApp. Retorna hub.challenge si es valido."
+          },
+          "response": []
+        },
+        {
+          "name": "RecibirMensajeWhatsApp",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"object\": \"whatsapp_business_account\",\n    \"entry\": [\n        {\n            \"id\": \"WHATSAPP_BUSINESS_ACCOUNT_ID\",\n            \"changes\": [\n                {\n                    \"value\": {\n                        \"messaging_product\": \"whatsapp\",\n                        \"metadata\": {\n                            \"display_phone_number\": \"+51987654321\",\n                            \"phone_number_id\": \"123456789012345\"\n                        },\n                        \"messages\": [\n                            {\n                                \"from\": \"51999888777\",\n                                \"id\": \"wamid.ABCxyz123\",\n                                \"timestamp\": \"1710000000\",\n                                \"type\": \"text\",\n                                \"text\": {\n                                    \"body\": \"Hola, quiero hacer un reclamo sobre mi pedido.\"\n                                }\n                            }\n                        ]\n                    },\n                    \"field\": \"messages\"\n                }\n            ]\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/webhook/whatsapp",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["webhook", "whatsapp"]
+            },
+            "description": "Recibir mensajes entrantes de WhatsApp. Meta envia este POST cuando un cliente escribe. El tenant se resuelve automaticamente por phone_number_id. Solo procesa mensajes de tipo text."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "24 - BotAPI (X-API-Key)",
+      "item": [
+        {
+          "name": "ListarReclamosBot",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [
+              { "key": "X-API-Key", "value": "{{BOT_API_KEY}}" }
+            ],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/bot/v1/reclamos",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "bot", "v1", "reclamos"]
+            },
+            "description": "Listar reclamos via Bot API. Requiere X-API-Key con permiso puede_leer_reclamos."
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerReclamoBot",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [
+              { "key": "X-API-Key", "value": "{{BOT_API_KEY}}" }
+            ],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/bot/v1/reclamos/{{RECLAMO_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "bot", "v1", "reclamos", "{{RECLAMO_ID}}"]
+            },
+            "description": "Obtener detalle de reclamo via Bot API."
+          },
+          "response": []
+        },
+        {
+          "name": "EnviarMensajeBot",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{BOT_API_KEY}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"mensaje\": \"Respuesta automatica del bot.\",\n    \"tipo_mensaje\": \"EMPRESA\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/bot/v1/reclamos/{{RECLAMO_ID}}/mensajes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "bot", "v1", "reclamos", "{{RECLAMO_ID}}", "mensajes"]
+            },
+            "description": "Enviar mensaje via Bot API. Requiere puede_enviar_mensajes."
+          },
+          "response": []
+        },
+        {
+          "name": "CambiarEstadoBot",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "PATCH",
+            "header": [
+              { "key": "X-API-Key", "value": "{{BOT_API_KEY}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"estado\": \"EN_PROCESO\",\n    \"comentario\": \"Bot inicio procesamiento automatico.\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/bot/v1/reclamos/{{RECLAMO_ID}}/estado",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "bot", "v1", "reclamos", "{{RECLAMO_ID}}", "estado"]
+            },
+            "description": "Cambiar estado de reclamo via Bot API. Requiere puede_cambiar_estado."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "25 - Verificar Contraseña",
+      "item": [
+        {
+          "name": "VerificarContraseñaActual",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/auth/verify-password",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "auth", "verify-password"]
+            },
+            "description": "Verificar que la contraseña actual del usuario autenticado sea correcta. Util antes de permitir cambios sensibles."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "26 - Contacto (Solicitud WhatsApp)",
+      "item": [
+        {
+          "name": "EnviarSolicitudActivacionWhatsApp",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"negocio\": \"Mi Empresa SAC\",\n    \"ruc\": \"20123456789\",\n    \"celular\": \"+51999888777\",\n    \"telefono_contacto\": \"+51999888776\",\n    \"direccion\": \"Av. Principal 123, Lima\",\n    \"correo\": \"contacto@miempresa.com\",\n    \"horario\": \"Lunes a Viernes 9am - 6pm\",\n    \"tenant_id\": \"a0000000-0000-0000-0000-000000000001\",\n    \"tenant_razon_social\": \"Mi Empresa SAC\",\n    \"tenant_ruc\": \"20123456789\",\n    \"tenant_slug\": \"demo\",\n    \"tenant_email\": \"admin@demo.com\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/contacto/solicitud-whatsapp",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "contacto", "solicitud-whatsapp"]
+            },
+            "description": "Enviar solicitud de activacion de WhatsApp Business al buzon de soporte configurado. Envia un email con los datos del negocio."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "27 - Widget Chat (API Key)",
+      "item": [
+        {
+          "name": "ObtenerWidgetJS",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/widget/chat.js?key={{BOT_API_KEY}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["widget", "chat.js"],
+              "query": [{ "key": "key", "value": "{{BOT_API_KEY}}" }]
+            },
+            "description": "Obtener el script JS del widget de chat. Se embebe en la web del cliente con la API key."
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerConfigWidget",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "X-API-Key", "value": "{{BOT_API_KEY}}" }],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/widget/v1/config",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "widget", "v1", "config"]
+            },
+            "description": "Obtener configuracion publica del tenant (nombre, color, logo) para personalizar el widget."
+          },
+          "response": []
+        },
+        {
+          "name": "AutenticarClienteWidget",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-API-Key", "value": "{{BOT_API_KEY}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"codigo\": \"2026-DEMO-ASAS-ABC123\",\n    \"email\": \"cliente@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/widget/v1/auth",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "widget", "v1", "auth"]
+            },
+            "description": "Autenticar cliente con codigo de reclamo + email. Retorna datos del reclamo sin token JWT."
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerMensajesWidget",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "X-API-Key", "value": "{{BOT_API_KEY}}" }],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/widget/v1/reclamos/{{RECLAMO_ID}}/mensajes?email=cliente@example.com",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "widget", "v1", "reclamos", "{{RECLAMO_ID}}", "mensajes"],
+              "query": [{ "key": "email", "value": "cliente@example.com" }]
+            },
+            "description": "Obtener mensajes de un reclamo via widget. Valida que el email coincida con el del reclamo."
+          },
+          "response": []
+        },
+        {
+          "name": "EnviarMensajeWidget",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-API-Key", "value": "{{BOT_API_KEY}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"contenido\": \"Hola, quiero saber el estado de mi reclamo\",\n    \"email\": \"cliente@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/widget/v1/reclamos/{{RECLAMO_ID}}/mensajes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "widget", "v1", "reclamos", "{{RECLAMO_ID}}", "mensajes"]
+            },
+            "description": "Enviar mensaje desde el widget de chat como cliente. Valida email contra el reclamo."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "28 - Validar Empresa RUC (Publico)",
+      "item": [
+        {
+          "name": "ValidarEmpresaPorRUC",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/libro/{{TENANT_SLUG}}/validar-empresa/20123456789",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["libro", "{{TENANT_SLUG}}", "validar-empresa", "20123456789"]
+            },
+            "description": "Validar si una empresa esta registrada por RUC. Endpoint publico sin autenticacion. RUC debe tener 11 digitos."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "29 - SuperAdmin Autenticacion",
+      "item": [
+        {
+          "name": "SA_IniciarSesion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('SA_TOKEN', jsonData.data.token);",
+                  "    pm.environment.set('SA_TOKEN', jsonData.data.token);",
+                  "    console.log('SA Token guardado exitosamente');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"CAMBIAR@TU-DOMINIO.pe\",\n    \"password\": \"CAMBIAR_ESTA_CLAVE\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/auth/login",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "auth", "login"]
+            },
+            "description": "Iniciar sesion como SuperAdmin. Guarda automaticamente SA_TOKEN."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_CerrarSesion",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/auth/logout",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "auth", "logout"]
+            },
+            "description": "Cerrar sesion del SuperAdmin autenticado."
+          },
+          "response": []
+        },
+        {
+          "name": "ReportarErrorFrontend",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"message\": \"Cannot read property 'map' of undefined\",\n    \"stack\": \"TypeError: Cannot read property 'map' of undefined\\n    at SADashboard.tsx:42\",\n    \"url\": \"/superadmin/dashboard\",\n    \"user_agent\": \"Mozilla/5.0\",\n    \"tenant_id\": null\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/error-report",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "error-report"]
+            },
+            "description": "Reportar error del frontend al backend. No requiere autenticacion. Se registra en el error log del sistema."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "30 - SuperAdmin Dashboard",
+      "item": [
+        {
+          "name": "SA_GetEstadisticas",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/estadisticas",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "estadisticas"]
+            },
+            "description": "Estadisticas generales del sistema: totales de cuentas, empresas, usuarios, reclamos, planes activos."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_GetRevenueMetrics",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/revenue",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "revenue"]
+            },
+            "description": "Metricas de ingresos: MRR, ARR, crecimiento por periodo, nuevos clientes."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_BuscarGlobal",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/buscar?q=demo",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "buscar"],
+              "query": [{ "key": "q", "value": "demo" }]
+            },
+            "description": "Busqueda global en cuentas, empresas y usuarios por nombre, email o RUC."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ObtenerRendimientoAPI",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/metricas/rendimiento?dias=7",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "metricas", "rendimiento"],
+              "query": [
+                { "key": "dias", "value": "7" },
+                { "key": "endpoint", "value": "", "disabled": true }
+              ]
+            },
+            "description": "Metricas de rendimiento de la API: latencia promedio, p95, p99, tasa de errores por endpoint."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "31 - SuperAdmin Cuentas",
+      "item": [
+        {
+          "name": "SA_ListarCuentas",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/cuentas?page=1&per_page=20",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "cuentas"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "per_page", "value": "20" },
+                { "key": "q", "value": "demo", "disabled": true },
+                { "key": "activo", "value": "true", "disabled": true }
+              ]
+            },
+            "description": "Listar cuentas (clientes) con paginacion. Busqueda por nombre, email o RUC con ?q=termino."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ObtenerCuenta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/cuentas/{{SA_CUENTA_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "cuentas", "{{SA_CUENTA_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_CrearCuenta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Corporacion Ejemplo SAC\",\n    \"email_contacto\": \"contacto@ejemplo.com\",\n    \"telefono\": \"+51999888777\",\n    \"ruc\": \"20123456789\",\n    \"direccion\": \"Av. Principal 123, Lima\",\n    \"notas\": \"Cliente referido por partner\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/cuentas",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "cuentas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ActualizarCuenta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Corporacion Ejemplo SAC Actualizada\",\n    \"email_contacto\": \"contacto@ejemplo.com\",\n    \"telefono\": \"+51999888777\",\n    \"ruc\": \"20123456789\",\n    \"direccion\": \"Av. Principal 456, Lima\",\n    \"notas\": \"Actualizado por SA\",\n    \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/cuentas/{{SA_CUENTA_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "cuentas", "{{SA_CUENTA_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_CambiarEstadoCuenta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"activo\": false\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/cuentas/{{SA_CUENTA_ID}}/estado",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "cuentas", "{{SA_CUENTA_ID}}", "estado"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_CrearEmpresaBajoCuenta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"razon_social\": \"Empresa Demo SAC\",\n    \"ruc\": \"20123456789\",\n    \"email\": \"admin@empresa.com\",\n    \"password\": \"Admin123!\",\n    \"nombre_admin\": \"Juan Perez\",\n    \"telefono\": \"999888777\",\n    \"plan_id\": \"{{SA_PLAN_ID}}\",\n    \"dias_trial\": 30\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/cuentas/{{SA_CUENTA_ID}}/empresas",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "cuentas", "{{SA_CUENTA_ID}}", "empresas"]
+            },
+            "description": "Crear una nueva empresa (tenant) bajo una cuenta existente."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ListarNotasCuenta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/cuentas/{{SA_CUENTA_ID}}/notas",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "cuentas", "{{SA_CUENTA_ID}}", "notas"]
+            },
+            "description": "Listar notas internas de una cuenta (uso exclusivo del staff superadmin)."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_CrearNotaCuenta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"contenido\": \"Cliente solicito ampliacion de limite de reclamos por el mes de marzo.\",\n    \"tipo\": \"INTERNA\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/cuentas/{{SA_CUENTA_ID}}/notas",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "cuentas", "{{SA_CUENTA_ID}}", "notas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ObtenerFacturacionCuenta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/cuentas/{{SA_CUENTA_ID}}/facturacion",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "cuentas", "{{SA_CUENTA_ID}}", "facturacion"]
+            },
+            "description": "Obtener informacion de facturacion de una cuenta: historial de pagos, metodos de pago, facturas pendientes."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ObtenerHealthScore",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/cuentas/{{SA_CUENTA_ID}}/health-score",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "cuentas", "{{SA_CUENTA_ID}}", "health-score"]
+            },
+            "description": "Obtener el health score de una cuenta: actividad reciente, uso del plan, engagement, riesgo de churn."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "32 - SuperAdmin Empresas",
+      "item": [
+        {
+          "name": "SA_ListarEmpresas",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas?page=1&per_page=20",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "per_page", "value": "20" },
+                { "key": "cuenta_id", "value": "{{SA_CUENTA_ID}}", "disabled": true },
+                { "key": "activo", "value": "true", "disabled": true }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ObtenerEmpresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ObtenerSedesDeEmpresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}/sedes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}", "sedes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ObtenerUsuariosDeEmpresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}/usuarios",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}", "usuarios"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ObtenerReclamosDeEmpresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}/reclamos?page=1&per_page=20",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}", "reclamos"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "per_page", "value": "20" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_CambiarEstadoEmpresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"activo\": false,\n    \"razon\": \"Incumplimiento de terminos de servicio.\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}/estado",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}", "estado"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ActivarDesactivarSede",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"activo\": false\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}/sedes/{{SEDE_ID}}/estado",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}", "sedes", "{{SEDE_ID}}", "estado"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_CambiarPlanEmpresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plan_id\": \"{{SA_PLAN_ID}}\",\n    \"razon\": \"Upgrade solicitado por el cliente.\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}/plan",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}", "plan"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ActivarDesactivarUsuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"activo\": false\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}/usuarios/{{USUARIO_ID}}/estado",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}", "usuarios", "{{USUARIO_ID}}", "estado"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_EditarUsuarioDeEmpresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_completo\": \"Juan Perez Actualizado\",\n    \"rol\": \"ADMIN\",\n    \"sede_id\": \"{{SEDE_ID}}\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}/usuarios/{{USUARIO_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}", "usuarios", "{{USUARIO_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ResetearPasswordUsuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nueva_password\": \"NuevaContrasena123!\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}/usuarios/{{USUARIO_ID}}/resetear-password",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}", "usuarios", "{{USUARIO_ID}}", "resetear-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ImpersonarEmpresa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('TOKEN', jsonData.data.token);",
+                  "    pm.environment.set('TOKEN', jsonData.data.token);",
+                  "    console.log('Token de impersonacion guardado en TOKEN');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}/impersonar",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}", "impersonar"]
+            },
+            "description": "Obtener un JWT temporal de tenant para acceder como usuario de esa empresa. Guarda el resultado en TOKEN."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ObtenerSuscripcionEmpresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/empresas/{{SA_EMPRESA_ID}}/suscripcion",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "empresas", "{{SA_EMPRESA_ID}}", "suscripcion"]
+            },
+            "description": "Obtener la suscripcion activa de una empresa: plan, fechas, estado de trial."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "33 - SuperAdmin Planes",
+      "item": [
+        {
+          "name": "SA_ListarPlanes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/planes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "planes"]
+            },
+            "description": "Listar todos los planes del sistema (incluyendo inactivos y ocultos)."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ObtenerPlan",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/planes/{{SA_PLAN_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "planes", "{{SA_PLAN_ID}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_CrearPlan",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"codigo\": \"ENTERPRISE\",\n    \"nombre\": \"Plan Enterprise\",\n    \"descripcion\": \"Plan para grandes empresas con multiples sedes\",\n    \"precio_mensual\": 299.90,\n    \"precio_anual\": 2999.00,\n    \"precio_sede_extra\": 49.90,\n    \"precio_usuario_extra\": 29.90,\n    \"max_sedes\": 20,\n    \"max_usuarios\": 50,\n    \"max_reclamos_mes\": 5000,\n    \"max_chatbots\": 10,\n    \"max_canales_whatsapp\": 5,\n    \"permite_chatbot\": true,\n    \"permite_whatsapp\": true,\n    \"permite_email\": true,\n    \"permite_reportes_pdf\": true,\n    \"permite_exportar_excel\": true,\n    \"permite_api\": true,\n    \"permite_marca_blanca\": true,\n    \"permite_multi_idioma\": true,\n    \"permite_asistente_ia\": true,\n    \"permite_atencion_vivo\": true,\n    \"max_storage_mb\": 51200,\n    \"orden\": 3,\n    \"activo\": true,\n    \"destacado\": false\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/planes",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "planes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ActualizarPlan",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Plan Enterprise Actualizado\",\n    \"descripcion\": \"Plan enterprise con nuevas funcionalidades\",\n    \"precio_mensual\": 349.90,\n    \"precio_anual\": 3499.00,\n    \"precio_sede_extra\": 49.90,\n    \"precio_usuario_extra\": 29.90,\n    \"max_sedes\": 25,\n    \"max_usuarios\": 75,\n    \"max_reclamos_mes\": 10000,\n    \"max_chatbots\": 15,\n    \"max_canales_whatsapp\": 10,\n    \"permite_chatbot\": true,\n    \"permite_whatsapp\": true,\n    \"permite_email\": true,\n    \"permite_reportes_pdf\": true,\n    \"permite_exportar_excel\": true,\n    \"permite_api\": true,\n    \"permite_marca_blanca\": true,\n    \"permite_multi_idioma\": true,\n    \"permite_asistente_ia\": true,\n    \"permite_atencion_vivo\": true,\n    \"max_storage_mb\": 102400,\n    \"orden\": 3,\n    \"activo\": true,\n    \"destacado\": true\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/planes/{{SA_PLAN_ID}}",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "planes", "{{SA_PLAN_ID}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "34 - SuperAdmin Staff",
+      "item": [
+        {
+          "name": "SA_ListarStaff",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/staff",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "staff"]
+            },
+            "description": "Listar todos los superadmins y staff del sistema."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_CrearStaff",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"CAMBIAR@TU-DOMINIO.pe\",\n    \"nombre\": \"Ana Martinez\",\n    \"password\": \"Staff123!\",\n    \"rol\": \"SOPORTE\"\n}"
+            },
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/staff",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "staff"]
+            },
+            "description": "Crear un nuevo miembro del staff superadmin."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "35 - SuperAdmin Auditoria",
+      "item": [
+        {
+          "name": "SA_ListarAuditoria",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/auditoria?page=1&per_page=50",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "auditoria"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "per_page", "value": "50" },
+                { "key": "desde", "value": "2026-01-01", "disabled": true },
+                { "key": "hasta", "value": "2026-12-31", "disabled": true },
+                { "key": "accion", "value": "", "disabled": true },
+                { "key": "superadmin_id", "value": "", "disabled": true }
+              ]
+            },
+            "description": "Listar auditoria de acciones de superadmins. Filtros: page, per_page, desde, hasta, accion, superadmin_id."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ListarActividadEmpresas",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/actividad-empresas?page=1&per_page=50",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "actividad-empresas"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "per_page", "value": "50" },
+                { "key": "tenant_id", "value": "", "disabled": true },
+                { "key": "desde", "value": "2026-01-01", "disabled": true },
+                { "key": "hasta", "value": "2026-12-31", "disabled": true },
+                { "key": "accion", "value": "", "disabled": true },
+                { "key": "usuario_id", "value": "", "disabled": true }
+              ]
+            },
+            "description": "Listar actividad de usuarios de empresas (tenants). Filtros: tenant_id, desde, hasta, accion, usuario_id."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ExportarActividadEmpresas",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/actividad-empresas/export?desde=2026-01-01&hasta=2026-12-31",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "actividad-empresas", "export"],
+              "query": [
+                { "key": "desde", "value": "2026-01-01" },
+                { "key": "hasta", "value": "2026-12-31" },
+                { "key": "formato", "value": "csv", "disabled": true },
+                { "key": "tenant_id", "value": "", "disabled": true }
+              ]
+            },
+            "description": "Exportar actividad de empresas en CSV o JSON. Rango maximo: 90 dias. Respuesta streaming."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "36 - SuperAdmin Errores",
+      "item": [
+        {
+          "name": "SA_ListarErrores",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/errores?page=1&per_page=50",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "errores"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "per_page", "value": "50" },
+                { "key": "nivel", "value": "ERROR", "disabled": true },
+                { "key": "origen", "value": "", "disabled": true },
+                { "key": "tenant_id", "value": "", "disabled": true },
+                { "key": "cuenta_id", "value": "", "disabled": true },
+                { "key": "desde", "value": "2026-01-01", "disabled": true },
+                { "key": "hasta", "value": "2026-12-31", "disabled": true }
+              ]
+            },
+            "description": "Listar errores del sistema con paginacion. Filtros: nivel (DEBUG/INFO/WARN/ERROR/FATAL), origen, tenant_id, cuenta_id, desde, hasta."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ResumenErrores",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/errores/resumen",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "errores", "resumen"],
+              "query": [
+                { "key": "desde", "value": "2026-01-01", "disabled": true },
+                { "key": "hasta", "value": "2026-12-31", "disabled": true },
+                { "key": "nivel", "value": "", "disabled": true },
+                { "key": "origen", "value": "", "disabled": true },
+                { "key": "tenant_id", "value": "", "disabled": true },
+                { "key": "cuenta_id", "value": "", "disabled": true }
+              ]
+            },
+            "description": "Resumen de errores agrupados por nivel y origen. Util para dashboards de monitoreo."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ListarErroresAgrupados",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/errores/agrupados?limite=20",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "errores", "agrupados"],
+              "query": [
+                { "key": "limite", "value": "20" },
+                { "key": "nivel", "value": "ERROR", "disabled": true },
+                { "key": "desde", "value": "2026-01-01", "disabled": true }
+              ]
+            },
+            "description": "Listar errores agrupados por mensaje (deduplicados). Muestra conteo y ultima ocurrencia de cada tipo de error."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_TimelineErrores",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/errores/timeline?intervalo=hora&dias=7",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "errores", "timeline"],
+              "query": [
+                { "key": "intervalo", "value": "hora" },
+                { "key": "dias", "value": "7" },
+                { "key": "nivel", "value": "", "disabled": true },
+                { "key": "origen", "value": "", "disabled": true },
+                { "key": "tenant_id", "value": "", "disabled": true },
+                { "key": "cuenta_id", "value": "", "disabled": true },
+                { "key": "desde", "value": "", "disabled": true },
+                { "key": "hasta", "value": "", "disabled": true }
+              ]
+            },
+            "description": "Timeline de errores agrupados por intervalo de tiempo. intervalo: 'hora' o 'dia'. dias: 1-90."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "37 - SuperAdmin Alertas",
+      "item": [
+        {
+          "name": "SA_ListarAlertasErrores",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/alertas?page=1&per_page=20",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "alertas"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "per_page", "value": "20" },
+                { "key": "visto", "value": "false", "disabled": true }
+              ]
+            },
+            "description": "Listar alertas de errores criticos. Filtrar por visto=false para ver solo las no vistas."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_ContarAlertasSinVer",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/alertas/count",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "alertas", "count"]
+            },
+            "description": "Obtener el conteo de alertas sin ver. Util para mostrar badge en la UI."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_MarcarAlertaComoVista",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/alertas/{{SA_ALERTA_ID}}/visto",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "alertas", "{{SA_ALERTA_ID}}", "visto"]
+            },
+            "description": "Marcar una alerta especifica como vista."
+          },
+          "response": []
+        },
+        {
+          "name": "SA_MarcarTodasAlertasComoVistas",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{SA_TOKEN}}", "type": "string" }]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{URL_LIBRO_DE_RECLAMOS}}/api/v1/superadmin/alertas/marcar-todas",
+              "host": ["{{URL_LIBRO_DE_RECLAMOS}}"],
+              "path": ["api", "v1", "superadmin", "alertas", "marcar-todas"]
+            },
+            "description": "Marcar todas las alertas pendientes como vistas de un solo golpe."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{TOKEN}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    { "key": "URL_LIBRO_DE_RECLAMOS", "value": "http://127.0.0.1:8080" },
+    { "key": "TOKEN", "value": "" },
+    { "key": "TENANT_SLUG", "value": "demo" },
+    { "key": "USUARIO_ID", "value": "" },
+    { "key": "SEDE_ID", "value": "" },
+    { "key": "RECLAMO_ID", "value": "" },
+    { "key": "SOLICITUD_ASESOR_ID", "value": "" },
+    { "key": "CHATBOT_ID", "value": "" },
+    { "key": "API_KEY_ID", "value": "" },
+    { "key": "CANAL_WHATSAPP_ID", "value": "" },
+    { "key": "PLAN_ID", "value": "" },
+    { "key": "CONVERSACION_ID", "value": "" },
+    { "key": "ROL_ID", "value": "" },
+    { "key": "PLANTILLA_EMAIL_ID", "value": "" },
+    { "key": "NOTIFICACION_ID", "value": "" },
+    { "key": "CODIGO_SEGUIMIENTO", "value": "" },
+    { "key": "BOT_API_KEY", "value": "" },
+    { "key": "SA_TOKEN", "value": "" },
+    { "key": "SA_CUENTA_ID", "value": "" },
+    { "key": "SA_EMPRESA_ID", "value": "" },
+    { "key": "SA_PLAN_ID", "value": "" },
+    { "key": "SA_ALERTA_ID", "value": "" }
+  ]
+}

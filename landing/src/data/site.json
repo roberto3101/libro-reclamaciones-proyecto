@@ -1,0 +1,44 @@
+{
+  "url": "",
+  "marca": "Libro de Reclamaciones",
+  "marcaCorta": "Libro de Reclamaciones",
+  "titulo": "Libro de Reclamaciones Virtual para Perú",
+  "descripcion": "Libro de Reclamaciones virtual conforme a INDECOPI: hoja con código único, QR de verificación pública, alertas de los 15 días hábiles y multi-sede. Desde S/ 19,90 al mes.",
+  "palabrasClave": "libro de reclamaciones virtual, libro de reclamaciones INDECOPI, libro reclamaciones Perú, hoja de reclamación electrónica, libro de reclamaciones QR",
+  "idioma": "es-PE",
+  "pais": "PE",
+  "moneda": "PEN",
+  "email": "",
+  "whatsapp": "",
+  "ogImagen": "/og.png",
+  "nav": [
+    {
+      "texto": "La norma",
+      "href": "#norma"
+    },
+    {
+      "texto": "Cómo funciona",
+      "href": "#flujo"
+    },
+    {
+      "texto": "Qué incluye",
+      "href": "#capacidades"
+    },
+    {
+      "texto": "Planes",
+      "href": "#planes"
+    },
+    {
+      "texto": "Preguntas",
+      "href": "#preguntas"
+    }
+  ],
+  "ctaPrimario": {
+    "texto": "Empezar gratis",
+    "href": "/registro"
+  },
+  "ctaSecundario": {
+    "texto": "Ver planes",
+    "href": "#planes"
+  }
+}

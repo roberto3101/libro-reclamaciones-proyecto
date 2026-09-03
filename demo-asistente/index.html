@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente IA — Demo de Integracion</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background:#0f1117; color:#e1e4e8; height:100vh; display:flex; flex-direction:column; }
+
+        /* ── Header ── */
+        .cabecera { display:flex; align-items:center; justify-content:space-between; padding:12px 20px; background:#161b22; border-bottom:1px solid #30363d; }
+        .cabecera h1 { font-size:16px; font-weight:600; }
+        .cabecera h1 span { color:#58a6ff; }
+        .estado-servicio { display:flex; align-items:center; gap:8px; font-size:13px; color:#8b949e; }
+        .estado-punto { width:8px; height:8px; border-radius:50%; background:#f85149; }
+        .estado-punto.activo { background:#3fb950; }
+
+        /* ── Layout principal ── */
+        .contenedor { display:flex; flex:1; overflow:hidden; }
+
+        /* ── Sidebar ── */
+        .barra-lateral { width:280px; min-width:280px; background:#161b22; border-right:1px solid #30363d; display:flex; flex-direction:column; overflow-y:auto; }
+        .seccion-sidebar { padding:12px 16px 8px; }
+        .seccion-sidebar h3 { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#8b949e; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+        .registro-item { padding:10px 12px; margin:2px 0; border-radius:6px; cursor:pointer; transition:background .15s; border-left:3px solid transparent; }
+        .registro-item:hover { background:#1c2129; }
+        .registro-item.seleccionado { background:#1c2129; border-left-color:#58a6ff; }
+        .registro-item .registro-id { font-size:13px; font-weight:600; color:#e1e4e8; }
+        .registro-item .registro-desc { font-size:11px; color:#8b949e; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .badge { display:inline-block; padding:1px 8px; border-radius:10px; font-size:10px; font-weight:600; text-transform:uppercase; }
+        .badge-pendiente, .badge-en_preparacion, .badge-abierto { background:#d29922; color:#000; }
+        .badge-en_proceso, .badge-confirmada, .badge-en_transito { background:#1f6feb; color:#fff; }
+        .badge-resuelto, .badge-entregado, .badge-cerrado { background:#238636; color:#fff; }
+        .badge-cancelado, .badge-alta, .badge-no_asistio { background:#f85149; color:#fff; }
+        .badge-media { background:#d29922; color:#000; }
+        .badge-baja { background:#8b949e; color:#000; }
+        .separador-sidebar { height:1px; background:#30363d; margin:8px 16px; }
+
+        /* conversaciones en sidebar */
+        .conversacion-item { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; margin:2px 0; border-radius:6px; cursor:pointer; transition:background .15s; }
+        .conversacion-item:hover { background:#1c2129; }
+        .conversacion-info { flex:1; overflow:hidden; }
+        .conversacion-titulo { font-size:12px; color:#e1e4e8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .conversacion-meta { font-size:10px; color:#8b949e; }
+        .btn-eliminar-conv { background:none; border:none; color:#f85149; cursor:pointer; font-size:14px; padding:4px; border-radius:4px; opacity:0.5; }
+        .btn-eliminar-conv:hover { opacity:1; background:#f8514920; }
+
+        /* ── Panel principal ── */
+        .panel-principal { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+
+        /* detalle + contexto */
+        .panel-superior { display:flex; gap:0; border-bottom:1px solid #30363d; max-height:45%; overflow:hidden; }
+        .panel-detalle { flex:1; padding:16px 20px; overflow-y:auto; border-right:1px solid #30363d; }
+        .panel-contexto { width:340px; min-width:340px; padding:16px; overflow-y:auto; background:#0d1117; }
+        .panel-titulo { font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#8b949e; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+        .detalle-campo { margin-bottom:6px; font-size:13px; }
+        .detalle-campo .etiqueta { color:#8b949e; }
+        .detalle-campo .valor { color:#e1e4e8; font-weight:500; }
+        .contexto-pre { font-family:'Cascadia Code','Fira Code',monospace; font-size:11px; color:#7ee787; background:#161b22; padding:12px; border-radius:6px; border:1px solid #30363d; white-space:pre-wrap; word-break:break-word; line-height:1.6; }
+        .contexto-nota { font-size:11px; color:#8b949e; margin-top:8px; font-style:italic; }
+
+        /* estado vacio */
+        .estado-vacio { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#484f58; text-align:center; padding:40px; }
+        .estado-vacio .icono { font-size:48px; margin-bottom:16px; }
+        .estado-vacio h3 { font-size:16px; color:#8b949e; margin-bottom:8px; }
+        .estado-vacio p { font-size:13px; max-width:300px; line-height:1.5; }
+
+        /* ── Chat ── */
+        .panel-chat { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+        .chat-cabecera { display:flex; align-items:center; justify-content:space-between; padding:10px 20px; background:#161b22; border-bottom:1px solid #30363d; }
+        .chat-cabecera h3 { font-size:13px; color:#e1e4e8; }
+        .btn-nueva-conv { background:#238636; color:#fff; border:none; padding:5px 12px; border-radius:6px; font-size:12px; cursor:pointer; }
+        .btn-nueva-conv:hover { background:#2ea043; }
+        .chat-mensajes { flex:1; overflow-y:auto; padding:16px 20px; display:flex; flex-direction:column; gap:12px; }
+        .mensaje { max-width:80%; padding:10px 14px; border-radius:12px; font-size:13px; line-height:1.5; word-wrap:break-word; }
+        .mensaje-usuario { align-self:flex-end; background:#1f6feb; color:#fff; border-bottom-right-radius:4px; }
+        .mensaje-asistente { align-self:flex-start; background:#21262d; color:#e1e4e8; border-bottom-left-radius:4px; }
+        .mensaje-meta { font-size:10px; color:#8b949e; margin-top:6px; }
+        .mensaje-asistente .mensaje-meta { color:#6e7681; }
+        .mensaje-error { align-self:center; background:#f8514920; color:#f85149; border-radius:8px; font-size:12px; padding:8px 16px; }
+        .mensaje-cargando { align-self:flex-start; background:#21262d; padding:12px 20px; border-radius:12px; }
+        .mensaje-cargando .puntos span { display:inline-block; width:6px; height:6px; background:#8b949e; border-radius:50%; margin:0 2px; animation:rebotar .6s infinite alternate; }
+        .mensaje-cargando .puntos span:nth-child(2) { animation-delay:.2s; }
+        .mensaje-cargando .puntos span:nth-child(3) { animation-delay:.4s; }
+        @keyframes rebotar { to { transform:translateY(-6px); opacity:.4; } }
+
+        .chat-entrada { display:flex; gap:8px; padding:12px 20px; background:#161b22; border-top:1px solid #30363d; }
+        .chat-entrada input { flex:1; background:#0d1117; border:1px solid #30363d; color:#e1e4e8; padding:10px 14px; border-radius:8px; font-size:13px; outline:none; }
+        .chat-entrada input:focus { border-color:#58a6ff; }
+        .chat-entrada input:disabled { opacity:.5; }
+        .btn-enviar { background:#1f6feb; color:#fff; border:none; padding:10px 20px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; }
+        .btn-enviar:hover { background:#388bfd; }
+        .btn-enviar:disabled { opacity:.5; cursor:not-allowed; }
+
+        /* scrollbar */
+        ::-webkit-scrollbar { width:6px; }
+        ::-webkit-scrollbar-track { background:transparent; }
+        ::-webkit-scrollbar-thumb { background:#30363d; border-radius:3px; }
+        ::-webkit-scrollbar-thumb:hover { background:#484f58; }
+
+        /* chat sin contexto label */
+        .etiqueta-contexto { display:inline-flex; align-items:center; gap:4px; padding:2px 10px; border-radius:12px; font-size:11px; background:#30363d; color:#8b949e; }
+        .etiqueta-contexto.con-contexto { background:#238636; color:#fff; }
+
+        /* boton limpiar seleccion */
+        .btn-limpiar { background:none; border:1px solid #30363d; color:#8b949e; padding:5px 10px; border-radius:6px; font-size:11px; cursor:pointer; }
+        .btn-limpiar:hover { border-color:#8b949e; color:#e1e4e8; }
+    </style>
+</head>
+<body>
+
+<!-- ═══ CABECERA ═══ -->
+<header class="cabecera">
+    <h1>Asistente IA — <span>Demo de Integracion</span></h1>
+    <div class="estado-servicio">
+        <div class="estado-punto" id="estadoPunto"></div>
+        <span id="estadoTexto">Verificando...</span>
+    </div>
+</header>
+
+<!-- ═══ CONTENEDOR PRINCIPAL ═══ -->
+<div class="contenedor">
+
+    <!-- ── Sidebar ── -->
+    <aside class="barra-lateral">
+        <div id="listaEscenarios"></div>
+        <div class="separador-sidebar"></div>
+        <div class="seccion-sidebar">
+            <h3>Conversaciones</h3>
+            <div id="listaConversaciones">
+                <p style="font-size:12px; color:#484f58; padding:8px 0;">Sin conversaciones aun</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── Panel principal ── -->
+    <main class="panel-principal">
+
+        <!-- Detalle + Contexto -->
+        <div class="panel-superior" id="panelSuperior">
+            <div class="panel-detalle" id="panelDetalle">
+                <div class="estado-vacio">
+                    <div class="icono">&#128269;</div>
+                    <h3>Selecciona un registro</h3>
+                    <p>Elige un pedido, cita o ticket del panel izquierdo para ver sus datos y chatear con la IA sobre el.</p>
+                </div>
+            </div>
+            <div class="panel-contexto" id="panelContexto">
+                <div class="panel-titulo">Contexto enviado a la IA</div>
+                <div class="contexto-pre" id="textoContexto">-- Ningun registro seleccionado --
+
+La IA recibira tu mensaje sin contexto adicional (chat libre).</div>
+                <div class="contexto-nota" id="notaContexto">Este texto se envia en el campo "contexto" del POST /chat. Tu app lo construye a partir de los datos que tenga.</div>
+            </div>
+        </div>
+
+        <!-- Chat -->
+        <div class="panel-chat">
+            <div class="chat-cabecera">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <h3>Chat con IA</h3>
+                    <span class="etiqueta-contexto" id="etiquetaContexto">Sin contexto</span>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button class="btn-limpiar" onclick="limpiarSeleccion()">Limpiar seleccion</button>
+                    <button class="btn-nueva-conv" onclick="iniciarNuevaConversacion()">+ Nueva conversacion</button>
+                </div>
+            </div>
+            <div class="chat-mensajes" id="chatMensajes">
+                <div class="estado-vacio" style="height:auto; padding:40px 20px;">
+                    <div class="icono">&#129302;</div>
+                    <h3>Escribe un mensaje para comenzar</h3>
+                    <p>Puedes chatear libremente o seleccionar un registro del panel izquierdo para que la IA tenga contexto de tus datos.</p>
+                </div>
+            </div>
+            <div class="chat-entrada">
+                <input type="text" id="inputMensaje" placeholder="Escribe un mensaje..." onkeydown="if(event.key==='Enter')enviarMensaje()">
+                <button class="btn-enviar" id="btnEnviar" onclick="enviarMensaje()">Enviar</button>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// CONFIGURACION
+// ════════════════════════════════════════════════════════════
+const URL_BASE_API = 'http://localhost:8070/api/v1/asistente';
+const JWT_SECRET = 'dev-secret-cambiar-en-produccion-32chars';
+const JWT_CLAIMS = {
+    tenant_id: 'a0000000-0000-0000-0000-000000000001',
+    user_id:   'b0000000-0000-0000-0000-000000000001',
+    role:      'ADMIN',
+    sede_id:   'c0000000-0000-0000-0000-000000000001'
+};
+
+// ════════════════════════════════════════════════════════════
+// DATOS MOCK — 3 escenarios genéricos
+// ════════════════════════════════════════════════════════════
+const escenarios = [
+    {
+        id: 'pedidos',
+        nombre: 'Sistema de Pedidos',
+        icono: '&#128722;',
+        registros: [
+            {
+                id: 'ORD-2026-047',
+                _etiqueta: 'Laptop HP + accesorios',
+                _estado: 'EN_PREPARACION',
+                cliente: 'Ana Torres',
+                email: 'ana.torres@gmail.com',
+                telefono: '987-654-321',
+                estado: 'En preparacion',
+                productos: 'Laptop HP Pavilion (1), Mouse inalambrico (1), Teclado mecanico (1)',
+                cantidad_items: 3,
+                total: 'S/ 3,245.90',
+                metodo_pago: 'Tarjeta Visa terminada en 4521',
+                direccion_envio: 'Av. Javier Prado 1234, San Isidro, Lima',
+                fecha_pedido: '2026-03-06',
+                fecha_entrega_estimada: '2026-03-10',
+                notas_cliente: 'Entregar en horario de oficina (9am-6pm)'
+            },
+            {
+                id: 'ORD-2026-048',
+                _etiqueta: 'Silla ergonomica',
+                _estado: 'EN_TRANSITO',
+                cliente: 'Pedro Ramirez',
+                email: 'pedro.r@outlook.com',
+                telefono: '912-345-678',
+                estado: 'En transito',
+                productos: 'Silla ergonomica ErgoMax Pro (1)',
+                cantidad_items: 1,
+                total: 'S/ 899.00',
+                metodo_pago: 'Transferencia bancaria',
+                direccion_envio: 'Jr. Cusco 567, Miraflores, Lima',
+                fecha_pedido: '2026-03-04',
+                fecha_entrega_estimada: '2026-03-08',
+                codigo_tracking: 'TRACK-98765',
+                transportista: 'Olva Courier'
+            },
+            {
+                id: 'ORD-2026-049',
+                _etiqueta: 'Monitor cancelado',
+                _estado: 'CANCELADO',
+                cliente: 'Lucia Fernandez',
+                email: 'lucia.f@empresa.pe',
+                telefono: '945-678-123',
+                estado: 'Cancelado',
+                productos: 'Monitor Samsung 27" 4K (2)',
+                cantidad_items: 2,
+                total: 'S/ 2,198.00',
+                metodo_pago: 'Tarjeta Mastercard terminada en 8832',
+                direccion_envio: 'Calle Las Begonias 450, San Isidro, Lima',
+                fecha_pedido: '2026-03-02',
+                motivo_cancelacion: 'Cliente solicito cancelacion — encontro mejor precio',
+                reembolso_estado: 'Pendiente de procesamiento'
+            }
+        ]
+    },
+    {
+        id: 'citas',
+        nombre: 'Citas Medicas',
+        icono: '&#127973;',
+        registros: [
+            {
+                id: 'CIT-2026-101',
+                _etiqueta: 'Cardiologia — Carlos M.',
+                _estado: 'CONFIRMADA',
+                paciente: 'Carlos Mendoza Gutierrez',
+                edad: 45,
+                documento: 'DNI 42567891',
+                telefono: '976-543-210',
+                especialidad: 'Cardiologia',
+                doctor: 'Dra. Patricia Ruiz',
+                estado: 'Confirmada',
+                fecha_cita: '2026-03-10 09:30',
+                consultorio: 'Consultorio 305, 3er piso',
+                motivo_consulta: 'Control post-operatorio — bypass coronario',
+                antecedentes: 'Cirugia de bypass coronario hace 3 meses. Hipertension controlada. Medicacion actual: Atorvastatina 40mg, Enalapril 10mg',
+                ultima_consulta: '2026-02-10',
+                seguro: 'EPS Rimac — Plan Premium'
+            },
+            {
+                id: 'CIT-2026-102',
+                _etiqueta: 'Pediatria — Sofia V.',
+                _estado: 'NO_ASISTIO',
+                paciente: 'Sofia Vargas (menor)',
+                edad: 7,
+                apoderado: 'Carmen Vargas (madre)',
+                telefono: '961-234-567',
+                especialidad: 'Pediatria',
+                doctor: 'Dr. Alejandro Mora',
+                estado: 'No asistio',
+                fecha_cita: '2026-03-05 14:00',
+                consultorio: 'Consultorio 102, 1er piso',
+                motivo_consulta: 'Fiebre recurrente durante 5 dias',
+                antecedentes: 'Alergica a la penicilina. Vacunas al dia.',
+                ultima_consulta: '2025-11-20',
+                seguro: 'SIS'
+            }
+        ]
+    },
+    {
+        id: 'tickets',
+        nombre: 'Tickets de Soporte',
+        icono: '&#128203;',
+        registros: [
+            {
+                id: 'TKT-2026-301',
+                _etiqueta: 'No puedo acceder a mi cuenta',
+                _estado: 'ABIERTO',
+                asunto: 'No puedo acceder a mi cuenta',
+                prioridad: 'Alta',
+                categoria: 'Acceso y autenticacion',
+                estado: 'Abierto',
+                cliente: 'Roberto Diaz',
+                email: 'roberto.diaz@empresa.com',
+                fecha_creacion: '2026-03-07 10:30',
+                descripcion: 'Desde ayer no puedo iniciar sesion en la plataforma. El sistema muestra "Credenciales invalidas" aunque estoy seguro de que mi contrasena es correcta. Ya intente recuperar contrasena pero no me llega el correo.',
+                pasos_reproducir: '1. Ir a login.ejemplo.com  2. Ingresar email y contrasena  3. Click en "Iniciar sesion"  4. Aparece error "Credenciales invalidas"',
+                intentos_solucion: 'Se intento resetear contrasena sin exito. El correo de recuperacion no llega al buzón del cliente.',
+                agente_asignado: 'Maria Lopez'
+            },
+            {
+                id: 'TKT-2026-302',
+                _etiqueta: 'Error al generar factura',
+                _estado: 'EN_PROCESO',
+                asunto: 'Error al generar factura electronica',
+                prioridad: 'Media',
+                categoria: 'Facturacion',
+                estado: 'En proceso',
+                cliente: 'Inversiones SAC',
+                email: 'contabilidad@inversiones.pe',
+                fecha_creacion: '2026-03-06 16:45',
+                descripcion: 'Al intentar generar una factura electronica para montos superiores a S/ 10,000, el sistema muestra un error 500 y no genera el comprobante. Facturas de montos menores funcionan correctamente.',
+                pasos_reproducir: '1. Ir a Facturacion > Nueva factura  2. Ingresar monto mayor a S/ 10,000  3. Click en "Generar"  4. Error 500',
+                intentos_solucion: 'Se identifico que el error ocurre en el modulo de validacion de SUNAT. Se esta revisando la integracion con el API de facturacion.',
+                agente_asignado: 'Carlos Quispe'
+            }
+        ]
+    }
+];
+
+// ════════════════════════════════════════════════════════════
+// ESTADO DE LA APP
+// ════════════════════════════════════════════════════════════
+let tokenJWT = '';
+let registroSeleccionado = null;
+let contextoActual = '';
+let conversacionIdActual = null;
+let enviando = false;
+
+// ════════════════════════════════════════════════════════════
+// JWT — Generación automática con HS256
+// ════════════════════════════════════════════════════════════
+function base64url(buffer) {
+    return btoa(String.fromCharCode(...new Uint8Array(buffer)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function generarTokenJWT() {
+    const cabecera = { alg: 'HS256', typ: 'JWT' };
+    const ahora = Math.floor(Date.now() / 1000);
+    const payload = { ...JWT_CLAIMS, iat: ahora, exp: ahora + 86400 };
+
+    const enc = new TextEncoder();
+    const partesCodificadas = base64url(enc.encode(JSON.stringify(cabecera))) + '.' +
+                               base64url(enc.encode(JSON.stringify(payload)));
+
+    const clave = await crypto.subtle.importKey(
+        'raw', enc.encode(JWT_SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+    );
+    const firma = await crypto.subtle.sign('HMAC', clave, enc.encode(partesCodificadas));
+    tokenJWT = partesCodificadas + '.' + base64url(firma);
+}
+
+// ════════════════════════════════════════════════════════════
+// API — Wrapper de llamadas HTTP
+// ════════════════════════════════════════════════════════════
+async function llamadaAPI(metodo, ruta, cuerpo = null) {
+    const opciones = {
+        method: metodo,
+        headers: { 'Content-Type': 'application/json' }
+    };
+    if (tokenJWT) opciones.headers['Authorization'] = 'Bearer ' + tokenJWT;
+    if (cuerpo) opciones.body = JSON.stringify(cuerpo);
+
+    const inicio = performance.now();
+    try {
+        const resp = await fetch(URL_BASE_API + ruta, opciones);
+        const datos = await resp.json();
+        return { status: resp.status, data: datos, ms: Math.round(performance.now() - inicio) };
+    } catch (e) {
+        return { status: 0, data: null, ms: Math.round(performance.now() - inicio), error: e.message };
+    }
+}
+
+// ════════════════════════════════════════════════════════════
+// UTILIDADES
+// ════════════════════════════════════════════════════════════
+function escaparHtml(t) {
+    const d = document.createElement('div');
+    d.textContent = t;
+    return d.innerHTML;
+}
+
+function obtenerClaseBadge(estado) {
+    const e = estado.toLowerCase().replace(/\s+/g, '_');
+    return 'badge-' + e;
+}
+
+// ════════════════════════════════════════════════════════════
+// CONTEXTO — La función más importante del demo
+// ════════════════════════════════════════════════════════════
+
+/**
+ * Convierte CUALQUIER objeto en texto de contexto para la IA.
+ * Esta es la función que tu app Angular debe replicar.
+ * No importa qué campos tenga el objeto — todo se convierte en texto.
+ */
+function construirContexto(registro) {
+    const lineas = [];
+    for (const [clave, valor] of Object.entries(registro)) {
+        if (clave.startsWith('_')) continue; // campos internos del demo
+        lineas.push(formatearClave(clave) + ': ' + valor);
+    }
+    return lineas.join('\n');
+}
+
+function formatearClave(clave) {
+    return clave
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+// ════════════════════════════════════════════════════════════
+// SIDEBAR — Renderizar escenarios y registros
+// ════════════════════════════════════════════════════════════
+function renderizarEscenarios() {
+    const contenedor = document.getElementById('listaEscenarios');
+    let html = '';
+    for (const esc of escenarios) {
+        html += `<div class="seccion-sidebar">
+            <h3>${esc.icono} ${escaparHtml(esc.nombre)}</h3>`;
+        for (const reg of esc.registros) {
+            html += `<div class="registro-item" id="reg-${reg.id}" onclick="seleccionarRegistro('${esc.id}','${reg.id}')">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span class="registro-id">${escaparHtml(reg.id)}</span>
+                    <span class="badge ${obtenerClaseBadge(reg._estado)}">${escaparHtml(reg._estado)}</span>
+                </div>
+                <div class="registro-desc">${escaparHtml(reg._etiqueta)}</div>
+            </div>`;
+        }
+        html += '</div>';
+    }
+    contenedor.innerHTML = html;
+}
+
+// ════════════════════════════════════════════════════════════
+// SELECCIÓN DE REGISTRO
+// ════════════════════════════════════════════════════════════
+function seleccionarRegistro(escenarioId, registroId) {
+    // encontrar el registro
+    const esc = escenarios.find(e => e.id === escenarioId);
+    const reg = esc.registros.find(r => r.id === registroId);
+
+    // marcar seleccionado en sidebar
+    document.querySelectorAll('.registro-item').forEach(el => el.classList.remove('seleccionado'));
+    document.getElementById('reg-' + registroId).classList.add('seleccionado');
+
+    registroSeleccionado = reg;
+
+    // construir contexto
+    contextoActual = construirContexto(reg);
+
+    // renderizar detalle
+    renderizarDetalle(reg, esc);
+
+    // renderizar contexto
+    document.getElementById('textoContexto').textContent = contextoActual;
+    document.getElementById('notaContexto').textContent =
+        'Este texto se envia automaticamente en el campo "contexto" del POST /chat. El backend lo concatena al prompt del sistema.';
+
+    // actualizar etiqueta del chat
+    const etiqueta = document.getElementById('etiquetaContexto');
+    etiqueta.textContent = reg.id;
+    etiqueta.className = 'etiqueta-contexto con-contexto';
+
+    // nueva conversación si cambia de registro
+    if (conversacionIdActual) {
+        iniciarNuevaConversacion();
+    }
+}
+
+function renderizarDetalle(reg, esc) {
+    const panel = document.getElementById('panelDetalle');
+    let html = `<div class="panel-titulo">${esc.icono} ${escaparHtml(esc.nombre)} — ${escaparHtml(reg.id)}</div>`;
+    for (const [clave, valor] of Object.entries(reg)) {
+        if (clave.startsWith('_')) continue;
+        html += `<div class="detalle-campo">
+            <span class="etiqueta">${escaparHtml(formatearClave(clave))}:</span>
+            <span class="valor"> ${escaparHtml(String(valor))}</span>
+        </div>`;
+    }
+    panel.innerHTML = html;
+}
+
+function limpiarSeleccion() {
+    registroSeleccionado = null;
+    contextoActual = '';
+    document.querySelectorAll('.registro-item').forEach(el => el.classList.remove('seleccionado'));
+
+    document.getElementById('panelDetalle').innerHTML = `
+        <div class="estado-vacio">
+            <div class="icono">&#128269;</div>
+            <h3>Selecciona un registro</h3>
+            <p>Elige un pedido, cita o ticket del panel izquierdo para ver sus datos y chatear con la IA sobre el.</p>
+        </div>`;
+
+    document.getElementById('textoContexto').textContent =
+        '-- Ningun registro seleccionado --\n\nLa IA recibira tu mensaje sin contexto adicional (chat libre).';
+
+    const etiqueta = document.getElementById('etiquetaContexto');
+    etiqueta.textContent = 'Sin contexto';
+    etiqueta.className = 'etiqueta-contexto';
+}
+
+// ════════════════════════════════════════════════════════════
+// CHAT — Enviar mensajes y recibir respuestas
+// ════════════════════════════════════════════════════════════
+async function enviarMensaje() {
+    const input = document.getElementById('inputMensaje');
+    const mensaje = input.value.trim();
+    if (!mensaje || enviando) return;
+
+    enviando = true;
+    input.value = '';
+    input.disabled = true;
+    document.getElementById('btnEnviar').disabled = true;
+
+    // limpiar estado vacio si es el primer mensaje
+    const chatDiv = document.getElementById('chatMensajes');
+    if (chatDiv.querySelector('.estado-vacio')) chatDiv.innerHTML = '';
+
+    // mostrar mensaje del usuario
+    agregarMensajeAlChat('usuario', mensaje);
+
+    // mostrar indicador de carga
+    const cargandoId = mostrarCargando();
+
+    // llamar al API
+    const cuerpo = { message: mensaje };
+    if (conversacionIdActual) cuerpo.conversacion_id = conversacionIdActual;
+    if (contextoActual) cuerpo.contexto = contextoActual;
+
+    const resp = await llamadaAPI('POST', '/chat', cuerpo);
+
+    // quitar indicador de carga
+    ocultarCargando(cargandoId);
+
+    if (resp.status === 200 && resp.data && resp.data.success) {
+        const d = resp.data.data;
+        conversacionIdActual = d.conversacion_id;
+        agregarMensajeAlChat('asistente', d.response, {
+            proveedor: d.provider,
+            tokens_prompt: d.prompt_tokens,
+            tokens_output: d.output_tokens,
+            ms: resp.ms
+        });
+        cargarConversaciones(); // actualizar sidebar
+    } else {
+        const errorMsg = resp.data?.error?.message || resp.error || 'Error de conexion con el servicio';
+        agregarMensajeAlChat('error', errorMsg);
+    }
+
+    enviando = false;
+    input.disabled = false;
+    document.getElementById('btnEnviar').disabled = false;
+    input.focus();
+}
+
+function agregarMensajeAlChat(tipo, contenido, meta = null) {
+    const chatDiv = document.getElementById('chatMensajes');
+    const div = document.createElement('div');
+
+    if (tipo === 'usuario') {
+        div.className = 'mensaje mensaje-usuario';
+        div.innerHTML = escaparHtml(contenido);
+    } else if (tipo === 'asistente') {
+        div.className = 'mensaje mensaje-asistente';
+        let html = escaparHtml(contenido).replace(/\n/g, '<br>');
+        if (meta) {
+            html += `<div class="mensaje-meta">${escaparHtml(meta.proveedor)} | ${meta.tokens_prompt}+${meta.tokens_output} tokens | ${meta.ms}ms</div>`;
+        }
+        div.innerHTML = html;
+    } else if (tipo === 'error') {
+        div.className = 'mensaje mensaje-error';
+        div.textContent = contenido;
+    }
+
+    chatDiv.appendChild(div);
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+}
+
+function mostrarCargando() {
+    const chatDiv = document.getElementById('chatMensajes');
+    const div = document.createElement('div');
+    const id = 'cargando-' + Date.now();
+    div.id = id;
+    div.className = 'mensaje-cargando';
+    div.innerHTML = '<div class="puntos"><span></span><span></span><span></span></div>';
+    chatDiv.appendChild(div);
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+    return id;
+}
+
+function ocultarCargando(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+}
+
+// ════════════════════════════════════════════════════════════
+// CONVERSACIONES — Historial
+// ════════════════════════════════════════════════════════════
+async function cargarConversaciones() {
+    const resp = await llamadaAPI('GET', '/conversaciones');
+    const contenedor = document.getElementById('listaConversaciones');
+
+    if (resp.status !== 200 || !resp.data?.success || !Array.isArray(resp.data.data) || resp.data.data.length === 0) {
+        contenedor.innerHTML = '<p style="font-size:12px; color:#484f58; padding:8px 0;">Sin conversaciones aun</p>';
+        return;
+    }
+
+    let html = '';
+    for (const conv of resp.data.data) {
+        const esActual = conv.id === conversacionIdActual;
+        const titulo = escaparHtml(conv.titulo || 'Conversacion');
+        const mensajes = conv.total_mensajes || 0;
+        html += `<div class="conversacion-item" style="${esActual ? 'background:#1c2129;' : ''}" onclick="continuarConversacion('${conv.id}')">
+            <div class="conversacion-info">
+                <div class="conversacion-titulo">${esActual ? '&#9654; ' : ''}${titulo}</div>
+                <div class="conversacion-meta">${mensajes} mensajes</div>
+            </div>
+            <button class="btn-eliminar-conv" onclick="event.stopPropagation(); eliminarConversacion('${conv.id}')" title="Eliminar">&#10005;</button>
+        </div>`;
+    }
+    contenedor.innerHTML = html;
+}
+
+async function continuarConversacion(id) {
+    conversacionIdActual = id;
+    const chatDiv = document.getElementById('chatMensajes');
+    chatDiv.innerHTML = '';
+
+    const resp = await llamadaAPI('GET', '/conversaciones/' + id + '/mensajes');
+    if (resp.status === 200 && resp.data?.success && Array.isArray(resp.data.data)) {
+        for (const msg of resp.data.data) {
+            const tipo = msg.rol === 'USER' ? 'usuario' : 'asistente';
+            const meta = msg.rol === 'ASSISTANT' ? {
+                proveedor: msg.proveedor || '',
+                tokens_prompt: msg.tokens_prompt || 0,
+                tokens_output: msg.tokens_output || 0,
+                ms: msg.duracion_ms || 0
+            } : null;
+            agregarMensajeAlChat(tipo, msg.contenido, meta);
+        }
+    }
+    cargarConversaciones();
+}
+
+async function eliminarConversacion(id) {
+    if (!confirm('Eliminar esta conversacion?')) return;
+    await llamadaAPI('DELETE', '/conversaciones/' + id);
+    if (conversacionIdActual === id) {
+        conversacionIdActual = null;
+        document.getElementById('chatMensajes').innerHTML = `
+            <div class="estado-vacio" style="height:auto; padding:40px 20px;">
+                <div class="icono">&#129302;</div>
+                <h3>Escribe un mensaje para comenzar</h3>
+                <p>Puedes chatear libremente o seleccionar un registro del panel izquierdo para que la IA tenga contexto de tus datos.</p>
+            </div>`;
+    }
+    cargarConversaciones();
+}
+
+function iniciarNuevaConversacion() {
+    conversacionIdActual = null;
+    document.getElementById('chatMensajes').innerHTML = `
+        <div class="estado-vacio" style="height:auto; padding:40px 20px;">
+            <div class="icono">&#129302;</div>
+            <h3>Nueva conversacion</h3>
+            <p>${registroSeleccionado ? 'Chateando con contexto de <strong>' + escaparHtml(registroSeleccionado.id) + '</strong>' : 'Chat libre — sin contexto de datos'}</p>
+        </div>`;
+    cargarConversaciones();
+}
+
+// ════════════════════════════════════════════════════════════
+// ESTADO DEL SERVICIO
+// ════════════════════════════════════════════════════════════
+async function verificarEstadoDelServicio() {
+    try {
+        const inicio = performance.now();
+        const resp = await fetch(URL_BASE_API + '/salud');
+        const ms = Math.round(performance.now() - inicio);
+        if (resp.ok) {
+            document.getElementById('estadoPunto').classList.add('activo');
+            document.getElementById('estadoTexto').textContent = 'Servicio activo (' + ms + 'ms)';
+        } else {
+            throw new Error('HTTP ' + resp.status);
+        }
+    } catch (e) {
+        document.getElementById('estadoPunto').classList.remove('activo');
+        document.getElementById('estadoTexto').textContent = 'Servicio no disponible';
+    }
+}
+
+// ════════════════════════════════════════════════════════════
+// INICIALIZACIÓN
+// ════════════════════════════════════════════════════════════
+async function inicializar() {
+    await generarTokenJWT();
+    renderizarEscenarios();
+    verificarEstadoDelServicio();
+    cargarConversaciones();
+    // verificar estado cada 30 segundos
+    setInterval(verificarEstadoDelServicio, 30000);
+}
+
+inicializar();
+</script>
+</body>
+</html>

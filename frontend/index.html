@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Libro de Reclamaciones</title>
+
+    <!-- Se abre conexión con Google Fonts antes de pedir los archivos:
+         ahorra el ida y vuelta de DNS y TLS cuando llega la petición. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Tres familias con papeles distintos:
+         · Fraunces      → titulares. Es la que da el carácter editorial.
+                           Se pide con opsz baja y SOFT/WONK a 0 para que
+                           salga sobria, no decorativa.
+         · IBM Plex Sans → interfaz y datos. Grotesca de rasgos claros,
+                           pensada para pantalla y para tablas densas.
+         · IBM Plex Mono → códigos de reclamo, RUC y DNI: lo que se lee
+                           carácter a carácter y exige distinguir 0 de O.
+         `display=swap` muestra ya el texto con la fuente del sistema y lo
+         cambia al cargar, en vez de dejar la página en blanco. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Material Symbols dibuja el icono a partir de su nombre escrito
+         como texto. Aquí `display=block` es obligatorio, no una
+         preferencia: con swap se leería «account_balance_wallet» hasta que
+         cargara la fuente. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block"
+      rel="stylesheet"
+    />
+
+    <script>
+      /* El tema se aplica antes de pintar nada.
+         Si esperara a que React monte, la primera pantalla saldría clara y
+         parpadearía a oscura: el destello blanco clásico. */
+      (function () {
+        try {
+          var t = localStorage.getItem('lr-tema');
+          if (t !== 'dark' && t !== 'light') t = 'light';
+          document.documentElement.classList.add(t);
+          document.documentElement.setAttribute('data-tema', t);
+        } catch (e) {
+          document.documentElement.classList.add('light');
+          document.documentElement.setAttribute('data-tema', 'light');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

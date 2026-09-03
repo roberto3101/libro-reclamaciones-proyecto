@@ -1,0 +1,116 @@
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-superficie);
+  color: var(--ui-texto);
+  overflow: hidden;
+  transition: box-shadow var(--ui-trans), border-color var(--ui-trans), transform var(--ui-trans);
+}
+
+.tarjeta[data-variante='estandar'] {
+  border: 1px solid var(--ui-borde-sutil);
+  box-shadow: var(--ui-sombra-1);
+}
+
+.tarjeta[data-variante='contorno'] {
+  border: 1px solid var(--ui-borde);
+  box-shadow: none;
+}
+
+.tarjeta[data-variante='suave'] {
+  border: 1px solid transparent;
+  background: var(--ui-superficie-2);
+  box-shadow: none;
+}
+
+/* El relleno vive en las secciones, no en la tarjeta: así una imagen a
+   sangre puede tocar los bordes mientras el texto conserva su margen. */
+.tarjeta[data-relleno='ninguno'] .cabecera,
+.tarjeta[data-relleno='ninguno'] .cuerpo,
+.tarjeta[data-relleno='ninguno'] .pie { padding: 0; }
+
+.tarjeta[data-relleno='p'] .cabecera { padding: 10px 12px; }
+.tarjeta[data-relleno='p'] .cuerpo   { padding: 10px 12px; }
+.tarjeta[data-relleno='p'] .pie      { padding: 10px 12px; }
+
+.tarjeta[data-relleno='m'] .cabecera { padding: 14px 16px; }
+.tarjeta[data-relleno='m'] .cuerpo   { padding: 14px 16px; }
+.tarjeta[data-relleno='m'] .pie      { padding: 12px 16px; }
+
+.tarjeta[data-relleno='g'] .cabecera { padding: 20px 24px; }
+.tarjeta[data-relleno='g'] .cuerpo   { padding: 20px 24px; }
+.tarjeta[data-relleno='g'] .pie      { padding: 16px 24px; }
+
+/* Cabecera y cuerpo contiguos duplicarían el espacio entre ambos. */
+.cabecera + .cuerpo {
+  padding-top: 0;
+}
+
+.conHover:hover {
+  box-shadow: var(--ui-sombra-2);
+  border-color: var(--ui-borde);
+}
+
+.clicable {
+  cursor: pointer;
+}
+
+.clicable:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+  border-color: var(--ui-foco);
+}
+
+.multimedia {
+  display: block;
+  line-height: 0;
+}
+
+.multimedia img,
+.multimedia video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ui-e-3);
+}
+
+.tituloBloque {
+  min-width: 0;
+}
+
+.titulo {
+  margin: 0;
+  font-size: var(--ui-t-lg);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ui-texto);
+}
+
+.subtitulo {
+  margin: 3px 0 0;
+  font-size: var(--ui-t-sm);
+  color: var(--ui-texto-2);
+  line-height: 1.45;
+}
+
+.accion {
+  flex: none;
+}
+
+.cuerpo {
+  flex: 1;
+  min-width: 0;
+}
+
+.pie {
+  border-top: 1px solid var(--ui-borde-sutil);
+  background: var(--ui-superficie-2);
+}

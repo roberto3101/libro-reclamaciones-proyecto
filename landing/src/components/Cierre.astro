@@ -1,0 +1,54 @@
+---
+import site from '../data/site.json';
+import cierre from '../data/cierre.json';
+---
+
+<section class="cierre" data-rv-grupo>
+  <div class="shell rejilla">
+    <div class="cierre-txt rv">
+      <h2 class="t-seccion">{cierre.titulo}</h2>
+      <p class="cierre-p">{cierre.texto}</p>
+      <div class="cierre-cta">
+        <a href={site.ctaPrimario.href} class="btn">{site.ctaPrimario.texto}</a>
+      </div>
+    </div>
+
+    <ul class="cierre-pts rv">
+      {cierre.puntos.map((p) => <li>{p}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .cierre {
+    padding-block: var(--rhythm);
+    border-top: 1px solid var(--rule-2);
+    background: var(--surface);
+  }
+  .cierre-txt { grid-column: 1 / span 7; }
+  .cierre-p {
+    font-size: clamp(16.5px, 1.5vw, 19px);
+    color: var(--ink-2);
+    margin-top: 16px;
+    max-width: 50ch;
+  }
+  .cierre-cta { margin-top: 26px; }
+
+  .cierre-pts {
+    grid-column: 9 / span 4;
+    align-self: end;
+    border-top: 1px solid var(--rule-2);
+  }
+  .cierre-pts li {
+    font-size: 14.5px;
+    color: var(--ink-2);
+    padding: 13px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (max-width: 900px) {
+    .cierre-txt,
+    .cierre-pts { grid-column: 1 / -1; }
+    .cierre-pts { margin-top: 32px; }
+  }
+</style>

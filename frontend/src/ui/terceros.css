@@ -1,0 +1,205 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   TERCEROS — ajustes para librerías con estilos propios.
+
+   Estas hojas vienen pensadas solo para fondo claro y se cargan desde
+   fragmentos diferidos, así que pueden llegar DESPUÉS que esta. Por eso
+   los selectores van deliberadamente cargados de especificidad
+   (`:root[data-tema=…]` delante) en lugar de recurrir a `!important`:
+   la especificidad gana sin importar el orden de carga, y deja el estilo
+   todavía sobreescribible desde el componente si hiciera falta.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── intl-tel-input ────────────────────────────────────────────────────
+   El desplegable de países se monta al final de <body> dentro de
+   `.iti--container`, fuera del árbol del formulario. Hay que apuntar
+   tanto a la versión en línea (.iti) como a la portada.                */
+
+:root .iti,
+:root .iti input,
+:root .iti input[type='tel'] {
+  background-color: transparent;
+  color: var(--ui-texto);
+}
+
+:root .iti__dropdown-content,
+:root .iti--container .iti__dropdown-content,
+:root .iti__country-list,
+:root .iti--container .iti__country-list {
+  background-color: var(--ui-superficie-elevada);
+  border-color: var(--ui-borde);
+  color: var(--ui-texto);
+}
+
+:root .iti__search-input,
+:root .iti--container .iti__search-input {
+  background-color: var(--ui-superficie);
+  border-color: var(--ui-borde);
+  color: var(--ui-texto);
+}
+
+:root .iti__search-input::placeholder,
+:root .iti--container .iti__search-input::placeholder {
+  color: var(--ui-texto-3);
+}
+
+:root .iti__country,
+:root .iti--container .iti__country {
+  background-color: transparent;
+  color: var(--ui-texto);
+}
+
+:root .iti__country:hover,
+:root .iti__country--highlight,
+:root .iti--container .iti__country:hover,
+:root .iti--container .iti__country--highlight {
+  background-color: var(--ui-hover);
+}
+
+:root .iti__dial-code,
+:root .iti--container .iti__dial-code {
+  color: var(--ui-texto-2);
+}
+
+:root .iti__country-name,
+:root .iti--container .iti__country-name {
+  color: var(--ui-texto);
+}
+
+:root .iti__selected-dial-code {
+  color: var(--ui-texto);
+}
+
+:root .iti__divider {
+  border-bottom-color: var(--ui-borde);
+}
+
+:root .iti__selected-country {
+  background-color: transparent;
+}
+
+:root .iti__selected-country:hover {
+  background-color: var(--ui-hover);
+}
+
+:root .iti__arrow {
+  border-top-color: var(--ui-texto-3);
+}
+
+:root .iti__arrow--up {
+  border-bottom-color: var(--ui-texto-3);
+}
+
+/* Mismo truco de siempre contra el autorrelleno de Chrome. */
+:root .iti input:-webkit-autofill,
+:root .iti input:-webkit-autofill:hover,
+:root .iti input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 9999px var(--ui-superficie) inset;
+  -webkit-text-fill-color: var(--ui-texto);
+  caret-color: var(--ui-texto);
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* ── Avisos emergentes (react-hot-toast) ───────────────────────────── */
+
+:root .toast-app {
+  background: var(--ui-superficie-elevada);
+  color: var(--ui-texto);
+  border: 1px solid var(--ui-borde);
+  box-shadow: var(--ui-sombra-2);
+}
+
+/* ── SweetAlert2 ───────────────────────────────────────────────────────
+   Los diálogos de confirmación traen su propia hoja, siempre clara: con
+   la aplicación en oscuro aparecía un cuadro blanco en mitad de la
+   pantalla. Se repintan con los tokens para que sigan al tema. Como su
+   CSS llega en un fragmento diferido y puede cargarse después que este,
+   los selectores van reforzados con `:root` en lugar de usar
+   `!important`. */
+
+:root .swal2-container {
+  background: var(--ui-velo);
+}
+
+:root .swal2-popup {
+  background: var(--ui-superficie-elevada);
+  color: var(--ui-texto);
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-lg);
+  box-shadow: var(--ui-sombra-3);
+}
+
+:root .swal2-title,
+:root .swal2-popup .swal2-title {
+  color: var(--ui-texto);
+}
+
+:root .swal2-html-container,
+:root .swal2-popup .swal2-html-container {
+  color: var(--ui-texto-2);
+}
+
+:root .swal2-popup .swal2-confirm {
+  background: var(--ui-primario);
+  color: var(--ui-primario-sobre);
+  border-radius: var(--ui-r-md);
+  box-shadow: none;
+}
+
+:root .swal2-popup .swal2-confirm:hover {
+  background: var(--ui-primario-hover);
+}
+
+/* La confirmación destructiva llega con el color de peligro en línea; se
+   respeta, pero se le da el mismo radio y foco que al resto. */
+:root .swal2-popup .swal2-deny {
+  background: var(--ui-peligro);
+  color: var(--ui-peligro-sobre);
+  border-radius: var(--ui-r-md);
+}
+
+:root .swal2-popup .swal2-cancel {
+  background: var(--ui-superficie-hundida);
+  color: var(--ui-texto);
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-md);
+}
+
+:root .swal2-popup .swal2-cancel:hover {
+  background: var(--ui-activo);
+}
+
+:root .swal2-popup .swal2-confirm:focus-visible,
+:root .swal2-popup .swal2-cancel:focus-visible,
+:root .swal2-popup .swal2-deny:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+:root .swal2-popup .swal2-input,
+:root .swal2-popup .swal2-textarea,
+:root .swal2-popup .swal2-select {
+  background: var(--ui-superficie);
+  color: var(--ui-texto);
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-md);
+  box-shadow: none;
+}
+
+:root .swal2-popup .swal2-input:focus,
+:root .swal2-popup .swal2-textarea:focus {
+  border-color: var(--ui-foco);
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+:root .swal2-popup .swal2-validation-message {
+  background: var(--ui-peligro-suave);
+  color: var(--ui-peligro-texto);
+}
+
+/* Los iconos de aviso y pregunta se dibujan con su color de marca; solo
+   se ajusta el anillo para que no chirríe sobre superficie oscura. */
+:root .swal2-popup .swal2-icon.swal2-question { border-color: var(--ui-borde-fuerte); color: var(--ui-texto-2); }
+:root .swal2-popup .swal2-icon.swal2-warning  { border-color: var(--ui-adv-borde);    color: var(--ui-adv-texto); }
+:root .swal2-popup .swal2-icon.swal2-error    { border-color: var(--ui-peligro-borde); color: var(--ui-peligro-texto); }
+:root .swal2-popup .swal2-icon.swal2-success  { border-color: var(--ui-exito-borde);  color: var(--ui-exito-texto); }
+:root .swal2-popup .swal2-icon.swal2-info     { border-color: var(--ui-info-borde);   color: var(--ui-info-texto); }

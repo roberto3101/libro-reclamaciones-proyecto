@@ -1,0 +1,2 @@
+# El boton de registro apunta a la app. Cambia el destino cuando tengas el dominio.
+/registro  /registro  302

@@ -1,0 +1,11 @@
+/* El aspecto base de la fuente de símbolos vive en base.css, como clase
+   global: la tabla y otros puntos aplican `material-symbols-rounded`
+   directamente sobre un span, sin pasar por este módulo. Aquí solo se
+   añade lo propio del componente. */
+.icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  vertical-align: middle;
+}

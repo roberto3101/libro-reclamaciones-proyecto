@@ -1,0 +1,112 @@
+.envoltura {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-e-2);
+  cursor: pointer;
+  user-select: none;
+  min-width: 0;
+}
+
+.envoltura[data-deshabilitado] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pos_izquierda { flex-direction: row-reverse; }
+.pos_arriba    { flex-direction: column-reverse; align-items: flex-start; }
+.pos_abajo     { flex-direction: column; align-items: flex-start; }
+
+.control {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+/* El input real se mantiene en el DOM y encima del dibujo: conserva el
+   foco por teclado, el envío del formulario y los lectores de pantalla.
+   Solo se le quita la apariencia nativa. */
+.entrada {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+  z-index: 1;
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 1.5px solid var(--ui-borde-fuerte);
+  border-radius: var(--ui-r-xs);
+  background: var(--ui-superficie);
+  color: transparent;
+  transition:
+    background-color var(--ui-trans-rapida),
+    border-color var(--ui-trans-rapida),
+    color var(--ui-trans-rapida),
+    box-shadow var(--ui-trans-rapida);
+}
+
+.envoltura[data-tamano='p'] .marca { width: 15px; height: 15px; padding: 1px; }
+.envoltura[data-tamano='m'] .marca { width: 18px; height: 18px; padding: 2px; }
+.envoltura[data-tamano='g'] .marca { width: 22px; height: 22px; padding: 3px; }
+
+.envoltura:hover .marca {
+  border-color: var(--ui-texto-3);
+}
+
+.entrada:focus-visible + .marca {
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+  border-color: var(--ui-foco);
+}
+
+.entrada:checked + .marca,
+.entrada:indeterminate + .marca {
+  border-color: transparent;
+  color: var(--ui-primario-sobre);
+  background: var(--ui-primario);
+}
+
+.envoltura[data-color='exito'] .entrada:checked + .marca,
+.envoltura[data-color='exito'] .entrada:indeterminate + .marca {
+  background: var(--ui-exito);
+  color: var(--ui-exito-sobre);
+}
+.envoltura[data-color='error'] .entrada:checked + .marca,
+.envoltura[data-color='error'] .entrada:indeterminate + .marca {
+  background: var(--ui-peligro);
+  color: var(--ui-peligro-sobre);
+}
+.envoltura[data-color='advertencia'] .entrada:checked + .marca,
+.envoltura[data-color='advertencia'] .entrada:indeterminate + .marca {
+  background: var(--ui-adv);
+  color: var(--ui-adv-sobre);
+}
+.envoltura[data-color='info'] .entrada:checked + .marca,
+.envoltura[data-color='info'] .entrada:indeterminate + .marca {
+  background: var(--ui-info);
+  color: var(--ui-info-sobre);
+}
+.envoltura[data-color='secundario'] .entrada:checked + .marca,
+.envoltura[data-color='secundario'] .entrada:indeterminate + .marca {
+  background: var(--ui-texto-2);
+  color: var(--ui-texto-sobre-color);
+}
+
+.envoltura[data-error] .marca {
+  border-color: var(--ui-peligro);
+}
+
+.etiqueta {
+  font-size: var(--ui-t-md);
+  color: var(--ui-texto);
+  line-height: 1.4;
+  min-width: 0;
+}
+
+.requerido {
+  color: var(--ui-peligro-texto);
+}

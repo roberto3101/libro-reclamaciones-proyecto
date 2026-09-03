@@ -1,0 +1,146 @@
+---
+import planes from '../data/planes.json';
+const fmt = (n: number) => n.toFixed(2).replace('.', ',');
+---
+
+<section id="planes" class="seccion" data-rv-grupo>
+  <div class="shell">
+    <div class="rejilla pl-cab">
+      <div class="rail rv"><p class="et">Planes</p></div>
+      <div class="cuerpo rv">
+        <h2 class="t-seccion">{planes.titulo}</h2>
+        <p class="entrada pl-e">{planes.entrada}</p>
+        <p class="pl-nota mono">{planes.notaAnual}</p>
+      </div>
+    </div>
+
+    <ul class="filas">
+      {planes.planes.map((p) => (
+        <li class={p.destacado ? 'fila fila-dest rv' : 'fila rv'}>
+          <div class="col-id">
+            <h3 class="pl-n">{p.nombre}</h3>
+            {p.destacado && <span class="insignia mono">{p.insignia}</span>}
+            <p class="pl-r">{p.resumen}</p>
+          </div>
+
+          <div class="col-precio">
+            {p.etiquetaPrecio ? (
+              <span class="precio mono">{p.etiquetaPrecio}</span>
+            ) : (
+              <>
+                <span class="precio mono">S/ {fmt(p.precioMensual)}</span>
+                <span class="precio-u">al mes</span>
+                {p.precioAnual && (
+                  <span class="precio-a mono">S/ {fmt(p.precioAnual)} al año</span>
+                )}
+              </>
+            )}
+          </div>
+
+          <dl class="col-limites">
+            {p.limites.map((l) => (
+              <div class="lim">
+                <dt>{l.k}</dt>
+                <dd class="mono">{l.v}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <ul class="col-incluye">
+            {p.incluye.map((i) => <li class="inc">{i}</li>)}
+            {p.excluye.map((e) => <li class="exc">{e}</li>)}
+          </ul>
+
+          <div class="col-cta">
+            <a href="/registro" class={p.destacado ? 'btn' : 'btn btn-linea'}>{p.cta}</a>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .pl-cab { align-items: baseline; }
+  .pl-e { margin-top: 14px; }
+  .pl-nota { font-size: 12.5px; color: var(--pine); margin-top: 12px; }
+
+  .filas { margin-top: clamp(34px, 4vw, 56px); border-top: 1px solid var(--rule-2); }
+
+  /* Filas de registro, no tarjetas */
+  .fila {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1.1fr 1.6fr auto;
+    gap: clamp(16px, 2.2vw, 36px);
+    align-items: start;
+    padding: clamp(24px, 2.8vw, 34px) clamp(4px, 1.4vw, 20px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .fila-dest {
+    background: var(--surface);
+    border-left: 3px solid var(--carmine);
+  }
+
+  .pl-n { font-size: clamp(21px, 2.2vw, 26px); }
+  .insignia {
+    display: inline-block;
+    margin-top: 7px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--carmine);
+    background: var(--carmine-soft);
+    padding: 3px 8px;
+  }
+  .pl-r { font-size: 14.5px; color: var(--ink-2); margin-top: 8px; max-width: 34ch; }
+
+  .col-precio { display: flex; flex-direction: column; gap: 2px; }
+  .precio { font-size: clamp(22px, 2.4vw, 28px); font-weight: 500; letter-spacing: -0.02em; }
+  .precio-u { font-size: 13px; color: var(--ink-3); }
+  .precio-a { font-size: 12.5px; color: var(--pine); margin-top: 5px; }
+
+  .col-limites { margin: 0; }
+  .lim {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .lim:last-child { border-bottom: 0; }
+  .lim dt { font-size: 13px; color: var(--ink-3); }
+  .lim dd { margin: 0; font-size: 13px; }
+
+  .col-incluye li {
+    font-size: 13.5px;
+    padding: 4px 0 4px 18px;
+    position: relative;
+  }
+  .inc { color: var(--ink-2); }
+  .inc::before {
+    content: "\002B";
+    position: absolute;
+    left: 0;
+    color: var(--pine);
+    font-family: var(--f-mono);
+  }
+  .exc { color: var(--ink-3); }
+  .exc::before {
+    content: "\2212";
+    position: absolute;
+    left: 0;
+    color: var(--ink-3);
+    font-family: var(--f-mono);
+  }
+
+  .col-cta { align-self: center; }
+
+  @media (max-width: 1080px) {
+    .fila { grid-template-columns: 1fr 1fr; row-gap: 22px; }
+    .col-incluye { grid-column: 1 / -1; }
+    .col-cta { grid-column: 1 / -1; }
+  }
+  @media (max-width: 560px) {
+    .fila { grid-template-columns: 1fr; }
+  }
+</style>

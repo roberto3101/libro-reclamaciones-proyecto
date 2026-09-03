@@ -1,0 +1,120 @@
+/* Los anchos salen de tokens.css para que cabecera, panel y contenido
+   partan del mismo número y nadie lo repita a mano. */
+.armazon {
+  --ui-barra-ancho: var(--ui-barra-ancho-abierta);
+  min-height: 100vh;
+  background: var(--ui-fondo);
+}
+
+.armazon[data-colapsado] {
+  --ui-barra-ancho: var(--ui-barra-ancho-plegada);
+}
+
+.panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: var(--ui-z-panel);
+  width: var(--ui-barra-ancho);
+  transition: width var(--ui-trans-lenta), transform var(--ui-trans-lenta);
+}
+
+.principal {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+  margin-left: var(--ui-barra-ancho);
+  transition: margin-left var(--ui-trans-lenta);
+}
+
+/* El contenido ocupa el ancho disponible con un tope alto: en pantallas
+   muy anchas una tabla estirada sin límite se vuelve incómoda de recorrer,
+   pero limitarla a una columna estrecha desperdicia la pantalla. */
+.contenido {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  max-width: 1560px;
+  padding: var(--ui-e-6) var(--ui-e-6) var(--ui-e-12);
+}
+
+@media (max-width: 1100px) {
+  .contenido {
+    padding: var(--ui-e-5) var(--ui-e-4) var(--ui-e-10);
+  }
+}
+
+@media (max-width: 600px) {
+  .contenido {
+    padding: var(--ui-e-4) var(--ui-e-3) var(--ui-e-8);
+  }
+}
+
+/* Por debajo de 360px cada píxel cuenta: se reduce el margen lateral al
+   mínimo que sigue separando el contenido del borde de la pantalla. */
+@media (max-width: 360px) {
+  .contenido {
+    padding: var(--ui-e-3) var(--ui-e-2) var(--ui-e-8);
+  }
+}
+
+/* ── Botón de plegado, en la cabecera ──────────────────────────────── */
+
+.botonPanel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--ui-r-md);
+  background: transparent;
+  color: var(--ui-texto-2);
+  cursor: pointer;
+  transition: background-color var(--ui-trans-rapida), color var(--ui-trans-rapida),
+    border-color var(--ui-trans-rapida);
+}
+
+.botonPanel:hover {
+  background: var(--ui-hover);
+  border-color: var(--ui-borde);
+  color: var(--ui-texto);
+}
+
+.botonPanel:focus-visible {
+  outline: none;
+  border-color: var(--ui-foco);
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+/* ── Móvil ─────────────────────────────────────────────────────────────
+   El panel deja de ocupar sitio y se convierte en cajón: sale de la
+   pantalla y entra al abrirlo. El contenido recupera todo el ancho.   */
+
+.armazon[data-movil] {
+  --ui-barra-ancho: 252px;
+}
+
+.armazon[data-movil] .principal {
+  margin-left: 0;
+}
+
+.armazon[data-movil] .panel {
+  transform: translateX(-100%);
+  box-shadow: var(--ui-sombra-3);
+}
+
+.armazon[data-movil][data-abierto] .panel {
+  transform: translateX(0);
+}
+
+.velo {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--ui-z-panel) - 1);
+  background: var(--ui-velo);
+}

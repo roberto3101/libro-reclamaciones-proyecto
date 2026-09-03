@@ -1,0 +1,83 @@
+---
+import preguntas from '../data/preguntas.json';
+---
+
+<section id="preguntas" class="seccion" data-rv-grupo>
+  <div class="shell rejilla">
+    <div class="rail rv">
+      <p class="et">Preguntas</p>
+      <h2 class="t-seccion pr-t">{preguntas.titulo}</h2>
+      <p class="pr-e">{preguntas.entrada}</p>
+    </div>
+
+    <div class="cuerpo">
+      <div class="lista">
+        {preguntas.items.map((q, i) => (
+          <details class="qa rv" open={i === 0}>
+            <summary>
+              <span class="qa-p">{q.p}</span>
+              <span class="qa-mas" aria-hidden="true"></span>
+            </summary>
+            <p class="qa-r">{q.r}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pr-t { margin-top: 14px; }
+  .pr-e {
+    font-size: 15px;
+    color: var(--ink-2);
+    margin-top: 16px;
+    max-width: 34ch;
+  }
+
+  .lista { border-top: 1px solid var(--rule-2); }
+  .qa { border-bottom: 1px solid var(--rule); }
+
+  .qa summary {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .qa summary::-webkit-details-marker { display: none; }
+
+  .qa-p {
+    font-family: var(--f-display);
+    font-size: clamp(18px, 1.9vw, 22px);
+    line-height: 1.25;
+    transition: color 140ms ease;
+  }
+  .qa summary:hover .qa-p { color: var(--carmine); }
+
+  .qa-mas {
+    position: relative;
+    width: 13px;
+    height: 13px;
+    flex: none;
+  }
+  .qa-mas::before,
+  .qa-mas::after {
+    content: "";
+    position: absolute;
+    background: var(--carmine);
+    transition: transform 200ms ease;
+  }
+  .qa-mas::before { inset: 6px 0 6px 0; height: 1px; }
+  .qa-mas::after { inset: 0 6px 0 6px; width: 1px; }
+  .qa[open] .qa-mas::after { transform: scaleY(0); }
+
+  .qa-r {
+    font-size: 15.5px;
+    color: var(--ink-2);
+    max-width: 68ch;
+    padding-bottom: 22px;
+  }
+</style>

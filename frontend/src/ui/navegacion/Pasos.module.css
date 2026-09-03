@@ -1,0 +1,166 @@
+.pasos {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  --ui-paso-color: var(--ui-primario);
+  --ui-paso-sobre: var(--ui-primario-sobre);
+}
+
+.pasos[data-color='exito'] {
+  --ui-paso-color: var(--ui-exito);
+  --ui-paso-sobre: var(--ui-exito-sobre);
+}
+
+.pasos[data-color='info'] {
+  --ui-paso-color: var(--ui-info);
+  --ui-paso-sobre: var(--ui-info-sobre);
+}
+
+.pasos[data-orientacion='horizontal'] {
+  align-items: flex-start;
+}
+
+.pasos[data-orientacion='vertical'] {
+  flex-direction: column;
+}
+
+.paso {
+  display: flex;
+  min-width: 0;
+}
+
+.pasos[data-orientacion='horizontal'] .paso {
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.pasos[data-orientacion='horizontal'] .paso:last-child {
+  flex: 0 1 auto;
+}
+
+.pasos[data-orientacion='vertical'] .paso {
+  gap: var(--ui-e-3);
+  padding-bottom: var(--ui-e-4);
+}
+
+.marcador {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+
+.pasos[data-orientacion='horizontal'] .marcador {
+  width: 100%;
+  justify-content: center;
+}
+
+.pasos[data-orientacion='vertical'] .marcador {
+  flex-direction: column;
+  align-self: stretch;
+}
+
+.circulo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--ui-borde-fuerte);
+  border-radius: 50%;
+  background: var(--ui-superficie);
+  color: var(--ui-texto-3);
+  font-size: var(--ui-t-xs);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  z-index: 1;
+  transition: background-color var(--ui-trans), border-color var(--ui-trans), color var(--ui-trans);
+}
+
+.linea {
+  background: var(--ui-borde);
+}
+
+.pasos[data-orientacion='horizontal'] .linea {
+  position: absolute;
+  top: 13px;
+  left: calc(50% + 18px);
+  right: calc(-50% + 18px);
+  height: 2px;
+}
+
+.pasos[data-orientacion='vertical'] .linea {
+  flex: 1;
+  width: 2px;
+  margin-block: 4px;
+  min-height: 16px;
+}
+
+.textos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.etiqueta {
+  font-size: var(--ui-t-sm);
+  font-weight: 500;
+  color: var(--ui-texto-2);
+  line-height: 1.35;
+}
+
+.descripcion {
+  font-size: var(--ui-t-xs);
+  color: var(--ui-texto-3);
+  line-height: 1.4;
+}
+
+.opcional {
+  font-size: var(--ui-t-xs);
+  color: var(--ui-texto-3);
+  font-style: italic;
+}
+
+/* ── Estados ───────────────────────────────────────────────────────── */
+
+.paso[data-estado='activo'] .circulo {
+  border-color: var(--ui-paso-color);
+  background: var(--ui-paso-color);
+  color: var(--ui-paso-sobre);
+}
+
+.paso[data-estado='activo'] .etiqueta {
+  color: var(--ui-texto);
+  font-weight: 600;
+}
+
+.paso[data-estado='hecho'] .circulo {
+  border-color: var(--ui-paso-color);
+  background: var(--ui-paso-color);
+  color: var(--ui-paso-sobre);
+}
+
+.paso[data-estado='hecho'] .linea {
+  background: var(--ui-paso-color);
+}
+
+.paso[data-estado='hecho'] .etiqueta {
+  color: var(--ui-texto);
+}
+
+.paso[data-estado='error'] .circulo {
+  border-color: var(--ui-peligro);
+  background: var(--ui-peligro);
+  color: var(--ui-peligro-sobre);
+}
+
+.paso[data-estado='error'] .etiqueta {
+  color: var(--ui-peligro-texto);
+  font-weight: 600;
+}

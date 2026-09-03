@@ -1,0 +1,293 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   TOKENS — única fuente de verdad del color en toda la aplicación.
+
+   ── Sobre el lenguaje visual ──────────────────────────────────────────
+   Sistema cálido y editorial, no el gris azulado de panel genérico.
+   Tres decisiones lo definen, y conviene respetarlas al ampliarlo:
+
+     1. Los neutros tiran a PAPEL, no a azul. Todo gris lleva algo de
+        amarillo. Es lo que separa esta interfaz de las mil que usan la
+        escala slate por defecto.
+     2. La estructura la dibujan LÍNEAS de 1px, no sombras difusas. Las
+        sombras quedan para lo que flota de verdad: menús y diálogos.
+     3. Un solo acento —tierra quemada— y semánticos apagados. Superficies
+        planas: ningún degradado.
+
+   ── Regla que sostiene el sistema ─────────────────────────────────────
+   Cada token semántico se define en AMBOS temas. Si falta en uno,
+   `var(--x)` no resuelve, la declaración se descarta y el elemento hereda
+   un color cualquiera: así es como algo "se ve en oscuro y desaparece en
+   claro". `npm run verificar:tokens` compara los dos bloques, falla si se
+   desincronizan y mide el contraste de cada par realmente en uso.
+
+   Consumen estos tokens, en este orden:
+     1. los .module.css de src/ui
+     2. el tema de MUI (src/ui/tema/temaMui.ts) — mismos valores
+     3. las utilidades de Tailwind vía @theme en index.css
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  color-scheme: light;
+
+  /* ── Superficies ───────────────────────────────────────────────────
+     Papel cálido. El fondo es lo más lejano; la superficie elevada, lo
+     más cercano.                                                      */
+  --ui-fondo: #f6f4ef;
+  --ui-superficie: #fffefb;
+  --ui-superficie-2: #f1eee6;
+  --ui-superficie-hundida: #eae6db;
+  --ui-superficie-elevada: #fffefb;
+  --ui-hover: rgba(40, 34, 22, 0.045);
+  --ui-activo: rgba(40, 34, 22, 0.08);
+  --ui-seleccionado: rgba(154, 74, 36, 0.1);
+
+  /* ── Bordes ──────────────────────────────────────────────────────────
+     Recurso estructural principal: definen tarjetas, tablas y campos sin
+     recurrir a sombras.                                               */
+  --ui-borde-sutil: #ebe7dd;
+  --ui-borde: #ddd8ca;
+  --ui-borde-fuerte: #b3ab98;
+
+  /* ── Texto ───────────────────────────────────────────────────────── */
+  --ui-texto: #1b1915;
+  --ui-texto-2: #55504a;
+  --ui-texto-3: #6a655a;
+  --ui-texto-desactivado: #9b958a;
+  --ui-texto-sobre-color: #fffefb;
+
+  /* ── Primario (tierra quemada) ─────────────────────────────────────
+     El acento de la marca. Se usa con cuentagotas: acción principal,
+     estado activo y poco más. Su fuerza viene de la escasez.          */
+  --ui-primario: #9a4a24;
+  --ui-primario-hover: #833d1c;
+  --ui-primario-activo: #6d3216;
+  --ui-primario-texto: #8a4120;
+  --ui-primario-suave: #fbf2ec;
+  --ui-primario-suave-hover: #f5e2d5;
+  --ui-primario-suave-borde: #f0dccd;
+  --ui-primario-sobre: #fffefb;
+
+  /* ── Acento (mismo tierra; se conserva el nombre por compatibilidad) */
+  --ui-acento: #9a4a24;
+  --ui-acento-hover: #833d1c;
+  --ui-acento-texto: #8a4120;
+  --ui-acento-suave: #fbf2ec;
+  --ui-acento-borde: #f0dccd;
+  --ui-acento-sobre: #fffefb;
+
+  /* ── Éxito (oliva, no menta) ───────────────────────────────────────── */
+  --ui-exito: #40613a;
+  --ui-exito-hover: #35512f;
+  --ui-exito-texto: #3a5834;
+  --ui-exito-texto-2: #44653d;
+  --ui-exito-suave: #f0f4ec;
+  --ui-exito-suave-2: #e2ebdb;
+  --ui-exito-borde: #c7d6bd;
+  --ui-exito-sobre: #fffefb;
+
+  /* ── Advertencia (ocre) ────────────────────────────────────────────── */
+  --ui-adv: #8a6112;
+  --ui-adv-hover: #74510e;
+  --ui-adv-texto: #7d570f;
+  --ui-adv-suave: #faf4e6;
+  --ui-adv-borde: #e8d6a8;
+  --ui-adv-sobre: #fffefb;
+
+  /* ── Peligro (ladrillo) ────────────────────────────────────────────── */
+  --ui-peligro: #a3312a;
+  --ui-peligro-hover: #8a2822;
+  --ui-peligro-texto: #932c25;
+  --ui-peligro-suave: #fbf0ee;
+  --ui-peligro-suave-2: #f4ddd9;
+  --ui-peligro-borde: #e5c2bc;
+  --ui-peligro-sobre: #fffefb;
+
+  /* ── Información (verde azulado apagado) ───────────────────────────── */
+  --ui-info: #29585c;
+  --ui-info-hover: #204a4e;
+  --ui-info-texto: #265256;
+  --ui-info-etiqueta: #35696d;
+  --ui-info-suave: #eef4f4;
+  --ui-info-suave-2: #dde9ea;
+  --ui-info-borde: #c2d7d8;
+  --ui-info-sobre: #fffefb;
+
+  /* ── Foco ──────────────────────────────────────────────────────────── */
+  --ui-foco: #9a4a24;
+  --ui-foco-halo: rgba(154, 74, 36, 0.2);
+
+  /* ── Sombras ───────────────────────────────────────────────────────
+     Muy contenidas a propósito: la jerarquía la marcan los bordes. Solo
+     lo que de verdad flota lleva sombra apreciable.                   */
+  --ui-sombra-1: 0 1px 1px rgba(40, 34, 22, 0.04);
+  --ui-sombra-2: 0 2px 6px rgba(40, 34, 22, 0.07);
+  --ui-sombra-3: 0 12px 28px rgba(40, 34, 22, 0.12);
+  --ui-sombra-interna: inset 0 1px 2px rgba(40, 34, 22, 0.05);
+
+  /* ── Superposiciones ───────────────────────────────────────────────── */
+  --ui-velo: rgba(28, 24, 16, 0.42);
+  --ui-vidrio: rgba(255, 254, 251, 0.82);
+  --ui-esqueleto: #e9e5da;
+  --ui-esqueleto-brillo: rgba(255, 255, 255, 0.7);
+  --ui-barra-desliz: #c9c2b1;
+}
+
+/* ── Tema oscuro ───────────────────────────────────────────────────────
+   Negro CÁLIDO, no azulado: es la contrapartida coherente del papel.
+   Las superficies se ACLARAN al elevarse, porque en oscuro la luz viene
+   de delante y lo cercano recibe más.                                  */
+:root.dark,
+:root[data-tema='dark'] {
+  color-scheme: dark;
+
+  --ui-fondo: #131210;
+  --ui-superficie: #1a1916;
+  --ui-superficie-2: #201e1a;
+  --ui-superficie-hundida: #0e0d0b;
+  --ui-superficie-elevada: #24221d;
+  --ui-hover: rgba(255, 246, 230, 0.055);
+  --ui-activo: rgba(255, 246, 230, 0.09);
+  --ui-seleccionado: rgba(214, 122, 76, 0.15);
+
+  --ui-borde-sutil: #242219;
+  --ui-borde: #332f27;
+  --ui-borde-fuerte: #4c4638;
+
+  --ui-texto: #eae5da;
+  --ui-texto-2: #aaa294;
+  --ui-texto-3: #928a7c;
+  --ui-texto-desactivado: #837c6d;
+  --ui-texto-sobre-color: #fffefb;
+
+  --ui-primario: #a44b22;
+  --ui-primario-hover: #b85528;
+  --ui-primario-activo: #c96030;
+  --ui-primario-texto: #e08a5c;
+  --ui-primario-suave: #241811;
+  --ui-primario-suave-hover: #33211a;
+  --ui-primario-suave-borde: #40291b;
+  --ui-primario-sobre: #fffefb;
+
+  --ui-acento: #a44b22;
+  --ui-acento-hover: #b85528;
+  --ui-acento-texto: #e08a5c;
+  --ui-acento-suave: #241811;
+  --ui-acento-borde: #40291b;
+  --ui-acento-sobre: #fffefb;
+
+  --ui-exito: #46693f;
+  --ui-exito-hover: #517a49;
+  --ui-exito-texto: #9dc191;
+  --ui-exito-texto-2: #8db481;
+  --ui-exito-suave: #161c13;
+  --ui-exito-suave-2: #1e2819;
+  --ui-exito-borde: #2f4029;
+  --ui-exito-sobre: #fffefb;
+
+  --ui-adv: #8a6112;
+  --ui-adv-hover: #9c6e15;
+  --ui-adv-texto: #d9ac52;
+  --ui-adv-suave: #1e1809;
+  --ui-adv-borde: #3d3013;
+  --ui-adv-sobre: #fffefb;
+
+  --ui-peligro: #a3312a;
+  --ui-peligro-hover: #b83a32;
+  --ui-peligro-texto: #e28b83;
+  --ui-peligro-suave: #201110;
+  --ui-peligro-suave-2: #2d1815;
+  --ui-peligro-borde: #46231f;
+  --ui-peligro-sobre: #fffefb;
+
+  --ui-info: #2d6165;
+  --ui-info-hover: #367276;
+  --ui-info-texto: #86bcc0;
+  --ui-info-etiqueta: #78b0b4;
+  --ui-info-suave: #101a1b;
+  --ui-info-suave-2: #172527;
+  --ui-info-borde: #24393b;
+  --ui-info-sobre: #fffefb;
+
+  --ui-foco: #d67a4c;
+  --ui-foco-halo: rgba(214, 122, 76, 0.28);
+
+  /* En oscuro la sombra sola no separa planos: se refuerza con un borde
+     luminoso, que es lo que da la sensación de relieve.               */
+  --ui-sombra-1: 0 1px 1px rgba(0, 0, 0, 0.4);
+  --ui-sombra-2: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 246, 230, 0.04);
+  --ui-sombra-3: 0 14px 32px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(255, 246, 230, 0.06);
+  --ui-sombra-interna: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+
+  --ui-velo: rgba(0, 0, 0, 0.68);
+  --ui-vidrio: rgba(26, 25, 22, 0.8);
+  --ui-esqueleto: #262319;
+  --ui-esqueleto-brillo: rgba(255, 246, 230, 0.06);
+  --ui-barra-desliz: #423c30;
+}
+
+/* ── Tokens sin tema ───────────────────────────────────────────────────
+   Geometría, ritmo y movimiento no dependen del tema, así que viven
+   fuera de los bloques de color y no necesitan duplicarse.             */
+:root {
+  /* Radios contenidos. Las esquinas muy redondeadas son la firma del
+     panel genérico; aquí la forma es más seca.                        */
+  --ui-r-xs: 2px;
+  --ui-r-sm: 3px;
+  --ui-r-md: 4px;
+  --ui-r-lg: 6px;
+  --ui-r-xl: 10px;
+  --ui-r-full: 9999px;
+
+  /* Escala de 4px para el CSS del kit. Ojo: la prop `sx` sigue usando el
+     múltiplo de 8px de MUI (ver src/ui/sx.ts) porque las maquetaciones
+     heredadas se escribieron contra él y cambiarlo las desplazaría.   */
+  --ui-e-1: 4px;
+  --ui-e-2: 8px;
+  --ui-e-3: 12px;
+  --ui-e-4: 16px;
+  --ui-e-5: 20px;
+  --ui-e-6: 24px;
+  --ui-e-8: 32px;
+  --ui-e-10: 40px;
+  --ui-e-12: 48px;
+
+  --ui-t-xs: 0.6875rem;
+  --ui-t-sm: 0.8125rem;
+  --ui-t-md: 0.875rem;
+  --ui-t-lg: 1rem;
+  --ui-t-xl: 1.25rem;
+  --ui-t-2xl: 1.5rem;
+
+  /* Tres familias con papeles distintos: serif para titulares (da el
+     carácter editorial), grotesca para interfaz y datos, y monoespaciada
+     para lo que se lee carácter a carácter —códigos de reclamo, RUC,
+     DNI—, donde importa distinguir 0 de O y 1 de l.                   */
+  --ui-fuente-titulo: 'Fraunces', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --ui-fuente: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --ui-fuente-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --ui-trans-rapida: 110ms cubic-bezier(0.2, 0, 0.2, 1);
+  --ui-trans: 170ms cubic-bezier(0.2, 0, 0.2, 1);
+  --ui-trans-lenta: 260ms cubic-bezier(0.2, 0, 0.2, 1);
+
+  --ui-z-pegajoso: 100;
+  --ui-z-panel: 200;
+  --ui-z-velo: 300;
+  --ui-z-dialogo: 400;
+  --ui-z-menu: 500;
+  --ui-z-aviso: 600;
+
+  /* Anchos del panel lateral. Viven aquí porque los consultan tanto el
+     armazón como la cabecera, que alinea su botón de plegado con ellos. */
+  --ui-barra-ancho-abierta: 244px;
+  --ui-barra-ancho-plegada: 60px;
+}
+
+/* Respetar a quien pidió menos movimiento en su sistema operativo. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ui-trans-rapida: 1ms linear;
+    --ui-trans: 1ms linear;
+    --ui-trans-lenta: 1ms linear;
+  }
+}

@@ -1,0 +1,227 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   BASE — normalización y estilos de elementos nativos.
+
+   Todo lo de aquí sale de tokens.css. La razón es concreta: los elementos
+   que pinta el navegador (barras de desplazamiento, selección de texto,
+   autorrelleno, calendarios) no heredan colores de React, y son
+   exactamente los que se quedaban en claro cuando la interfaz pasaba a
+   oscuro.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* IMPORTANTE — todo lo de abajo va dentro de @layer base.
+   Tailwind coloca sus utilidades en @layer utilities, y en CSS cualquier
+   regla SIN capa gana a cualquier regla EN capa, por especificidad que
+   tenga esta. Con estas reglas fuera de capa, un `h1` con `text-white`
+   salia pintado con el color de texto por defecto: la utilidad no podia
+   ganar. Metiendolas en @layer base se restablece el orden natural
+   (base < components < utilities) y las utilidades vuelven a mandar. */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    /* Reserva el carril de la barra de desplazamiento: sin esto la página
+       se desplaza unos píxeles al abrir un modal que bloquea el scroll. */
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--ui-fondo);
+    color: var(--ui-texto);
+    font-family: var(--ui-fuente);
+    font-size: var(--ui-t-md);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Cifras de ancho fijo: los importes y las fechas de las tablas dejan de
+       bailar al cambiar de valor. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  html,
+  body,
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Los titulares llevan la serif: es lo que da el carácter editorial y
+     lo que separa visualmente "lo que se lee" de "lo que se opera".
+     `text-wrap: balance` reparte las líneas para que no quede una
+     palabra suelta colgando al final. */
+  /* Solo los dos primeros niveles llevan serif: son los titulares que dan
+     carácter. Del h3 hacia abajo son rótulos de sección —a menudo en
+     versalitas—, y una serif en mayúsculas con espaciado se lee peor y
+     desentona. Esos van en la grotesca de interfaz. */
+  h1, h2 {
+    font-family: var(--ui-fuente-titulo);
+    font-weight: 600;
+    font-optical-sizing: auto;
+    letter-spacing: -0.011em;
+    color: var(--ui-texto);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  h3, h4, h5, h6 {
+    font-family: var(--ui-fuente);
+    font-weight: 600;
+    letter-spacing: -0.003em;
+    color: var(--ui-texto);
+    line-height: 1.3;
+  }
+
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.0625rem; }
+  h4, h5, h6 { font-size: 0.9375rem; }
+
+  /* Los códigos y documentos van en monoespaciada estén donde estén: es
+     lo que se lee carácter a carácter. */
+  code, kbd, samp,
+  .lr-codigo {
+    font-family: var(--ui-fuente-mono);
+    font-variant-ligatures: none;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Ningún bloque de texto corrido debe cruzar la pantalla entera: por
+     encima de ~75 caracteres el ojo pierde el renglón al saltar de línea.
+     Se aplica solo a párrafos sueltos, no a celdas ni etiquetas. */
+  .lr-medida {
+    max-width: 68ch;
+  }
+
+  a {
+    color: var(--ui-primario-texto);
+    text-underline-offset: 2px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--ui-borde);
+  }
+
+  code, pre, kbd, samp {
+    font-family: var(--ui-fuente-mono);
+    font-size: 0.9em;
+  }
+
+  /* Los controles de formulario no heredan la tipografía por defecto. */
+  button, input, select, textarea, optgroup {
+    font: inherit;
+    color: inherit;
+  }
+
+  img, svg, video, canvas {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Nadie debería perder el foco de vista al navegar con teclado. */
+  :focus-visible {
+    outline: 2px solid var(--ui-foco);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--ui-seleccionado);
+    color: var(--ui-texto);
+  }
+
+  /* ── Barras de desplazamiento ──────────────────────────────────────────
+     Se declaran por las dos vías: la estándar la entienden Firefox y los
+     navegadores recientes; la de WebKit cubre al resto.                   */
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ui-barra-desliz) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--ui-barra-desliz);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: var(--ui-r-full);
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--ui-texto-3);
+    background-clip: padding-box;
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* ── Autorrelleno ──────────────────────────────────────────────────────
+     Chrome pinta un fondo propio que no admite background-color. La sombra
+     interna lo tapa y la transición interminable evita que se dibuje.     */
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--ui-superficie) inset;
+    -webkit-text-fill-color: var(--ui-texto);
+    caret-color: var(--ui-texto);
+    transition: background-color 9999s ease-in-out 0s;
+  }
+
+  /* ── Fuente de símbolos ────────────────────────────────────────────────
+     Material Symbols dibuja el icono a partir del texto del elemento. Sin
+     `white-space: nowrap` y las ligaduras activas, un nombre compuesto como
+     `account_balance_wallet` se partiría y no resolvería.                 */
+
+  .material-symbols-rounded {
+    font-family: 'Material Symbols Rounded', sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: 'liga';
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+  }
+
+  /* ── Controles nativos con tema ────────────────────────────────────────
+     El icono del calendario y del reloj lo dibuja el navegador en negro
+     fijo; invertirlo en oscuro es la única forma de verlo.               */
+
+  :root[data-tema='dark'] input[type='date']::-webkit-calendar-picker-indicator,
+  :root[data-tema='dark'] input[type='time']::-webkit-calendar-picker-indicator,
+  :root[data-tema='dark'] input[type='datetime-local']::-webkit-calendar-picker-indicator {
+    filter: invert(1) opacity(0.65);
+  }
+
+  :root[data-tema='dark'] input[type='search']::-webkit-search-cancel-button {
+    filter: invert(1) opacity(0.6);
+  }
+}

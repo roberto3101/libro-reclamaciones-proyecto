@@ -1,0 +1,93 @@
+.bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+}
+
+.cabecera {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--ui-e-2);
+}
+
+.etiqueta {
+  font-size: var(--ui-t-sm);
+  color: var(--ui-texto-2);
+}
+
+.porcentaje {
+  font-size: var(--ui-t-sm);
+  font-weight: 600;
+  color: var(--ui-texto);
+  font-variant-numeric: tabular-nums;
+}
+
+.pista {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-radius: var(--ui-r-full);
+  background: var(--ui-superficie-hundida);
+}
+
+.relleno {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ui-primario);
+  transition: width var(--ui-trans-lenta);
+}
+
+.pista[data-variante='secundario']  .relleno { background: var(--ui-texto-2); }
+.pista[data-variante='error']       .relleno { background: var(--ui-peligro); }
+.pista[data-variante='info']        .relleno { background: var(--ui-info); }
+.pista[data-variante='exito']       .relleno { background: var(--ui-exito); }
+.pista[data-variante='advertencia'] .relleno { background: var(--ui-adv); }
+
+.textoInterno {
+  padding-inline: 8px;
+  font-size: var(--ui-t-xs);
+  font-weight: 600;
+  color: var(--ui-primario-sobre);
+  font-variant-numeric: tabular-nums;
+}
+
+.rayado {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.18) 25%, transparent 25%,
+    transparent 50%, rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.18) 75%, transparent 75%
+  );
+  background-size: 1rem 1rem;
+}
+
+.animado {
+  animation: desplazar 1s linear infinite;
+}
+
+@keyframes desplazar {
+  from { background-position: 1rem 0; }
+  to   { background-position: 0 0; }
+}
+
+/* Sin valor conocido, la barra recorre la pista en vez de quedarse quieta. */
+.indeterminado {
+  width: 40%;
+  animation: recorrer 1.15s ease-in-out infinite;
+}
+
+@keyframes recorrer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indeterminado { animation-duration: 3s; }
+  .animado { animation: none; }
+}

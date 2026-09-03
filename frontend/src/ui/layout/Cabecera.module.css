@@ -1,0 +1,196 @@
+.cabecera {
+  position: sticky;
+  top: 0;
+  z-index: var(--ui-z-pegajoso);
+  display: flex;
+  align-items: center;
+  gap: var(--ui-e-3);
+  min-height: 52px;
+  padding: 6px var(--ui-e-4) 6px var(--ui-e-3);
+  background: var(--ui-superficie);
+  /* Una línea, no una sombra: es la que separa la cabecera del contenido
+     sin añadir profundidad falsa. */
+  border-bottom: 1px solid var(--ui-borde);
+}
+
+.inicio {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+
+.izquierda {
+  flex: 1;
+  min-width: 0;
+}
+
+.derecha {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-e-2);
+  flex: none;
+}
+
+/* El título de la cabecera es un rótulo de orientación, no un titular de
+   lectura: va en la grotesca de interfaz y en tamaño contenido, para que
+   el protagonismo se lo lleve el contenido de la página. */
+.titulo {
+  margin: 0;
+  font-family: var(--ui-fuente);
+  font-size: var(--ui-t-md);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--ui-texto);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.migas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--ui-t-sm);
+}
+
+/* El separador se genera desde CSS: así el marcado no lleva caracteres
+   sueltos que el lector de pantalla leería en voz alta. */
+.migas li + li::before {
+  content: '/';
+  margin-right: 6px;
+  color: var(--ui-borde-fuerte);
+}
+
+.miga {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--ui-texto-2);
+  cursor: pointer;
+}
+
+.miga:hover {
+  color: var(--ui-primario-texto);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.migaActual {
+  color: var(--ui-texto);
+  font-weight: 500;
+}
+
+.busqueda {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 0 1 300px;
+}
+
+.lupa {
+  position: absolute;
+  left: 9px;
+  display: inline-flex;
+  color: var(--ui-texto-3);
+  pointer-events: none;
+}
+
+.campoBusqueda {
+  width: 100%;
+  padding: 6px 10px 6px 30px;
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-md);
+  background: var(--ui-superficie-hundida);
+  color: var(--ui-texto);
+  font-size: var(--ui-t-sm);
+  outline: none;
+  transition: border-color var(--ui-trans-rapida), box-shadow var(--ui-trans-rapida),
+    background-color var(--ui-trans-rapida);
+}
+
+.campoBusqueda::placeholder {
+  color: var(--ui-texto-3);
+  opacity: 1;
+}
+
+.campoBusqueda:focus {
+  border-color: var(--ui-foco);
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+  background: var(--ui-superficie);
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 8px 3px 3px;
+  border: 1px solid transparent;
+  border-radius: var(--ui-r-md);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color var(--ui-trans-rapida), border-color var(--ui-trans-rapida);
+}
+
+.usuario:hover {
+  background: var(--ui-hover);
+  border-color: var(--ui-borde);
+}
+
+.usuario:focus-visible {
+  outline: none;
+  border-color: var(--ui-foco);
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+/* Avatar cuadrado de esquinas suaves: el círculo con inicial es el cliché
+   de todo panel generado. */
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--ui-r-sm);
+  background: var(--ui-primario);
+  color: var(--ui-primario-sobre);
+  font-size: var(--ui-t-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.datosUsuario {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.nombre {
+  font-size: var(--ui-t-sm);
+  font-weight: 500;
+  color: var(--ui-texto);
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rol {
+  font-size: var(--ui-t-xs);
+  color: var(--ui-texto-3);
+  text-transform: lowercase;
+}
+
+/* En pantallas estrechas se conserva el avatar y se suelta el texto: es la
+   parte que peor cabe y la que menos aporta. */
+@media (max-width: 700px) {
+  .datosUsuario { display: none; }
+  .busqueda { display: none; }
+}

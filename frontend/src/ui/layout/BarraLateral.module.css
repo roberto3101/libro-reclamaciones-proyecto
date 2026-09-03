@@ -1,0 +1,275 @@
+.barra {
+  display: flex;
+  flex-direction: column;
+  width: var(--ui-barra-ancho);
+  height: 100%;
+  background: var(--ui-superficie-2);
+  border-right: 1px solid var(--ui-borde);
+  overflow: visible; /* deja salir los paneles flotantes al plegar */
+}
+
+.cabeceraBarra {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-e-2);
+  padding: 12px var(--ui-e-3);
+  min-height: 52px;
+  border-bottom: 1px solid var(--ui-borde-sutil);
+}
+
+.barra[data-colapsado] .cabeceraBarra {
+  justify-content: center;
+  padding: 12px 6px;
+}
+
+/* El nombre de la empresa es lo único con voz editorial en el panel:
+   sirve de rótulo del espacio de trabajo. Se permite hasta tres líneas y
+   después se recorta, en vez de empujar el menú hacia abajo. */
+.textoLogo {
+  font-family: var(--ui-fuente-titulo);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  color: var(--ui-texto);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.navegacion {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: visible;
+  padding: var(--ui-e-2) var(--ui-e-2) var(--ui-e-4);
+}
+
+.lista,
+.sublista,
+.flotante {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* El panel flotante se ancla al elemento de la lista, no al botón: así
+   queda alineado con la fila completa aunque el botón tenga relleno. */
+.lista > li {
+  position: relative;
+}
+
+.sublista {
+  margin: 2px 0 4px;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 6px 9px;
+  border: none;
+  border-radius: var(--ui-r-md);
+  background: transparent;
+  color: var(--ui-texto-2);
+  font-family: inherit;
+  font-size: var(--ui-t-sm);
+  font-weight: 450;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--ui-trans-rapida), color var(--ui-trans-rapida);
+}
+
+.item:hover:not(:disabled) {
+  background: var(--ui-hover);
+  color: var(--ui-texto);
+}
+
+.item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ui-foco-halo);
+}
+
+.item:disabled {
+  color: var(--ui-texto-desactivado);
+  cursor: not-allowed;
+}
+
+/* El activo se marca con una barra a la izquierda y peso, no rellenando
+   la fila de color: mantiene el panel tranquilo con un elemento marcado. */
+.activo {
+  background: var(--ui-activo);
+  color: var(--ui-texto);
+  font-weight: 600;
+}
+
+.activo::before {
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  border-radius: 0 1px 1px 0;
+  background: var(--ui-primario);
+}
+
+.anidado {
+  padding-left: 32px;
+  font-weight: 400;
+}
+
+.barra[data-colapsado] .item {
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.barra[data-colapsado] .activo::before {
+  left: -6px;
+}
+
+.icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 18px;
+  font-size: 18px;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.activo .icono {
+  opacity: 1;
+}
+
+.etiqueta {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.insignia {
+  flex: none;
+  padding: 0 5px;
+  border-radius: var(--ui-r-sm);
+  background: var(--ui-primario-suave);
+  border: 1px solid var(--ui-primario-suave-borde);
+  color: var(--ui-primario-texto);
+  font-family: var(--ui-fuente-mono);
+  font-size: var(--ui-t-xs);
+  font-weight: 500;
+}
+
+.chevron {
+  flex: none;
+  display: inline-flex;
+  color: var(--ui-texto-3);
+  transition: transform var(--ui-trans);
+}
+
+.chevronAbierto {
+  transform: rotate(90deg);
+}
+
+/* Rótulo de sección: versalita ancha, el recurso clásico para separar
+   grupos sin meter líneas ni cajas. */
+.seccion {
+  padding: var(--ui-e-4) 9px 5px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ui-texto-3);
+}
+
+.divisor {
+  height: 1px;
+  margin: var(--ui-e-2) 9px;
+  background: var(--ui-borde-sutil);
+}
+
+/* ── Panel flotante (barra plegada) ────────────────────────────────── */
+
+.flotante {
+  position: absolute;
+  left: 100%;
+  top: -2px;
+  z-index: var(--ui-z-menu);
+  min-width: 190px;
+  margin-left: 5px;
+  padding: 4px;
+  background: var(--ui-superficie-elevada);
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-lg);
+  box-shadow: var(--ui-sombra-2);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--ui-trans-rapida), visibility var(--ui-trans-rapida);
+}
+
+li:hover > .flotante,
+.flotante:hover,
+li:focus-within > .flotante {
+  opacity: 1;
+  visibility: visible;
+}
+
+.itemFlotante {
+  justify-content: flex-start;
+  padding: 6px 9px;
+  white-space: nowrap;
+}
+
+/* ── Pie con el usuario ────────────────────────────────────────────── */
+
+.pie {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: var(--ui-e-3);
+  border-top: 1px solid var(--ui-borde-sutil);
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--ui-r-sm);
+  background: var(--ui-superficie-hundida);
+  border: 1px solid var(--ui-borde);
+  color: var(--ui-texto-2);
+  font-size: var(--ui-t-xs);
+  font-weight: 600;
+}
+
+.datosUsuario {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.nombre {
+  font-size: var(--ui-t-sm);
+  font-weight: 500;
+  color: var(--ui-texto);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rol {
+  font-size: var(--ui-t-xs);
+  color: var(--ui-texto-3);
+  text-transform: lowercase;
+}

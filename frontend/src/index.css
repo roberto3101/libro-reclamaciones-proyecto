@@ -1,0 +1,1039 @@
+@import "tailwindcss";
+
+/* Sistema de diseno: tokens primero, luego los estilos de elementos
+   nativos que dependen de ellos. El orden importa. */
+@import "./ui/tokens.css";
+@import "./ui/base.css";
+
+/* La variante `dark:` de Tailwind sigue la clase del elemento raiz, que
+   fija UiProveedorTema, en vez del ajuste del sistema operativo: asi el
+   selector de tema de la aplicacion manda sobre la preferencia global. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Puente hacia Tailwind: expone los tokens como utilidades (bg-superficie,
+   text-texto-2, border-borde...). Una sola paleta para los tres sistemas. */
+@theme inline {
+  /* Los tokens, expuestos como utilidades: bg-superficie, text-texto-2... */
+  --color-fondo: var(--ui-fondo);
+  --color-superficie: var(--ui-superficie);
+  --color-superficie-2: var(--ui-superficie-2);
+  --color-borde: var(--ui-borde);
+  --color-texto: var(--ui-texto);
+  --color-texto-2: var(--ui-texto-2);
+  --color-texto-3: var(--ui-texto-3);
+  --color-primario: var(--ui-primario);
+  --color-exito: var(--ui-exito);
+  --color-adv: var(--ui-adv);
+  --color-peligro: var(--ui-peligro);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Escala neutra REDEFINIDA en cálido.
+
+   Las escalas `gray` y `slate` de Tailwind tiran a azul (gray-800 es
+   #1f2937, con más azul que rojo). La aplicación las usa en cientos de
+   sitios —fondos de tarjeta, bordes, texto secundario—, y ese azul es
+   justo lo que hacía que todo siguiera pareciendo el panel de siempre.
+
+   Redefinirlas aquí tiñe de papel toda la interfaz de una vez, sin tocar
+   un solo `className`. Y deja el sistema mantenible: quien escriba
+   `bg-gray-100` mañana obtiene el gris correcto sin saber nada de esto.
+
+   Los valores son los mismos neutros de tokens.css, extendidos a la
+   escala completa de 50 a 950.
+   ───────────────────────────────────────────────────────────────────── */
+@theme {
+  --color-gray-50:  #faf8f4;
+  --color-gray-100: #f1eee6;
+  --color-gray-200: #e5e0d4;
+  --color-gray-300: #d3cdbc;
+  --color-gray-400: #aca596;
+  --color-gray-500: #857e70;
+  --color-gray-600: #6a655a;
+  --color-gray-700: #55504a;
+  --color-gray-800: #302d27;
+  --color-gray-900: #1f1d19;
+  --color-gray-950: #131210;
+
+  --color-slate-50:  #faf8f4;
+  --color-slate-100: #f1eee6;
+  --color-slate-200: #e5e0d4;
+  --color-slate-300: #d3cdbc;
+  --color-slate-400: #aca596;
+  --color-slate-500: #857e70;
+  --color-slate-600: #6a655a;
+  --color-slate-700: #55504a;
+  --color-slate-800: #302d27;
+  --color-slate-900: #1f1d19;
+  --color-slate-950: #131210;
+
+  --color-zinc-50:  #faf8f4;
+  --color-zinc-100: #f1eee6;
+  --color-zinc-200: #e5e0d4;
+  --color-zinc-700: #55504a;
+  --color-zinc-800: #302d27;
+  --color-zinc-900: #1f1d19;
+
+  /* El azul deja de ser el color de acción: pasa a tierra quemada, que es
+     el acento del sistema. Se conserva la escala para los pocos usos
+     informativos que quedan, pero desplazada al mismo tono. */
+  --color-blue-50:  #fbf2ec;
+  --color-blue-100: #f5e2d5;
+  --color-blue-200: #f0dccd;
+  --color-blue-300: #e0a988;
+  --color-blue-400: #d78f63;
+  --color-blue-500: #b85528;
+  --color-blue-600: #9a4a24;
+  --color-blue-700: #8a4120;
+  --color-blue-800: #6d3216;
+  --color-blue-900: #40291b;
+  --color-blue-950: #241811;
+
+  /* Los semánticos se alinean con los tokens: verde oliva, ocre y
+     ladrillo en lugar del esmeralda, ámbar y rojo de fábrica. */
+  --color-emerald-50:  #f0f4ec;
+  --color-emerald-100: #e2ebdb;
+  --color-emerald-200: #c7d6bd;
+  --color-emerald-300: #9dc191;
+  --color-emerald-400: #7ba86d;
+  --color-emerald-500: #5c8a4f;
+  --color-emerald-600: #40613a;
+  --color-emerald-700: #3a5834;
+  --color-emerald-800: #2f4029;
+  --color-emerald-900: #1e2819;
+  --color-emerald-950: #161c13;
+
+  --color-green-50:  #f0f4ec;
+  --color-green-100: #e2ebdb;
+  --color-green-200: #c7d6bd;
+  --color-green-300: #9dc191;
+  --color-green-600: #40613a;
+  --color-green-700: #3a5834;
+  --color-green-800: #2f4029;
+  --color-green-900: #1e2819;
+
+  --color-amber-50:  #faf4e6;
+  --color-amber-100: #f4e7c5;
+  --color-amber-200: #e8d6a8;
+  --color-amber-300: #d9ac52;
+  --color-amber-400: #c39433;
+  --color-amber-500: #a67718;
+  --color-amber-600: #8a6112;
+  --color-amber-700: #7d570f;
+  --color-amber-800: #3d3013;
+  --color-amber-900: #241c0c;
+  --color-amber-950: #1e1809;
+
+  --color-red-50:  #fbf0ee;
+  --color-red-100: #f4ddd9;
+  --color-red-200: #e5c2bc;
+  --color-red-300: #e28b83;
+  --color-red-400: #e8877c;
+  --color-red-500: #b83a32;
+  --color-red-600: #a3312a;
+  --color-red-700: #932c25;
+  --color-red-800: #46231f;
+  --color-red-900: #2d1815;
+  --color-red-950: #201110;
+
+  /* Naranjas -> el mismo acento; violetas, indigos y cianes -> verde
+     azulado. Estos ultimos son el segundo categorico: si cayeran tambien
+     en tierra quemada, dos series contiguas de un grafico dejarian de
+     distinguirse. */
+  --color-orange-50: #fbf2ec;
+  --color-orange-100: #f5e2d5;
+  --color-orange-200: #f0dccd;
+  --color-orange-300: #e0a988;
+  --color-orange-400: #d78f63;
+  --color-orange-500: #b85528;
+  --color-orange-600: #9a4a24;
+  --color-orange-700: #8a4120;
+  --color-orange-800: #6d3216;
+  --color-orange-900: #40291b;
+  --color-orange-950: #241811;
+
+  --color-violet-50: #eef3f2;
+  --color-violet-100: #dde8e7;
+  --color-violet-200: #c2d5d4;
+  --color-violet-300: #8fb3b2;
+  --color-violet-400: #6ea6a4;
+  --color-violet-500: #3d7276;
+  --color-violet-600: #29585c;
+  --color-violet-700: #244d50;
+  --color-violet-800: #1d3f42;
+  --color-violet-900: #16302f;
+  --color-violet-950: #10201f;
+
+  --color-purple-50: #eef3f2;
+  --color-purple-100: #dde8e7;
+  --color-purple-300: #8fb3b2;
+  --color-purple-400: #6ea6a4;
+  --color-purple-500: #3d7276;
+  --color-purple-600: #29585c;
+  --color-purple-700: #244d50;
+  --color-purple-800: #1d3f42;
+  --color-purple-900: #16302f;
+
+  --color-indigo-50: #fbf2ec;
+  --color-indigo-100: #f5e2d5;
+  --color-indigo-400: #d78f63;
+  --color-indigo-500: #b85528;
+  --color-indigo-600: #9a4a24;
+  --color-indigo-700: #8a4120;
+  --color-indigo-800: #6d3216;
+  --color-indigo-900: #40291b;
+
+  --color-cyan-50: #eef3f2;
+  --color-cyan-100: #dde8e7;
+  --color-cyan-400: #6ea6a4;
+  --color-cyan-500: #3d7276;
+  --color-cyan-600: #29585c;
+  --color-cyan-700: #244d50;
+  --color-cyan-800: #1d3f42;
+  --color-cyan-900: #16302f;
+
+  /* ── Radios ─────────────────────────────────────────────────────────
+     Tailwind da 12px a `rounded-xl` y 16px a `rounded-2xl`, y la app los
+     usa en casi todas las tarjetas. Esa curva tan marcada, repetida en
+     cada caja, es de las cosas que más delatan una plantilla.
+
+     Se reasigna la escala a la del sistema (2-10px). Ningún `className`
+     cambia; cambian todos los radios a la vez.                        */
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 6px;
+  --radius-2xl: 10px;
+  --radius-3xl: 12px;
+  --radius-4xl: 14px;
+
+  /* ── Sombras ────────────────────────────────────────────────────────
+     Las sombras de fábrica levantan cada tarjeta del papel. Con un filete
+     ya se separa una superficie de otra, así que aquí quedan casi planas:
+     lo justo para un menú flotante o un diálogo, que sí necesitan
+     despegarse del contenido que tapan.                               */
+  --shadow-2xs: 0 1px 1px rgb(28 24 18 / 0.03);
+  --shadow-xs: 0 1px 2px rgb(28 24 18 / 0.04);
+  --shadow-sm: 0 1px 2px rgb(28 24 18 / 0.05);
+  --shadow-md: 0 2px 4px rgb(28 24 18 / 0.06);
+  --shadow-lg: 0 3px 8px rgb(28 24 18 / 0.08);
+  --shadow-xl: 0 6px 16px rgb(28 24 18 / 0.10);
+  --shadow-2xl: 0 10px 28px rgb(28 24 18 / 0.14);
+}
+
+
+/* ── Barra lateral ──────────────────────────────────────────── */
+
+/* Aquí vivían tres parches con !important que alcanzaban el DOM interno de
+   la librería anterior (aside > .MuiBox-root ...): recortar el nombre de
+   empresa a tres líneas, ocultar su botón de plegado y corregir sus
+   rellenos. Ninguno hace falta ya: BarraLateral.module.css lo resuelve
+   desde dentro del componente, con sus propias clases. */
+
+/* Inicial de la empresa cuando la barra está plegada. */
+/* El latido se quedó en 0 %: la inicial ya no palpita ni emite resplandor.
+   Era una animación en bucle sin información que dar, y en un panel que
+   está abierto toda la jornada acaba cansando. Se conserva la regla para
+   no dejar la clase apuntando a una animación inexistente. */
+@keyframes latido-inicial {
+  0%, 100% { opacity: 1; }
+}
+
+.letra-animada-sidebar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin: 0 auto;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--ui-primario-texto);
+  background: var(--ui-primario-suave);
+  border: 1px solid var(--ui-primario-suave-borde);
+  border-radius: var(--ui-r-lg);
+  animation: latido-inicial 2.5s ease-in-out infinite;
+  cursor: default;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letra-animada-sidebar { animation: none; }
+}
+
+/* ─── Adaptive hover utility (outside @layer → wins over Tailwind) ─── */
+.hover-adaptive { transition: background-color 0.15s; }
+.hover-adaptive:hover { background-color: var(--ui-hover); }
+
+/* ─── Libro público: prevent horizontal overflow on tiny screens ───── */
+/* Stepper labels can overflow on screens < 360px */
+.MuiStepper-root {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.MuiStepper-root .MuiStepLabel-label {
+  font-size: clamp(0.65rem, 2.5vw, 0.875rem);
+}
+.MuiStepper-root .MuiStepLabel-labelContainer .MuiTypography-caption {
+  font-size: clamp(0.55rem, 2vw, 0.75rem);
+}
+
+/* ─── ErrorTexto: non-invasive validation messages ──────────────────── */
+/* Reserve space so appearing/disappearing errors don't shift layout */
+.error-texto-slot {
+  min-height: 1.25rem;
+  display: block;
+}
+
+/* Hide library hamburger visually — programmatic .click() is used by LayoutPrincipal.
+   NOTE: pointer-events must NOT be 'none' or some mobile browsers silently block .click(). */
+button[aria-label="open drawer"] {
+  opacity: 0 !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+/* MRT dark mode fix → injected at runtime in main.tsx
+   (bypasses @tailwindcss/vite processing, lands after MUI Emotion) */
+
+/* Dialog input dark-mode fix is injected at runtime in main.tsx
+   (bypasses @tailwindcss/vite processing, lands after MUI Emotion) */
+
+/* ╔══════════════════════════════════════════════════════════════════╗
+   ║  LOGIN PAGE v2 — Split hero + form                              ║
+   ╚══════════════════════════════════════════════════════════════════╝ */
+
+/* ── Acceso ────────────────────────────────────────────────────────────
+   Dos columnas asimétricas: el formulario a la izquierda, con su propio
+   aire, y a la derecha una banda de contexto sobre papel oscuro.
+
+   Lo que había antes —degradado azul, tres círculos flotando en bucle y
+   una rejilla superpuesta— se retiró entero. Ese conjunto es la firma
+   visual más reconocible de una plantilla genérica, y además el
+   movimiento perpetuo compite con el único punto de atención real de la
+   pantalla, que es el campo de correo.                                */
+
+.login-root {
+  display: flex;
+  min-height: 100vh;
+  background: var(--ui-fondo);
+}
+
+/* ── Panel del formulario ─────────────────────────────────────────── */
+
+.login-form-panel {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ui-e-8) var(--ui-e-5);
+}
+
+@media (min-width: 1024px) {
+  .login-form-panel {
+    flex: 0 0 47%;
+    justify-content: flex-end;
+    padding-right: var(--ui-e-12);
+  }
+}
+
+/* Ancho de columna de lectura: un formulario más ancho obliga al ojo a
+   recorrer de más entre etiqueta y campo. */
+.login-form-inner {
+  width: 100%;
+  max-width: 366px;
+}
+
+.login-mobile-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: var(--ui-e-8);
+}
+
+.login-mobile-brand-text {
+  font-family: var(--ui-fuente-titulo);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--ui-texto);
+}
+
+@media (min-width: 1024px) {
+  .login-mobile-brand { display: none; }
+}
+
+.login-title {
+  margin: 0 0 6px;
+  font-family: var(--ui-fuente-titulo);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.12;
+  color: var(--ui-texto);
+}
+
+.login-subtitle {
+  margin: 0 0 var(--ui-e-8);
+  font-size: var(--ui-t-md);
+  color: var(--ui-texto-2);
+}
+
+/* ── Aviso de error ───────────────────────────────────────────────── */
+
+.login-error-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: var(--ui-e-5);
+  padding: 10px 12px;
+  border: 1px solid var(--ui-peligro-borde);
+  border-left-width: 3px;
+  border-radius: var(--ui-r-md);
+  background: var(--ui-peligro-suave);
+  color: var(--ui-peligro-texto);
+  font-size: var(--ui-t-sm);
+  line-height: 1.45;
+}
+
+/* ── Campos ───────────────────────────────────────────────────────── */
+
+.login-field {
+  margin-bottom: var(--ui-e-4);
+}
+
+.login-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: var(--ui-t-sm);
+  font-weight: 500;
+  color: var(--ui-texto-2);
+}
+
+.login-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-input-icon {
+  position: absolute;
+  left: 11px;
+  display: inline-flex;
+  color: var(--ui-texto-3);
+  pointer-events: none;
+}
+
+.login-input {
+  width: 100%;
+  padding: 10px 12px 10px 38px;
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-md);
+  background: var(--ui-superficie);
+  color: var(--ui-texto);
+  font-family: inherit;
+  font-size: var(--ui-t-md);
+  outline: none;
+  transition: border-color var(--ui-trans-rapida), box-shadow var(--ui-trans-rapida);
+}
+
+.login-input::placeholder {
+  color: var(--ui-texto-3);
+  opacity: 1;
+}
+
+.login-input:hover {
+  border-color: var(--ui-borde-fuerte);
+}
+
+.login-input:focus {
+  border-color: var(--ui-foco);
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+.login-input--error {
+  border-color: var(--ui-peligro);
+}
+
+.login-input--error:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-peligro) 22%, transparent);
+}
+
+.login-input--password {
+  padding-right: 40px;
+}
+
+.login-toggle-password {
+  position: absolute;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: var(--ui-r-sm);
+  background: transparent;
+  color: var(--ui-texto-3);
+  cursor: pointer;
+  transition: color var(--ui-trans-rapida), background-color var(--ui-trans-rapida);
+}
+
+.login-toggle-password:hover {
+  color: var(--ui-texto);
+  background: var(--ui-hover);
+}
+
+.login-field-error {
+  margin: 5px 0 0;
+  font-size: var(--ui-t-xs);
+  color: var(--ui-peligro-texto);
+}
+
+/* ── Botón de entrada ─────────────────────────────────────────────── */
+
+.login-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: var(--ui-e-2);
+  padding: 11px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--ui-r-md);
+  background: var(--ui-primario);
+  color: var(--ui-primario-sobre);
+  font-family: inherit;
+  font-size: var(--ui-t-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--ui-trans-rapida);
+}
+
+.login-submit:hover:not(:disabled) {
+  background: var(--ui-primario-hover);
+}
+
+.login-submit:active:not(:disabled) {
+  background: var(--ui-primario-activo);
+}
+
+.login-submit:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+.login-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: login-giro 620ms linear infinite;
+}
+
+@keyframes login-giro {
+  to { transform: rotate(360deg); }
+}
+
+.login-footer {
+  margin-top: var(--ui-e-8);
+  padding-top: var(--ui-e-4);
+  border-top: 1px solid var(--ui-borde-sutil);
+}
+
+.login-footer p {
+  margin: 0;
+  font-size: var(--ui-t-xs);
+  color: var(--ui-texto-3);
+}
+
+.login-theme-toggle {
+  position: absolute;
+  top: var(--ui-e-4);
+  right: var(--ui-e-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-md);
+  background: var(--ui-superficie);
+  color: var(--ui-texto-2);
+  cursor: pointer;
+  transition: border-color var(--ui-trans-rapida), color var(--ui-trans-rapida);
+}
+
+.login-theme-toggle:hover {
+  border-color: var(--ui-borde-fuerte);
+  color: var(--ui-texto);
+}
+
+/* ── Banda de contexto ─────────────────────────────────────────────────
+   Papel oscuro y tipografía; ninguna forma decorativa. El texto va
+   alineado a la izquierda y con medida controlada, no centrado en el
+   medio de un rectángulo enorme.                                      */
+
+.login-hero {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .login-hero {
+    position: relative;
+    display: flex;
+    flex: 1 1 53%;
+    align-items: center;
+    padding: var(--ui-e-12) var(--ui-e-12) var(--ui-e-12) var(--ui-e-10);
+    background: #1b1915;
+    border-left: 1px solid var(--ui-borde);
+  }
+}
+
+.login-hero-content {
+  max-width: 30rem;
+}
+
+.login-hero-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: var(--ui-e-10);
+}
+
+.login-hero-logo-mark,
+.login-mobile-brand .login-hero-logo-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--ui-r-sm);
+  background: var(--ui-primario);
+  color: #fffefb;
+  font-family: var(--ui-fuente);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.login-hero-logo-text {
+  font-family: var(--ui-fuente-titulo);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #f2ece0;
+}
+
+.login-hero-title {
+  margin: 0 0 var(--ui-e-4);
+  font-family: var(--ui-fuente-titulo);
+  font-size: 2.35rem;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.022em;
+  color: #f6f1e7;
+}
+
+.login-hero-desc {
+  margin: 0 0 var(--ui-e-8);
+  max-width: 34ch;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #b3aa98;
+}
+
+/* Lista de garantías: una debajo de otra, con regla fina. Las píldoras
+   flotantes en fila son otro tic de plantilla. */
+.login-hero-features {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #332f27;
+}
+
+.login-hero-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid #332f27;
+  font-size: var(--ui-t-sm);
+  color: #cfc6b3;
+}
+
+.login-hero-pill svg {
+  flex: none;
+  color: var(--ui-primario-texto);
+}
+
+@media (max-width: 768px) {
+  header .MuiTypography-h6 {
+    max-width: 40vw;
+  }
+}
+
+/* ── Aviso de periodo de prueba ────────────────────────────────────────
+   Era un degradado ámbar→naranja con una píldora de color a la izquierda.
+   Ahora es una nota sobre papel con filete lateral, el recurso de toda la
+   vida para marcar un apunte al margen sin gritar.                     */
+
+.lr-aviso-prueba {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ui-e-3);
+  padding: 11px var(--ui-e-4);
+  border: 1px solid var(--ui-adv-borde);
+  border-left-width: 3px;
+  border-radius: var(--ui-r-md);
+  background: var(--ui-adv-suave);
+}
+
+.lr-aviso-prueba p:first-child {
+  color: var(--ui-adv-texto);
+}
+
+/* ── Botones de la cabecera ────────────────────────────────────────────
+   Campana, tema y cualquiera que se añada después. Antes cada uno
+   repetía su propia cadena de utilidades y habían divergido: círculos
+   rellenos de gris, luna amarilla y anillo de foco azul.
+
+   Una sola clase para los tres motivos de siempre: que se vean iguales,
+   que un botón nuevo herede el aspecto sin copiar nada, y que el retoque
+   se haga en un sitio. Cuadrado de esquina corta y sin relleno hasta que
+   el puntero entra, igual que el botón de plegar el panel.            */
+
+.lr-boton-cabecera {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--ui-r-md);
+  background: transparent;
+  color: var(--ui-texto-2);
+  cursor: pointer;
+  transition: background-color var(--ui-trans-rapida), color var(--ui-trans-rapida),
+    border-color var(--ui-trans-rapida);
+}
+
+.lr-boton-cabecera:hover {
+  background: var(--ui-hover);
+  border-color: var(--ui-borde);
+  color: var(--ui-texto);
+}
+
+.lr-boton-cabecera:focus-visible {
+  outline: none;
+  border-color: var(--ui-foco);
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+.lr-boton-cabecera svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* Contador de no leídos. Punto de aviso, no globo rojo: se apoya en la
+   esquina del icono y usa el mismo acento que el resto del sistema. */
+.lr-insignia-cabecera {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 7px;
+  background: var(--ui-primario);
+  color: var(--ui-primario-sobre);
+  font-family: var(--ui-fuente-mono);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* ── Barra de filtros ──────────────────────────────────────────────────
+   Los controles de filtro repetían la misma cadena de doce utilidades en
+   cada uno, y ya habían divergido: solo el de sede llevaba `min-w`, así
+   que los dos desplegables salían de anchos distintos y la fila quedaba
+   escalonada. El foco, además, seguía siendo azul.
+
+   Una clase para todos. En pantalla estrecha pasan a ocupar el ancho
+   completo y se apilan, que es la única forma de que a 325px no queden
+   dos controles a medias.                                             */
+
+.lr-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-e-2);
+}
+
+.lr-campo {
+  min-width: 0;
+  padding: 7px 11px;
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-md);
+  background: var(--ui-superficie);
+  color: var(--ui-texto);
+  font-family: inherit;
+  font-size: var(--ui-t-sm);
+  line-height: 1.4;
+  outline: none;
+  transition: border-color var(--ui-trans-rapida), box-shadow var(--ui-trans-rapida);
+}
+
+select.lr-campo {
+  cursor: pointer;
+}
+
+.lr-campo:hover {
+  border-color: var(--ui-borde-fuerte);
+}
+
+.lr-campo:focus {
+  border-color: var(--ui-foco);
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+/* En escritorio el de sede necesita más cuerpo porque lleva nombres
+   largos; el de periodo se ajusta a su contenido. */
+@media (min-width: 521px) {
+  .lr-campo--ancho {
+    min-width: 190px;
+  }
+}
+
+@media (max-width: 520px) {
+  /* La barra vive dentro de una columna flexible alineada al inicio, y un
+     hijo así se encoge a su contenido. Se reclama el ancho aquí para no
+     depender de las utilidades del contenedor, que pertenecen a la
+     página y podrían cambiar. */
+  .lr-filtros {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .lr-campo,
+  .lr-filtros > * {
+    width: 100%;
+  }
+}
+
+/* ── Tira de cifras (KPI) ──────────────────────────────────────────────
+   Antes eran cuatro tarjetas sueltas, cada una con su fondo de color:
+   azul, ámbar, verde, rojo. Cuatro colores compitiendo entre sí no
+   jerarquizan nada —si todo destaca, no destaca nada— y esa fila de cajas
+   de colores es de los patrones que más delatan una plantilla.
+
+   Ahora es un solo bloque dividido por filetes. El color queda reservado
+   para la cifra que pide atención; el resto va en tinta normal.
+
+   El truco del filete: la rejilla lleva 1px de hueco y el fondo del
+   borde, y cada celda pinta su propio fondo encima. Así las líneas salen
+   perfectas se envuelvan como se envuelvan las celdas, sin tener que
+   acertar qué borde toca a cada una.                                   */
+
+.lr-cifras {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-borde);
+  overflow: hidden;
+}
+
+@media (min-width: 900px) {
+  .lr-cifras {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.lr-cifra {
+  min-width: 0;
+  padding: var(--ui-e-4);
+  background: var(--ui-superficie);
+}
+
+.lr-cifra-rotulo {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ui-texto-3);
+}
+
+/* Cifras tabulares: al actualizarse no cambian de ancho y la fila no
+   baila. El tamaño se contiene a 325px para que cuatro dígitos quepan. */
+.lr-cifra-valor {
+  margin: 10px 0 0;
+  font-family: var(--ui-fuente-titulo);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ui-texto);
+}
+
+.lr-cifra-valor[data-alerta] {
+  color: var(--ui-peligro-texto);
+}
+
+.lr-cifra-nota {
+  margin: 7px 0 0;
+  font-size: var(--ui-t-xs);
+  line-height: 1.4;
+  color: var(--ui-texto-2);
+}
+
+@media (max-width: 380px) {
+  .lr-cifra {
+    padding: 12px 11px;
+  }
+
+  .lr-cifra-valor {
+    font-size: 1.5rem;
+  }
+}
+
+/* ── Cabecera del libro público ────────────────────────────────────────
+   Estaba centrada dentro de un contenedor de 1152px: el nombre, el RUC y
+   la dirección quedaban flotando en mitad de una franja vacía, y el botón
+   de consulta debajo, solo, en el centro.
+
+   Pasa a cabecera de documento: identificación de la empresa a la
+   izquierda —que es donde empieza a leer el ojo— y la acción secundaria a
+   la derecha, aprovechando el ancho en vez de dejarlo en blanco.
+
+   Un libro de reclamaciones es un documento formal; la referencia son las
+   actas y los formularios oficiales, no la portada de un producto.      */
+
+.lr-libro-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--ui-e-4);
+  padding-bottom: var(--ui-e-4);
+  border-bottom: 2px solid var(--ui-texto);
+}
+
+.lr-libro-identidad {
+  min-width: 0;
+  flex: 1 1 20rem;
+}
+
+.lr-libro-logo {
+  max-height: 46px;
+  margin-bottom: 10px;
+  object-fit: contain;
+}
+
+.lr-libro-titulo {
+  margin: 0;
+  font-family: var(--ui-fuente-titulo);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  color: var(--ui-texto);
+}
+
+.lr-libro-empresa {
+  margin: 8px 0 0;
+  font-size: var(--ui-t-md);
+  font-weight: 500;
+  color: var(--ui-texto);
+}
+
+/* El RUC y la dirección son datos de registro: van en monoespaciada y en
+   tinta secundaria, como el pie de un formulario oficial. */
+.lr-libro-registro {
+  margin: 3px 0 0;
+  font-family: var(--ui-fuente-mono);
+  font-size: var(--ui-t-xs);
+  line-height: 1.5;
+  color: var(--ui-texto-2);
+}
+
+.lr-libro-accion {
+  flex: none;
+}
+
+@media (max-width: 640px) {
+  .lr-libro-cabecera {
+    align-items: flex-start;
+  }
+
+  .lr-libro-titulo {
+    font-size: 1.4rem;
+  }
+
+  .lr-libro-accion {
+    width: 100%;
+  }
+}
+
+/* ── Pasos de la consulta pública ──────────────────────────────────────
+   Lista numerada con el número en monoespaciada y filete de separación.
+   Sustituye a tres columnas centradas con un icono grande cada una.    */
+
+.lr-pasos-seguimiento {
+  counter-reset: paso;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--ui-borde-sutil);
+}
+
+.lr-pasos-seguimiento li {
+  counter-increment: paso;
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  gap: 2px var(--ui-e-2);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ui-borde-sutil);
+}
+
+.lr-pasos-seguimiento li::before {
+  content: counter(paso, decimal-leading-zero);
+  grid-row: 1 / 3;
+  font-family: var(--ui-fuente-mono);
+  font-size: var(--ui-t-xs);
+  line-height: 1.5;
+  color: var(--ui-texto-3);
+}
+
+.lr-paso-titulo {
+  font-size: var(--ui-t-md);
+  font-weight: 500;
+  color: var(--ui-texto);
+}
+
+.lr-paso-nota {
+  font-size: var(--ui-t-sm);
+  line-height: 1.5;
+  color: var(--ui-texto-2);
+}

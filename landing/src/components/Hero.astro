@@ -1,0 +1,146 @@
+---
+import site from '../data/site.json';
+import hero from '../data/hero.json';
+---
+<section class="hero" data-rv-grupo>
+  <div class="shell">
+    <div class="rejilla hero-top">
+      <div class="hero-txt">
+        <p class="et rv">{hero.eyebrow}</p>
+        <h1 class="t-hero rv">{hero.titulo}</h1>
+        <p class="entrada rv hero-entrada">{hero.entrada}</p>
+        <div class="hero-cta rv">
+          <a href={site.ctaPrimario.href} class="btn">{site.ctaPrimario.texto}</a>
+          <a href={site.ctaSecundario.href} class="btn btn-linea">{site.ctaSecundario.texto}</a>
+        </div>
+      </div>
+
+      <aside class="hoja rv" aria-label="Ejemplo de hoja de reclamación">
+        <div class="hoja-cab">
+          <span class="mono hoja-tit">{hero.hoja.titulo}</span>
+          <span class="mono hoja-cod">{hero.hoja.codigo}</span>
+        </div>
+        <dl class="hoja-campos">
+          {hero.hoja.campos.map((c) => (
+            <div class="hoja-fila">
+              <dt>{c.k}</dt>
+              <dd class="mono">{c.v}</dd>
+            </div>
+          ))}
+        </dl>
+        <div class="hoja-pie">
+          <span class="qr" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </span>
+          <p>{hero.hoja.pie}</p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="linea" data-linea></div>
+
+    <ul class="datos">
+      {hero.datos.map((d) => (
+        <li class="rv">
+          <span class="dato-v mono">{d.valor}</span>
+          <span class="dato-e">{d.etiqueta}</span>
+          <span class="dato-n">{d.nota}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: clamp(56px, 8vw, 104px) clamp(40px, 5vw, 68px); }
+  .hero-top { align-items: start; }
+
+  .hero-txt {
+    grid-column: 1 / span 7;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(18px, 2vw, 26px);
+  }
+  .hero-entrada { max-width: 52ch; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+
+  /* Hoja: documento plano, con filetes. Nada de tarjeta redondeada. */
+  .hoja {
+    grid-column: 9 / span 4;
+    background: var(--surface);
+    border: 1px solid var(--rule-2);
+    align-self: start;
+  }
+  .hoja-cab {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--rule-2);
+    background: var(--paper-2);
+  }
+  .hoja-tit { font-size: 10.5px; letter-spacing: 0.12em; color: var(--ink-2); }
+  .hoja-cod { font-size: 12px; color: var(--carmine); font-weight: 500; }
+
+  .hoja-campos { margin: 0; padding: 4px 18px 10px; }
+  .hoja-fila {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hoja-fila:last-child { border-bottom: 0; }
+  .hoja-fila dt { font-size: 13.5px; color: var(--ink-3); }
+  .hoja-fila dd { margin: 0; font-size: 13.5px; }
+
+  .hoja-pie {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-top: 1px solid var(--rule-2);
+  }
+  .hoja-pie p { font-size: 12.5px; color: var(--ink-3); line-height: 1.45; }
+  .qr {
+    display: grid;
+    grid-template-columns: repeat(3, 8px);
+    gap: 3px;
+    flex: none;
+  }
+  .qr span { width: 8px; height: 8px; background: var(--ink); }
+  .qr span:nth-child(2), .qr span:nth-child(4), .qr span:nth-child(9) { background: var(--carmine); }
+  .qr span:nth-child(6) { background: transparent; }
+
+  .linea {
+    height: 1px;
+    background: var(--rule-2);
+    margin-block: clamp(40px, 5vw, 68px) 0;
+  }
+
+  .datos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-left: 1px solid var(--rule);
+  }
+  .datos li {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: clamp(22px, 2.6vw, 34px) clamp(18px, 2.4vw, 32px);
+    border-right: 1px solid var(--rule);
+  }
+  .dato-v { font-size: clamp(26px, 3.2vw, 38px); font-weight: 500; letter-spacing: -0.02em; }
+  .dato-e { font-size: 14.5px; color: var(--ink); }
+  .dato-n { font-size: 12.5px; color: var(--ink-3); }
+  .datos li:first-child .dato-v { color: var(--carmine); }
+
+  @media (max-width: 900px) {
+    .hero-txt, .hoja { grid-column: 1 / -1; }
+    .hoja { margin-top: 10px; }
+    .datos { grid-template-columns: 1fr; border-left: 0; }
+    .datos li { border-right: 0; border-bottom: 1px solid var(--rule); }
+  }
+</style>

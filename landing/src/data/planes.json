@@ -1,0 +1,76 @@
+{
+  "titulo": "Precios sin letra chica",
+  "entrada": "Sin costo de instalación, sin permanencia y sin cobrar por reclamo recibido. Los precios incluyen IGV.",
+  "notaAnual": "Pagando al año ahorras hasta dos meses y medio.",
+  "planes": [
+    {
+      "codigo": "DEMO",
+      "nombre": "Demo",
+      "resumen": "Para probarlo con calma antes de decidir.",
+      "precioMensual": 0,
+      "precioAnual": null,
+      "etiquetaPrecio": "Gratis",
+      "limites": [
+        { "k": "Sedes", "v": "1" },
+        { "k": "Usuarios", "v": "1" },
+        { "k": "Reclamos al mes", "v": "20" }
+      ],
+      "incluye": ["Hoja PDF con código único", "Consulta pública por QR", "Reloj de 15 días hábiles"],
+      "excluye": ["Asistente con IA", "WhatsApp", "Chat en vivo", "Exportar a Excel"],
+      "destacado": false,
+      "cta": "Crear cuenta demo"
+    },
+    {
+      "codigo": "EMPRENDEDOR",
+      "nombre": "Emprendedor",
+      "resumen": "Para un negocio con uno o pocos locales.",
+      "precioMensual": 19.9,
+      "precioAnual": 179.9,
+      "etiquetaPrecio": null,
+      "limites": [
+        { "k": "Sedes", "v": "3" },
+        { "k": "Usuarios", "v": "1" },
+        { "k": "Reclamos al mes", "v": "Ilimitados" }
+      ],
+      "incluye": ["Todo lo del plan Demo", "Asistente con IA", "WhatsApp Business", "Chat en vivo", "Exportar a Excel"],
+      "excluye": ["API", "Marca blanca"],
+      "destacado": false,
+      "cta": "Empezar"
+    },
+    {
+      "codigo": "PYME",
+      "nombre": "PYME",
+      "resumen": "Para cadenas y equipos que atienden a varias manos.",
+      "precioMensual": 44.9,
+      "precioAnual": 449.9,
+      "etiquetaPrecio": null,
+      "limites": [
+        { "k": "Sedes", "v": "15" },
+        { "k": "Usuarios", "v": "5" },
+        { "k": "Reclamos al mes", "v": "Ilimitados" }
+      ],
+      "incluye": ["Todo lo del plan Emprendedor", "Acceso a la API", "Roles por usuario", "Panel de métricas"],
+      "excluye": ["Marca blanca"],
+      "destacado": true,
+      "insignia": "El más contratado",
+      "cta": "Empezar"
+    },
+    {
+      "codigo": "PRO",
+      "nombre": "Pro",
+      "resumen": "Para operaciones grandes o quien lo revende a terceros.",
+      "precioMensual": 86.9,
+      "precioAnual": 899.9,
+      "etiquetaPrecio": null,
+      "limites": [
+        { "k": "Sedes", "v": "50" },
+        { "k": "Usuarios", "v": "10" },
+        { "k": "Reclamos al mes", "v": "Ilimitados" }
+      ],
+      "incluye": ["Todo lo del plan PYME", "Marca blanca", "Dominio propio", "Soporte prioritario"],
+      "excluye": [],
+      "destacado": false,
+      "cta": "Empezar"
+    }
+  ]
+}

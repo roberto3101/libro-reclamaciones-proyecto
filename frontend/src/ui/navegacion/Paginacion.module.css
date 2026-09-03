@@ -1,0 +1,71 @@
+.paginacion {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.centrado {
+  justify-content: center;
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding-inline: 6px;
+  border: 1px solid transparent;
+  border-radius: var(--ui-r-sm);
+  background: transparent;
+  color: var(--ui-texto-2);
+  font-family: inherit;
+  font-size: var(--ui-t-sm);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    background-color var(--ui-trans-rapida),
+    color var(--ui-trans-rapida),
+    border-color var(--ui-trans-rapida);
+}
+
+.boton:hover:not(:disabled):not(.activo) {
+  background: var(--ui-hover);
+  color: var(--ui-texto);
+}
+
+.boton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+.boton:disabled {
+  color: var(--ui-texto-desactivado);
+  cursor: not-allowed;
+}
+
+.activo {
+  background: var(--ui-primario);
+  border-color: transparent;
+  color: var(--ui-primario-sobre);
+  font-weight: 600;
+}
+
+.paginacion[data-color='secundario'] .activo {
+  background: var(--ui-superficie-hundida);
+  border-color: var(--ui-borde-fuerte);
+  color: var(--ui-texto);
+}
+
+.salto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 32px;
+  color: var(--ui-texto-3);
+  font-size: var(--ui-t-sm);
+  user-select: none;
+}

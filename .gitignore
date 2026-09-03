@@ -1,0 +1,41 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno
+.env
+.env.*
+# …salvo la plantilla, que no lleva valores y debe viajar con el repo
+!.env.produccion.ejemplo
+!.env.example
+
+# Binarios Go
+*.exe
+*.exe~
+
+# Cache y build
+dist/
+.history/
+*.tsbuildinfo
+
+# Claude Code (local)
+.claude/worktrees/
+.claude/plans/
+.claude/settings.local.json
+
+# Documentos temporales generados
+docs/node_modules/
+docs/package.json
+docs/package-lock.json
+docs/generar_informe_websocket.js
+
+# Archivos basura Windows
+nul
+asistente-ia/nul
+
+# Scripts de prueba local
+test-notificaciones.ps1
+Docs/Ejecucion_notificaciones_test.md
+
+# Logs
+logs/
+*.log

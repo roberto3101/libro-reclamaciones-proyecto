@@ -1,0 +1,66 @@
+---
+import norma from '../data/norma.json';
+---
+<section id="norma" class="seccion" data-rv-grupo>
+  <div class="shell rejilla">
+    <div class="rail rv">
+      <p class="et">La norma</p>
+      <h2 class="t-seccion norma-t">{norma.titulo}</h2>
+    </div>
+
+    <div class="cuerpo">
+      <p class="entrada rv norma-e">{norma.entrada}</p>
+
+      <ol class="reqs">
+        {norma.requisitos.map((r) => (
+          <li class="rv">
+            <span class="req-n mono">{r.n}</span>
+            <div class="req-c">
+              <h3 class="req-t">{r.titulo}</h3>
+              <p class="req-p">{r.texto}</p>
+            </div>
+            <span class="req-ok" aria-label="Incluido">✓</span>
+          </li>
+        ))}
+      </ol>
+
+      <aside class="aviso rv">
+        <h3 class="aviso-t">{norma.aviso.titulo}</h3>
+        <p class="aviso-p">{norma.aviso.texto}</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .norma-t { margin-top: 14px; }
+  .norma-e { margin-bottom: clamp(28px, 3.4vw, 44px); }
+
+  .reqs { border-top: 1px solid var(--rule); }
+  .reqs li {
+    display: grid;
+    grid-template-columns: 56px 1fr 28px;
+    gap: clamp(14px, 2vw, 28px);
+    align-items: start;
+    padding: clamp(20px, 2.4vw, 28px) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .req-n { font-size: 12.5px; color: var(--ink-3); padding-top: 4px; }
+  .req-t { font-size: clamp(18px, 1.9vw, 22px); margin-bottom: 6px; }
+  .req-p { font-size: 15.5px; color: var(--ink-2); max-width: 62ch; }
+  .req-ok { color: var(--pine); font-size: 17px; padding-top: 3px; }
+
+  .aviso {
+    margin-top: clamp(28px, 3.4vw, 44px);
+    background: var(--amber-soft);
+    border-left: 3px solid var(--amber);
+    padding: clamp(20px, 2.4vw, 28px) clamp(20px, 2.6vw, 30px);
+  }
+  .aviso-t { font-size: 19px; margin-bottom: 8px; }
+  .aviso-p { font-size: 15.5px; color: var(--ink-2); max-width: 66ch; }
+
+  @media (max-width: 640px) {
+    .reqs li { grid-template-columns: 40px 1fr; }
+    .req-ok { display: none; }
+  }
+</style>

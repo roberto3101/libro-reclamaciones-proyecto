@@ -1,0 +1,38 @@
+{
+  "titulo": "Preguntas que nos hacen siempre",
+  "entrada": "Lo que conviene tener claro antes de contratar cualquier libro virtual, sea el nuestro o no.",
+  "items": [
+    {
+      "p": "¿Es obligatorio tener libro de reclamaciones en Perú?",
+      "r": "Sí. Todo proveedor que ofrezca bienes o servicios a consumidores finales debe tenerlo disponible, tanto en local físico como en tienda en línea. Es una obligación del Código de Protección y Defensa del Consumidor."
+    },
+    {
+      "p": "¿El libro virtual reemplaza al físico?",
+      "r": "Sí. El Decreto Supremo 006-2014-PCM autoriza usar el libro virtual en lugar del físico en los sectores no regulados por normas especiales. Debes exhibir el aviso con el acceso al libro virtual en cada establecimiento."
+    },
+    {
+      "p": "¿Cuánto es la multa por no tenerlo?",
+      "r": "La escala de infracciones arranca en 0,5 UIT, unos S/ 2 750 con la UIT de 2026 fijada en S/ 5 500. El monto sube según la gravedad, la reincidencia y el tamaño del negocio."
+    },
+    {
+      "p": "¿En cuánto tiempo tengo que responder un reclamo?",
+      "r": "El plazo es de 15 días hábiles desde que se presenta. El sistema calcula la fecha límite con el calendario laboral peruano y te avisa antes de que venza."
+    },
+    {
+      "p": "¿Qué diferencia hay entre una queja y un reclamo?",
+      "r": "Un reclamo es una disconformidad con el producto o servicio que contrataste. Una queja apunta al trato recibido o a la atención, no al producto. El libro registra las dos, pero solo el reclamo obliga a una respuesta de fondo."
+    },
+    {
+      "p": "¿Necesito un libro por cada local?",
+      "r": "Cada establecimiento debe tener el libro a disposición del cliente. Con una sola cuenta manejas todas tus sedes: cada una recibe su propio QR y sus reclamos quedan separados."
+    },
+    {
+      "p": "¿Qué pasa si un cliente reclama y no respondo?",
+      "r": "No responder dentro del plazo es una infracción por sí misma, aparte del problema original. Además el consumidor puede llevar el caso a INDECOPI con la constancia de su hoja."
+    },
+    {
+      "p": "¿Puedo migrar si ya uso otro proveedor?",
+      "r": "Sí. Importamos tu registro histórico para que conserves la trazabilidad y no pierdas los reclamos ya atendidos."
+    }
+  ]
+}

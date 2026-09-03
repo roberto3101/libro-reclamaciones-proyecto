@@ -1,0 +1,220 @@
+.boton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ui-e-2);
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: var(--ui-r-md);
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition:
+    background-color var(--ui-trans-rapida),
+    border-color var(--ui-trans-rapida),
+    color var(--ui-trans-rapida),
+    box-shadow var(--ui-trans-rapida);
+}
+
+.boton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Anillo solo con teclado: el ratón no lo dispara, así que no molesta al
+   hacer clic pero sigue guiando a quien navega con tabulador. */
+.boton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+.anchoCompleto {
+  width: 100%;
+}
+
+/* ── Tamaños ───────────────────────────────────────────────────────── */
+
+.boton[data-tamano='xs'] { padding: 4px 10px;  font-size: var(--ui-t-xs); min-height: 26px; }
+.boton[data-tamano='sm'] { padding: 6px 12px;  font-size: var(--ui-t-sm); min-height: 32px; }
+.boton[data-tamano='md'] { padding: 8px 16px;  font-size: var(--ui-t-md); min-height: 38px; }
+.boton[data-tamano='lg'] { padding: 11px 22px; font-size: var(--ui-t-lg); min-height: 44px; }
+.boton[data-tamano='xl'] { padding: 14px 28px; font-size: var(--ui-t-lg); min-height: 52px; }
+
+/* Sin texto que lo ensanche, el botón debe quedar cuadrado. */
+.soloIcono { padding: 0; aspect-ratio: 1; }
+.soloIcono[data-tamano='xs'] { width: 26px; }
+.soloIcono[data-tamano='sm'] { width: 32px; }
+.soloIcono[data-tamano='md'] { width: 38px; }
+.soloIcono[data-tamano='lg'] { width: 44px; }
+.soloIcono[data-tamano='xl'] { width: 52px; }
+
+/* ── Formas ────────────────────────────────────────────────────────── */
+
+.boton[data-forma='pildora'],
+.boton[data-forma='circulo'] {
+  border-radius: var(--ui-r-full);
+}
+
+/* ── Variantes ─────────────────────────────────────────────────────── */
+
+.boton[data-variante='primario'] {
+  background: var(--ui-primario);
+  color: var(--ui-primario-sobre);
+}
+.boton[data-variante='primario']:hover:not(:disabled) { background: var(--ui-primario-hover); }
+.boton[data-variante='primario']:active:not(:disabled) { background: var(--ui-primario-activo); }
+
+.boton[data-variante='secundario'] {
+  background: var(--ui-superficie-hundida);
+  color: var(--ui-texto);
+  border-color: var(--ui-borde);
+}
+.boton[data-variante='secundario']:hover:not(:disabled) {
+  background: var(--ui-activo);
+  border-color: var(--ui-borde-fuerte);
+}
+
+.boton[data-variante='contorno'] {
+  background: transparent;
+  color: var(--ui-texto);
+  border-color: var(--ui-borde-fuerte);
+}
+.boton[data-variante='contorno']:hover:not(:disabled) {
+  background: var(--ui-hover);
+  border-color: var(--ui-texto-3);
+}
+
+.boton[data-variante='fantasma'] {
+  background: transparent;
+  color: var(--ui-texto-2);
+}
+.boton[data-variante='fantasma']:hover:not(:disabled) {
+  background: var(--ui-hover);
+  color: var(--ui-texto);
+}
+
+.boton[data-variante='suave'] {
+  background: var(--ui-primario-suave);
+  color: var(--ui-primario-texto);
+  border-color: var(--ui-primario-suave-borde);
+}
+.boton[data-variante='suave']:hover:not(:disabled) { background: var(--ui-primario-suave-borde); }
+
+.boton[data-variante='peligro'] {
+  background: var(--ui-peligro);
+  color: var(--ui-peligro-sobre);
+}
+.boton[data-variante='peligro']:hover:not(:disabled) { background: var(--ui-peligro-hover); }
+
+.boton[data-variante='exito'] {
+  background: var(--ui-exito);
+  color: var(--ui-exito-sobre);
+}
+.boton[data-variante='exito']:hover:not(:disabled) { background: var(--ui-exito-hover); }
+
+.boton[data-variante='advertencia'] {
+  background: var(--ui-adv);
+  color: var(--ui-adv-sobre);
+}
+.boton[data-variante='advertencia']:hover:not(:disabled) { background: var(--ui-adv-hover); }
+
+.boton[data-variante='info'] {
+  background: var(--ui-info);
+  color: var(--ui-info-sobre);
+}
+.boton[data-variante='info']:hover:not(:disabled) { background: var(--ui-info-hover); }
+
+/* `oscuro` y `claro` son absolutos a propósito: se usan sobre imágenes o
+   fondos de color donde la superficie del tema no aplica. Por eso llevan
+   valores fijos y no tokens. */
+.boton[data-variante='oscuro'] {
+  background: #1f242b;
+  color: #ffffff;
+}
+.boton[data-variante='oscuro']:hover:not(:disabled) { background: #2c333c; }
+
+.boton[data-variante='claro'] {
+  background: #ffffff;
+  color: #1f242b;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+.boton[data-variante='claro']:hover:not(:disabled) { background: #f1f3f5; }
+
+.boton[data-variante='enlace'] {
+  background: transparent;
+  color: var(--ui-primario-texto);
+  padding-inline: 4px;
+  min-height: auto;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.boton[data-variante='enlace']:hover:not(:disabled) { color: var(--ui-primario-hover); }
+
+/* ── Estados de resultado ──────────────────────────────────────────── */
+
+.boton[data-estado='exito'] {
+  background: var(--ui-exito);
+  border-color: transparent;
+  color: var(--ui-exito-sobre);
+}
+
+.boton[data-estado='error'] {
+  background: var(--ui-peligro);
+  border-color: transparent;
+  color: var(--ui-peligro-sobre);
+}
+
+/* ── Contenido ─────────────────────────────────────────────────────── */
+
+.cuerpo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ui-e-2);
+  min-width: 0;
+}
+
+/* Se oculta a la vista pero conserva su tamaño, que es lo que evita que
+   el botón encoja mientras carga. */
+.cuerpoOculto {
+  visibility: hidden;
+}
+
+.icono {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  font-size: 1.15em;
+  line-height: 1;
+}
+
+.texto {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.giro {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 1.05em;
+  height: 1.05em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: giro 620ms linear infinite;
+}
+
+@keyframes giro {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .giro { animation-duration: 2s; }
+}

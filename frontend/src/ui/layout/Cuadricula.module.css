@@ -1,0 +1,15 @@
+.contenedor {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  gap: var(--ui-hueco, 0px);
+}
+
+/* Ancho de la celda. La resta compensa las separaciones para que una fila
+   completa sume exactamente el 100 % del contenedor, ni más ni menos. */
+.elemento {
+  min-width: 0;
+  --ui-col: 12;
+  width: calc(100% * var(--ui-col) / 12 - var(--ui-hueco, 0px) * (12 - var(--ui-col)) / 12);
+}
+

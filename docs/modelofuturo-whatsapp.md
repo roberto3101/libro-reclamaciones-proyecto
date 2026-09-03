@@ -1,0 +1,2 @@
+Modelo 1 — Todo bajo tu cuenta la plataforma (más fácil para el cliente):
+Tú tienes una app de Meta verificada con la plataforma. El cliente conecta su número a tu app mediante Embedded Signup (el botón "Conectar WhatsApp" que hablamos antes). El cliente no tiene que entender nada de Meta — solo autoriza y listo. Tú administras la infraestructura, el cliente solo usa el panel. Este es el modelo que usan Twilio, Zenvia, etc.

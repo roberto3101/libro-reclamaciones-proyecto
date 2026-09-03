@@ -1,0 +1,80 @@
+# ── Despliegue completo ────────────────────────────────────────────────
+#
+#   docker compose up -d --build
+#
+# Levanta base de datos, backend y frontend. El único puerto que sale al
+# exterior es el 80 del frontend: la base y el backend solo se ven desde
+# dentro de la red de Docker, así que nadie puede atacarlos directamente.
+#
+# Antes de arrancar: copia .env.produccion.ejemplo a .env y rellénalo.
+
+services:
+  # ── Base de datos ────────────────────────────────────────────────────
+  # Un solo nodo. Para empezar sobra; si el negocio crece, CockroachDB
+  # escala añadiendo nodos sin cambiar la aplicación.
+  base:
+    image: cockroachdb/cockroach:v24.3.5
+    command: start-single-node --insecure --store=/cockroach/datos
+    volumes:
+      - datos_base:/cockroach/datos
+    # Sin `ports`: la base NO se publica al exterior. Solo la alcanzan los
+    # contenedores de esta red. Es la diferencia entre una base privada y
+    # una expuesta a internet.
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8080/health?ready=1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+  # ── Crea la base la primera vez ──────────────────────────────────────
+  # Sin este paso el backend arranca contra una base que no existe.
+  preparar:
+    image: cockroachdb/cockroach:v24.3.5
+    depends_on:
+      base:
+        condition: service_healthy
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        cockroach sql --insecure --host=base:26257 \
+          -e "CREATE DATABASE IF NOT EXISTS ${CRDB_DATABASE:-libroreclamaciones};"
+        echo "base lista"
+    restart: "no"
+
+  # ── Backend ──────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+    env_file: .env
+    environment:
+      CRDB_HOST: base
+      CRDB_PORT: "26257"
+      CRDB_USER: root
+      CRDB_SSLMODE: disable      # red interna de Docker, no sale a internet
+      SERVER_PORT: "8080"
+      SERVER_ENV: production
+    depends_on:
+      preparar:
+        condition: service_completed_successfully
+    # Tampoco se publica: solo lo alcanza nginx.
+    restart: unless-stopped
+
+  # ── Frontend + puerta de entrada ─────────────────────────────────────
+  web:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: /api/v1
+        VITE_WS_URL: ""
+        VITE_TURNSTILE_SITE_KEY: ${VITE_TURNSTILE_SITE_KEY:-}
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  datos_base:

@@ -1,0 +1,59 @@
+.esqueleto {
+  display: block;
+  background: var(--ui-esqueleto);
+  /* Evita que un esqueleto sin alto explícito colapse a 0. */
+  min-height: 1em;
+}
+
+.esqueleto[data-variante='texto'] {
+  height: 1em;
+  margin-block: 0.15em;
+  border-radius: var(--ui-r-xs);
+  transform: scale(1, 0.72);
+}
+
+.esqueleto[data-variante='rectangular'] {
+  border-radius: 0;
+}
+
+.esqueleto[data-variante='redondeado'] {
+  border-radius: var(--ui-r-md);
+}
+
+.esqueleto[data-variante='circular'] {
+  border-radius: 50%;
+  aspect-ratio: 1;
+}
+
+.pulso {
+  animation: respirar 1.6s ease-in-out infinite;
+}
+
+@keyframes respirar {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+/* La ola recorre un brillo por encima del relleno. */
+.ola {
+  position: relative;
+  overflow: hidden;
+}
+
+.ola::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--ui-esqueleto-brillo), transparent);
+  animation: ola 1.6s linear infinite;
+}
+
+@keyframes ola {
+  to { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulso { animation: none; opacity: 0.8; }
+  .ola::after { animation: none; display: none; }
+}

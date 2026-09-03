@@ -1,0 +1,16 @@
+{
+  "name": "landing-libro-reclamaciones",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.6.1",
+    "@astrojs/sitemap": "^3.3.0",
+    "gsap": "^3.13.0",
+    "lenis": "^1.2.3"
+  }
+}

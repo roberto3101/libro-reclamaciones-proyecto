@@ -1,0 +1,30 @@
+{
+  "titulo": "Cuatro pasos, y ninguno es tuyo",
+  "entrada": "El cliente resuelve su parte solo. Tú apareces cuando hay algo que responder.",
+  "pasos": [
+    {
+      "n": "01",
+      "titulo": "El cliente escanea el QR",
+      "texto": "Pega el cartel en el local o comparte el enlace. No instala nada ni crea una cuenta.",
+      "actor": "Cliente"
+    },
+    {
+      "n": "02",
+      "titulo": "Llena la hoja en su celular",
+      "texto": "El formulario recoge lo que la norma exige y valida los datos antes de enviar.",
+      "actor": "Cliente"
+    },
+    {
+      "n": "03",
+      "titulo": "Se emite el PDF y llega el aviso",
+      "texto": "El cliente recibe su copia con código único. A ti te llega la notificación y arranca el conteo de los 15 días.",
+      "actor": "Sistema"
+    },
+    {
+      "n": "04",
+      "titulo": "Respondes desde el panel",
+      "texto": "Escribes la respuesta, se envía al cliente y el reclamo queda cerrado con constancia de fecha.",
+      "actor": "Tú"
+    }
+  ]
+}

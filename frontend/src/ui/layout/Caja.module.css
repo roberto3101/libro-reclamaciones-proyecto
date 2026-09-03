@@ -1,0 +1,106 @@
+.caja {
+  min-width: 0;
+}
+
+/* ── Variantes ─────────────────────────────────────────────────────── */
+
+.caja[data-variante='bordeado'] {
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-superficie);
+}
+
+.caja[data-variante='sombreado'] {
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-superficie);
+  box-shadow: var(--ui-sombra-2);
+}
+
+/* El efecto vidrio necesita un fondo detrás; sobre superficie plana se
+   comporta como una tarjeta translúcida normal. */
+.caja[data-variante='vidrio'] {
+  border: 1px solid var(--ui-borde-sutil);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-vidrio);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+
+/* La variante conserva el nombre por compatibilidad, pero ya no pinta un
+   degradado: es una superficie hundida plana con su filete. */
+.caja[data-variante='gradiente'] {
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-superficie-hundida);
+  border: 1px solid var(--ui-borde-sutil);
+}
+
+/* ── Estados de validación ─────────────────────────────────────────── */
+
+.caja[data-validacion] {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--ui-r-md);
+}
+
+.caja[data-validacion='error'] {
+  border-color: var(--ui-peligro-borde);
+  background: var(--ui-peligro-suave);
+}
+
+.caja[data-validacion='exito'] {
+  border-color: var(--ui-exito-borde);
+  background: var(--ui-exito-suave);
+}
+
+.caja[data-validacion='advertencia'] {
+  border-color: var(--ui-adv-borde);
+  background: var(--ui-adv-suave);
+}
+
+.caja[data-validacion='info'] {
+  border-color: var(--ui-info-borde);
+  background: var(--ui-info-suave);
+}
+
+/* ── Atajos de disposición ─────────────────────────────────────────── */
+
+.centrado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pantallaCompleta {
+  width: 100vw;
+  min-height: 100vh;
+}
+
+.flexFila {
+  display: flex;
+  flex-direction: row;
+}
+
+.flexColumna {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Interacción ───────────────────────────────────────────────────────
+   Las dos variantes conservan el nombre por compatibilidad, pero ya no
+   desplazan ni escalan la caja. Una tarjeta que sube dos píxeles y estrena
+   sombra al pasar por encima es de los gestos que más delatan una
+   plantilla, y en una tabla de tarjetas produce un oleaje constante.
+
+   El realce pasa al borde y a la superficie: se nota igual qué elemento
+   está bajo el puntero y nada se mueve de sitio.                       */
+
+.flotarElevar,
+.flotarEscalar {
+  transition: border-color var(--ui-trans-rapida), background-color var(--ui-trans-rapida);
+}
+
+.flotarElevar:hover,
+.flotarEscalar:hover {
+  border-color: var(--ui-borde-fuerte);
+  background-color: var(--ui-hover);
+}

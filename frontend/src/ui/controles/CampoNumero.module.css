@@ -1,0 +1,48 @@
+.al_izquierda { text-align: left; }
+.al_centro     { text-align: center; }
+.al_derecha    { text-align: right; }
+
+/* Se ocultan los incrementos que dibuja el navegador: son distintos en
+   cada uno y no siguen el tema. Los sustituyen los botones propios. */
+.al_izquierda::-webkit-outer-spin-button,
+.al_izquierda::-webkit-inner-spin-button,
+.al_centro::-webkit-outer-spin-button,
+.al_centro::-webkit-inner-spin-button,
+.al_derecha::-webkit-outer-spin-button,
+.al_derecha::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.controles {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  gap: 1px;
+  margin-right: -4px;
+}
+
+.paso {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 14px;
+  padding: 0;
+  border: none;
+  border-radius: var(--ui-r-xs);
+  background: transparent;
+  color: var(--ui-texto-3);
+  cursor: pointer;
+  transition: background-color var(--ui-trans-rapida), color var(--ui-trans-rapida);
+}
+
+.paso:hover:not(:disabled) {
+  background: var(--ui-hover);
+  color: var(--ui-texto);
+}
+
+.paso:disabled {
+  color: var(--ui-texto-desactivado);
+  cursor: not-allowed;
+}

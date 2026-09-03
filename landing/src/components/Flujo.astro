@@ -1,0 +1,72 @@
+---
+import flujo from '../data/flujo.json';
+---
+<section id="flujo" class="seccion flujo" data-rv-grupo>
+  <div class="shell">
+    <div class="rejilla flujo-cab">
+      <div class="rail rv">
+        <p class="et">Cómo funciona</p>
+      </div>
+      <div class="cuerpo rv">
+        <h2 class="t-seccion">{flujo.titulo}</h2>
+        <p class="entrada flujo-e">{flujo.entrada}</p>
+      </div>
+    </div>
+
+    <div class="linea" data-linea></div>
+
+    <ol class="pasos">
+      {flujo.pasos.map((p) => (
+        <li class="rv">
+          <div class="paso-cab">
+            <span class="paso-n mono">{p.n}</span>
+            <span class={`paso-a paso-a-${p.actor === 'Tú' ? 'tu' : p.actor === 'Sistema' ? 'sis' : 'cli'}`}>{p.actor}</span>
+          </div>
+          <h3 class="paso-t">{p.titulo}</h3>
+          <p class="paso-p">{p.texto}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .flujo-cab { align-items: baseline; }
+  .flujo-e { margin-top: 14px; }
+  .linea { height: 1px; background: var(--rule-2); margin-block: clamp(36px, 4.5vw, 60px) 0; }
+
+  .pasos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-left: 1px solid var(--rule);
+  }
+  .pasos li {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: clamp(24px, 2.8vw, 36px) clamp(18px, 2vw, 28px);
+    border-right: 1px solid var(--rule);
+  }
+  .paso-cab { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .paso-n { font-size: 12.5px; color: var(--ink-3); }
+  .paso-a {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+  }
+  .paso-a-cli { color: var(--ink-3); }
+  .paso-a-sis { color: var(--pine); }
+  .paso-a-tu  { color: var(--carmine); }
+
+  .paso-t { font-size: clamp(18px, 1.8vw, 21px); margin-top: 4px; }
+  .paso-p { font-size: 15px; color: var(--ink-2); }
+
+  @media (max-width: 1000px) { .pasos { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) {
+    .pasos { grid-template-columns: 1fr; border-left: 0; }
+    .pasos li { border-right: 0; border-bottom: 1px solid var(--rule); }
+  }
+</style>

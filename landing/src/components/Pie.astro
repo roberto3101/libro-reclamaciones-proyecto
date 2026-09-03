@@ -1,0 +1,78 @@
+---
+import site from '../data/site.json';
+const anio = new Date().getFullYear();
+---
+
+<footer class="pie">
+  <div class="shell pie-in">
+    <div class="pie-marca">
+      <span class="sello" aria-hidden="true"></span>
+      <span class="pie-n">{site.marca}</span>
+      <p class="pie-d">Libro de reclamaciones virtual para negocios en Perú.</p>
+    </div>
+
+    <nav class="pie-nav" aria-label="Pie de página">
+      {site.nav.map((n) => <a href={n.href}>{n.texto}</a>)}
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </nav>
+
+    <p class="pie-legal">
+      © {anio} {site.marca}. Conforme al D.S. 006-2014-PCM. Esta página es
+      informativa y no constituye asesoría legal.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    border-top: 1px solid var(--rule-2);
+    padding-block: clamp(40px, 5vw, 64px) 34px;
+  }
+  .pie-in {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(24px, 3vw, 48px);
+  }
+
+  .pie-marca {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+  }
+  .sello {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--carmine);
+    border-radius: 50%;
+  }
+  .pie-n { font-family: var(--f-display); font-size: 18px; }
+  .pie-d {
+    flex-basis: 100%;
+    font-size: 14px;
+    color: var(--ink-2);
+    max-width: 40ch;
+  }
+
+  .pie-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    align-items: start;
+  }
+  .pie-nav a { font-size: 14px; color: var(--ink-2); }
+  .pie-nav a:hover { color: var(--carmine); }
+
+  .pie-legal {
+    grid-column: 1 / -1;
+    font-size: 12.5px;
+    color: var(--ink-3);
+    padding-top: 26px;
+    margin-top: 8px;
+    border-top: 1px solid var(--rule);
+  }
+
+  @media (max-width: 700px) {
+    .pie-in { grid-template-columns: 1fr; }
+  }
+</style>

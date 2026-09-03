@@ -1,0 +1,121 @@
+---
+import site from '../data/site.json';
+import preguntas from '../data/preguntas.json';
+import planes from '../data/planes.json';
+import '../styles/global.css';
+
+interface Props { titulo?: string; descripcion?: string; ruta?: string; }
+const { titulo = site.titulo, descripcion = site.descripcion, ruta = '/' } = Astro.props;
+/* El dominio va vacío hasta que se decida cuál será. Sin base no se
+   pueden construir URLs absolutas, así que canónica y og:image quedan
+   vacías: los buscadores simplemente las ignoran, en lugar de romper la
+   página con un "Invalid URL". */
+const base = (site.url || '').trim();
+const canonica = base ? new URL(ruta, base).toString() : '';
+const ogImg = base ? new URL(site.ogImagen, base).toString() : '';
+
+const dePago = planes.planes.filter((p) => p.precioMensual > 0);
+const desde = Math.min(...dePago.map((p) => p.precioMensual));
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${site.url}/#org`,
+      name: site.marca,
+      url: site.url,
+      email: site.email,
+      areaServed: { '@type': 'Country', name: 'Perú' },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${site.url}/#web`,
+      url: site.url,
+      name: site.marca,
+      inLanguage: site.idioma,
+      publisher: { '@id': `${site.url}/#org` },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: site.marca,
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      description: site.descripcion,
+      url: site.url,
+      offers: dePago.map((p) => ({
+        '@type': 'Offer',
+        name: `Plan ${p.nombre}`,
+        price: p.precioMensual.toFixed(2),
+        priceCurrency: site.moneda,
+        url: `${site.url}#planes`,
+      })),
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: preguntas.items.map((q) => ({
+        '@type': 'Question',
+        name: q.p,
+        acceptedAnswer: { '@type': 'Answer', text: q.r },
+      })),
+    },
+  ],
+};
+---
+<!doctype html>
+<html lang="es-PE">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <meta name="keywords" content={site.palabrasClave} />
+    <link rel="canonical" href={canonica} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="geo.region" content="PE" />
+    <meta name="author" content={site.marca} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_PE" />
+    <meta property="og:site_name" content={site.marca} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={ogImg} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descripcion} />
+    <meta name="twitter:image" content={ogImg} />
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F0EA" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141310" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <script is:inline>
+      (function () {
+        try {
+          var g = localStorage.getItem('tema');
+          if (g === 'claro' || g === 'oscuro') document.documentElement.setAttribute('data-tema', g);
+        } catch (e) {}
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('motion');
+        }
+      })();
+    </script>
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+  </head>
+  <body>
+    <slot />
+    <script>
+      import { iniciarMovimiento } from '../lib/motion';
+      iniciarMovimiento();
+    </script>
+  </body>
+</html>

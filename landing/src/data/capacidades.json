@@ -1,0 +1,33 @@
+{
+  "titulo": "Más que un formulario con QR",
+  "entrada": "Casi todos los libros virtuales del mercado se detienen en recibir el reclamo. Este sigue: atiende, responde y te avisa.",
+  "grupos": [
+    {
+      "nombre": "Cumplimiento",
+      "items": [
+        { "titulo": "Hoja PDF con código único", "texto": "Numeración correlativa e inalterable por cada reclamo emitido." },
+        { "titulo": "Consulta pública por QR", "texto": "El cliente verifica el estado sin cuenta ni contraseña." },
+        { "titulo": "Reloj de 15 días hábiles", "texto": "Calendario laboral peruano, con avisos antes del vencimiento." },
+        { "titulo": "Exportación a Excel", "texto": "El registro completo, listo si te lo piden en una fiscalización." }
+      ]
+    },
+    {
+      "nombre": "Atención",
+      "items": [
+        { "titulo": "Asistente con IA", "texto": "Redacta borradores de respuesta y clasifica el reclamo al entrar." },
+        { "titulo": "WhatsApp Business", "texto": "Recibe y responde reclamos por el canal que tu cliente ya usa." },
+        { "titulo": "Chat en vivo", "texto": "Conversación en tiempo real cuando el caso necesita ida y vuelta." },
+        { "titulo": "Plantillas de correo", "texto": "Respuestas frecuentes preparadas, editables por tu equipo." }
+      ]
+    },
+    {
+      "nombre": "Operación",
+      "items": [
+        { "titulo": "Multi-sede", "texto": "Cada local con su propio QR y sus reclamos separados." },
+        { "titulo": "Usuarios y roles", "texto": "Define quién ve, quién responde y quién administra." },
+        { "titulo": "Panel de métricas", "texto": "Volumen, tiempos de respuesta y motivos más repetidos." },
+        { "titulo": "API y marca blanca", "texto": "Intégralo con tus sistemas o publícalo con tu propia identidad." }
+      ]
+    }
+  ]
+}

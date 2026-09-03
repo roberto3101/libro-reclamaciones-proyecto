@@ -1,0 +1,39 @@
+Listado de rutas de carpetas
+El n·mero de serie del volumen es D2AB-208D
+C:.
+|   .env
+|   .env.example
+|   estructura.txt
+|   go.mod
+|   go.sum
+|   
++---apigateway
+|   |   go.mod
+|   |   
+|   \---cmd
+|       \---gateway
+|               main.go
+|               
++---cmd
+|   \---plataforma_api
+|           main.go
+|           
+\---internal
+    +---config
+    |       config.go
+    |       
+    +---db
+    |       mssql.go
+    |       
+    +---model
+    |       sp.go
+    |       
+    +---repo
+    |       plataforma_repo.go
+    |       
+    +---router
+    |       plataforma.go
+    |       
+    \---server
+            http.go
+            

@@ -1,0 +1,88 @@
+.bloque {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.envoltura {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-e-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.envoltura[data-deshabilitado] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pos_inicio { flex-direction: row-reverse; }
+.pos_arriba { flex-direction: column-reverse; align-items: flex-start; }
+.pos_abajo  { flex-direction: column; align-items: flex-start; }
+
+.pista {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  box-sizing: border-box;
+  background: var(--ui-borde-fuerte);
+  border-radius: var(--ui-r-full);
+  transition: background-color var(--ui-trans);
+}
+
+.envoltura[data-tamano='mediano'] .pista { width: 40px; height: 22px; padding: 2px; }
+.envoltura[data-tamano='pequeno'] .pista { width: 32px; height: 18px; padding: 2px; }
+
+.entrada {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+  z-index: 1;
+}
+
+.pulgar {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform var(--ui-trans);
+}
+
+/* El recorrido se calcula con el ancho real de la pista menos el pulgar y
+   sus márgenes, para que encaje en los dos tamaños sin números mágicos. */
+.envoltura[data-tamano='mediano'] .entrada:checked ~ .pulgar { transform: translateX(18px); }
+.envoltura[data-tamano='pequeno'] .entrada:checked ~ .pulgar { transform: translateX(14px); }
+
+.entrada:checked ~ .pulgar {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.entrada:focus-visible ~ .pulgar {
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+/* La pista se colorea desde el input, que es quien conoce el estado. */
+.pista:has(.entrada:checked) { background: var(--ui-primario); }
+.envoltura[data-color='exito'] .pista:has(.entrada:checked) { background: var(--ui-exito); }
+.envoltura[data-color='error'] .pista:has(.entrada:checked) { background: var(--ui-peligro); }
+.envoltura[data-color='advertencia'] .pista:has(.entrada:checked) { background: var(--ui-adv); }
+.envoltura[data-color='info'] .pista:has(.entrada:checked) { background: var(--ui-info); }
+.envoltura[data-color='secundario'] .pista:has(.entrada:checked) { background: var(--ui-texto-2); }
+
+.etiqueta {
+  font-size: var(--ui-t-md);
+  color: var(--ui-texto);
+  line-height: 1.4;
+}
+
+.error {
+  margin: 0;
+  font-size: var(--ui-t-xs);
+  color: var(--ui-peligro-texto);
+}

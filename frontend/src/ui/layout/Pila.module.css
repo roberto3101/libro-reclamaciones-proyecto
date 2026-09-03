@@ -1,0 +1,27 @@
+.pila {
+  display: flex;
+  min-width: 0;
+}
+
+/* El separador solo dibuja línea cuando no lleva contenido propio;
+   si se pasó un nodo a `divisor`, se muestra ese en su lugar. */
+.divisor {
+  flex: none;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divisor:empty {
+  background: var(--ui-borde);
+}
+
+/* En fila el separador es una línea vertical; en columna, horizontal. */
+.pila[data-eje='fila'] > .divisor:empty {
+  width: 1px;
+}
+
+.pila[data-eje='columna'] > .divisor:empty {
+  height: 1px;
+}

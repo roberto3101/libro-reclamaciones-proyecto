@@ -1,0 +1,105 @@
+.insignia {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-sizing: border-box;
+  padding: 2px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--ui-r-sm);
+  font-size: var(--ui-t-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.circular,
+.conPunto {
+  border-radius: var(--ui-r-full);
+}
+
+.suelta {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Fondo suave + texto de color: legible en los dos temas sin depender de
+   que el color sólido tenga contraste suficiente con el blanco. */
+.insignia[data-color='primario'] {
+  background: var(--ui-primario-suave);
+  border-color: var(--ui-primario-suave-borde);
+  color: var(--ui-primario-texto);
+}
+
+.insignia[data-color='info'] {
+  background: var(--ui-info-suave);
+  border-color: var(--ui-info-borde);
+  color: var(--ui-info-texto);
+}
+
+.insignia[data-color='exito'] {
+  background: var(--ui-exito-suave);
+  border-color: var(--ui-exito-borde);
+  color: var(--ui-exito-texto);
+}
+
+.insignia[data-color='advertencia'] {
+  background: var(--ui-adv-suave);
+  border-color: var(--ui-adv-borde);
+  color: var(--ui-adv-texto);
+}
+
+.insignia[data-color='error'] {
+  background: var(--ui-peligro-suave);
+  border-color: var(--ui-peligro-borde);
+  color: var(--ui-peligro-texto);
+}
+
+.insignia[data-color='secundario'] {
+  background: var(--ui-superficie-hundida);
+  border-color: var(--ui-borde);
+  color: var(--ui-texto-2);
+}
+
+.punto {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.conBorde {
+  border-color: currentColor;
+}
+
+.animado .punto {
+  animation: latido 1.6s ease-in-out infinite;
+}
+
+@keyframes latido {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(0.8); }
+}
+
+/* ── Anclada sobre otro elemento ───────────────────────────────────── */
+
+.ancla {
+  position: relative;
+  display: inline-flex;
+}
+
+.flotante {
+  position: absolute;
+  display: inline-flex;
+  pointer-events: none;
+}
+
+.v_arriba { top: 0; }
+.v_abajo  { bottom: 0; }
+.h_derecha    { right: 0; transform: translate(50%, -50%); }
+.h_izquierda  { left: 0; transform: translate(-50%, -50%); }
+.v_abajo.h_derecha   { transform: translate(50%, 50%); }
+.v_abajo.h_izquierda { transform: translate(-50%, 50%); }

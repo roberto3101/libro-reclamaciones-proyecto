@@ -1,0 +1,234 @@
+/* ── Selección de empresa ──────────────────────────────────────────────
+   Estilos en módulo, no en un <style> incrustado con interpolación de
+   JavaScript. El bloque anterior reescribía cada color según `esOscuro`,
+   así que el tema vivía en el componente y había que acordarse de las dos
+   ramas en cada retoque. Aquí los colores salen de los tokens y el modo
+   oscuro se resuelve solo.                                             */
+
+.raiz {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--ui-e-10) var(--ui-e-5) var(--ui-e-12);
+  background: var(--ui-fondo);
+}
+
+@media (min-height: 720px) {
+  .raiz {
+    align-items: center;
+    padding-top: var(--ui-e-5);
+  }
+}
+
+.columna {
+  width: 100%;
+  max-width: 30rem;
+}
+
+/* ── Encabezado ───────────────────────────────────────────────────── */
+
+.cabecera {
+  margin-bottom: var(--ui-e-6);
+}
+
+.antetitulo {
+  margin: 0 0 var(--ui-e-2);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ui-texto-3);
+}
+
+.titulo {
+  margin: 0 0 var(--ui-e-2);
+  font-family: var(--ui-fuente-titulo);
+  font-size: 1.625rem;
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: -0.018em;
+  color: var(--ui-texto);
+}
+
+.nota {
+  margin: 0;
+  max-width: 46ch;
+  font-size: var(--ui-t-sm);
+  line-height: 1.55;
+  color: var(--ui-texto-2);
+}
+
+.error {
+  margin: 0 0 var(--ui-e-4);
+  padding: 9px 12px;
+  border: 1px solid var(--ui-peligro-borde);
+  border-left-width: 3px;
+  border-radius: var(--ui-r-md);
+  background: var(--ui-peligro-suave);
+  color: var(--ui-peligro-texto);
+  font-size: var(--ui-t-sm);
+}
+
+/* ── Lista de empresas ─────────────────────────────────────────────────
+   Filas separadas por filete, no tarjetas sueltas: son registros de la
+   misma clase y comparten eje izquierdo, así que la vista de lista se
+   recorre de un vistazo.                                              */
+
+.lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--ui-borde-sutil);
+}
+
+.lista > li {
+  border-bottom: 1px solid var(--ui-borde-sutil);
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-e-3);
+  width: 100%;
+  padding: 12px 8px;
+  border: none;
+  border-radius: var(--ui-r-md);
+  background: transparent;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--ui-trans-rapida);
+}
+
+.fila:hover:not(:disabled) {
+  background: var(--ui-hover);
+}
+
+.fila:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ui-foco-halo);
+}
+
+.fila:disabled {
+  cursor: default;
+}
+
+/* Solo la fila que está cargando se atenúa; las demás siguen legibles
+   mientras esperan, en vez de apagarse todas a la vez. */
+.fila[aria-busy='true'] {
+  background: var(--ui-hover);
+}
+
+.fila:disabled:not([aria-busy='true']) {
+  opacity: 0.55;
+}
+
+.logo,
+.inicial {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--ui-r-sm);
+}
+
+.logo {
+  object-fit: cover;
+  border: 1px solid var(--ui-borde);
+  background: var(--ui-superficie);
+}
+
+.inicial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ui-fuente-titulo);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #fffefb;
+}
+
+.datos {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.32;
+}
+
+.nombre {
+  font-size: var(--ui-t-md);
+  font-weight: 500;
+  color: var(--ui-texto);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rol {
+  font-size: var(--ui-t-xs);
+  color: var(--ui-texto-3);
+  text-transform: lowercase;
+}
+
+.flecha {
+  flex: none;
+  color: var(--ui-texto-3);
+}
+
+.fila:hover:not(:disabled) .flecha {
+  color: var(--ui-texto-2);
+}
+
+.giro {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--ui-borde-fuerte);
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: sel-giro 620ms linear infinite;
+}
+
+@keyframes sel-giro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.volver {
+  margin: var(--ui-e-6) 0 0;
+  font-size: var(--ui-t-sm);
+}
+
+.volver a {
+  color: var(--ui-texto-2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ui-borde-fuerte);
+  padding-bottom: 1px;
+}
+
+.volver a:hover {
+  color: var(--ui-texto);
+  border-bottom-color: var(--ui-texto);
+}
+
+/* Por debajo de 360px se recorta el distintivo y el relleno lateral: el
+   nombre de la empresa es lo que hay que poder leer. */
+@media (max-width: 360px) {
+  .raiz {
+    padding-left: var(--ui-e-3);
+    padding-right: var(--ui-e-3);
+  }
+
+  .fila {
+    gap: 10px;
+    padding: 11px 4px;
+  }
+
+  .logo,
+  .inicial {
+    width: 34px;
+    height: 34px;
+  }
+}

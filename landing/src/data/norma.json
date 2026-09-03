@@ -1,0 +1,35 @@
+{
+  "titulo": "Lo que la ley te exige, resuelto",
+  "entrada": "El Código de Protección y Defensa del Consumidor obliga a todo proveedor a poner el libro a disposición del cliente. Estas son las cinco condiciones que un libro virtual debe cumplir para ser válido — y que este sistema cumple de fábrica.",
+  "requisitos": [
+    {
+      "n": "01",
+      "titulo": "Hoja con código único",
+      "texto": "Cada reclamo genera un PDF numerado e irrepetible. Ni tú ni el cliente pueden alterarlo después de emitido."
+    },
+    {
+      "n": "02",
+      "titulo": "Verificación pública",
+      "texto": "El consumidor consulta el estado de su reclamo con el código o escaneando el QR, sin cuenta ni contraseña."
+    },
+    {
+      "n": "03",
+      "titulo": "Plazo de 15 días hábiles",
+      "texto": "El sistema calcula el vencimiento con el calendario laboral peruano y avisa antes de que se te pase."
+    },
+    {
+      "n": "04",
+      "titulo": "Aviso visible al cliente",
+      "texto": "Recibes el cartel y el QR listos para imprimir y colocar en cada local, como exige la norma."
+    },
+    {
+      "n": "05",
+      "titulo": "Registro conservado y exportable",
+      "texto": "Historial completo de cada reclamo, descargable en Excel si INDECOPI te lo solicita."
+    }
+  ],
+  "aviso": {
+    "titulo": "Qué pasa si no lo tienes",
+    "texto": "No exhibir el libro, no entregar la hoja o no responder dentro del plazo son infracciones sancionables. La escala arranca en 0,5 UIT y sube según la gravedad y el tamaño del negocio."
+  }
+}
