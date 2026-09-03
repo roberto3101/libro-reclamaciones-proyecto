@@ -70,7 +70,7 @@ func RegisterRoutes(r *gin.Engine, cfg *config.Config, db *sql.DB, concentradorW
 	limitesRepo := repo.NewLimitesRepo(db)
 	limitesService := service.NewLimitesService(limitesRepo, cfg.Server.Env)
 	suscripcionCtrl := controller.NewSuscripcionController(suscripcionService, limitesService, auditRepo)
-	pagoCtrl := controller.NewPagoController(pagoService, culqiClient)
+	pagoCtrl := controller.NewPagoController(pagoService, culqiClient, mpClient)
 	tenantCtrl := controller.NewTenantController(tenantService, auditRepo)
 	sedeCtrl := controller.NewSedeController(sedeService)
 	usuarioCtrl := controller.NewUsuarioController(usuarioService, auditRepo, rolRepo)

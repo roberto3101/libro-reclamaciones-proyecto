@@ -32,9 +32,11 @@ func RegisterPagoAdminRoutes(r *gin.Engine, ctrl *controller.PagoController, aut
 	}
 }
 
-// RegisterPagoWebhookRoutes webhook público de Culqi.
-// Sin auth: la seguridad viene de la firma HMAC del cuerpo.
+// RegisterPagoWebhookRoutes webhooks públicos de las pasarelas.
+// Sin auth: la seguridad viene de la firma que manda cada una.
 // POST /webhook/culqi
+// POST /webhook/mercadopago
 func RegisterPagoWebhookRoutes(r *gin.Engine, ctrl *controller.PagoController) {
 	r.POST("/webhook/culqi", ctrl.Webhook)
+	r.POST("/webhook/mercadopago", ctrl.WebhookMercadoPago)
 }

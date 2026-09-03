@@ -7,6 +7,7 @@ import (
 
 	"libro-reclamaciones/internal/apperror"
 	"libro-reclamaciones/internal/helper"
+	"libro-reclamaciones/internal/model"
 	"libro-reclamaciones/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -15,10 +16,15 @@ import (
 type PagoController struct {
 	pagoService *service.PagoService
 	culqi       *service.CulqiClient
+	mp          *service.MercadoPagoClient
 }
 
-func NewPagoController(pagoService *service.PagoService, culqi *service.CulqiClient) *PagoController {
-	return &PagoController{pagoService: pagoService, culqi: culqi}
+func NewPagoController(
+	pagoService *service.PagoService,
+	culqi *service.CulqiClient,
+	mp *service.MercadoPagoClient,
+) *PagoController {
+	return &PagoController{pagoService: pagoService, culqi: culqi, mp: mp}
 }
 
 // GetConfig entrega al frontend lo que necesita para montar el checkout.
@@ -231,9 +237,91 @@ func (c *PagoController) Webhook(ctx *gin.Context) {
 	}
 
 	procesado, err := c.pagoService.ProcesarEventoWebhook(
-		ctx.Request.Context(), eventoID, evento.Type, cuerpo,
+		ctx.Request.Context(), model.ProveedorCulqi, eventoID, evento.Type, cuerpo,
 	)
 	if err != nil {
+		ctx.JSON(http.StatusOK, gin.H{"recibido": true, "procesado": false})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"recibido": true, "procesado": procesado})
+}
+
+// WebhookMercadoPago recibe los avisos de Mercado Pago.
+//
+// Va aparte del de Culqi porque las dos pasarelas no se parecen en nada:
+//
+//   - Culqi firma el cuerpo entero con HMAC y manda X-Culqi-Signature.
+//   - Mercado Pago firma una plantilla armada con el id del recurso, el
+//     id de la petición y una marca de tiempo, repartidos entre la query
+//     y las cabeceras x-signature y x-request-id.
+//
+// Meter las dos en el mismo handler obligaba a adivinar el emisor antes
+// de validarlo, que es justo lo que no conviene hacer en un endpoint
+// público sin autenticación.
+//
+// Sin auth: la seguridad viene de la firma.
+// POST /webhook/mercadopago
+func (c *PagoController) WebhookMercadoPago(ctx *gin.Context) {
+	cuerpo, err := io.ReadAll(io.LimitReader(ctx.Request.Body, 1<<20))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "cuerpo ilegible"})
+		return
+	}
+
+	var evento struct {
+		ID     json.Number `json:"id"`
+		Type   string      `json:"type"`
+		Action string      `json:"action"`
+		Data   struct {
+			ID string `json:"id"`
+		} `json:"data"`
+	}
+	// Un cuerpo ilegible no se rechaza: se acepta sin procesar. Si se
+	// respondiera con error, Mercado Pago lo reintentaría indefinidamente.
+	if err := json.Unmarshal(cuerpo, &evento); err != nil {
+		ctx.JSON(http.StatusOK, gin.H{"recibido": false, "motivo": "json inválido"})
+		return
+	}
+
+	// El id del recurso puede venir por query o en el cuerpo, según el
+	// tipo de notificación.
+	dataID := ctx.Query("data.id")
+	if dataID == "" {
+		dataID = evento.Data.ID
+	}
+
+	if !c.mp.VerificarFirmaWebhook(
+		ctx.GetHeader("x-signature"),
+		ctx.GetHeader("x-request-id"),
+		dataID,
+	) {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "firma inválida"})
+		return
+	}
+
+	// Para la idempotencia vale el id de la notificación; si no viene, el
+	// del recurso más la acción, que es lo que distingue un cobro
+	// aprobado de su posterior devolución.
+	eventoID := evento.ID.String()
+	if eventoID == "" || eventoID == "0" {
+		eventoID = dataID
+		if evento.Action != "" {
+			eventoID = evento.Action + ":" + dataID
+		}
+	}
+
+	tipo := evento.Type
+	if evento.Action != "" {
+		tipo = evento.Action
+	}
+
+	procesado, err := c.pagoService.ProcesarEventoWebhook(
+		ctx.Request.Context(), model.ProveedorMercadoPago, eventoID, tipo, cuerpo,
+	)
+	if err != nil {
+		// 200 a propósito: el evento quedó guardado y no queremos que
+		// reintente por un fallo nuestro al procesarlo.
 		ctx.JSON(http.StatusOK, gin.H{"recibido": true, "procesado": false})
 		return
 	}

@@ -378,14 +378,25 @@ func (s *PagoService) ListarPorTenant(ctx context.Context, tenantID uuid.UUID, l
 }
 
 // ProcesarEventoWebhook guarda el evento y avisa si toca procesarlo.
-// Culqi reintenta mientras no reciba un 200, así que la idempotencia
-// no es opcional.
-func (s *PagoService) ProcesarEventoWebhook(ctx context.Context, eventoID, tipo string, payload []byte) (bool, error) {
+//
+// El proveedor va como parámetro porque las dos pasarelas numeran sus
+// eventos por su cuenta: un identificador de Culqi puede coincidir con uno
+// de Mercado Pago sin que tengan nada que ver. Guardarlos bajo el mismo
+// proveedor haría que el segundo se descartara por duplicado y ese cobro
+// no se procesaría nunca.
+//
+// Ambas reintentan mientras no reciban un 200, así que la idempotencia no
+// es opcional: si el evento ya estaba registrado se responde que sí, sin
+// volver a aplicarlo.
+func (s *PagoService) ProcesarEventoWebhook(ctx context.Context, proveedor, eventoID, tipo string, payload []byte) (bool, error) {
 	if eventoID == "" {
 		return false, apperror.New(http.StatusBadRequest, "EVENTO_SIN_ID", "El evento no trae identificador.")
 	}
+	if proveedor == "" {
+		proveedor = model.ProveedorCulqi
+	}
 
-	nuevo, err := s.pagoRepo.RegistrarEvento(ctx, model.ProveedorCulqi, eventoID, tipo, payload)
+	nuevo, err := s.pagoRepo.RegistrarEvento(ctx, proveedor, eventoID, tipo, payload)
 	if err != nil {
 		return false, err
 	}
@@ -393,7 +404,7 @@ func (s *PagoService) ProcesarEventoWebhook(ctx context.Context, eventoID, tipo 
 		return false, nil // Ya lo vimos antes; responder 200 y no hacer nada.
 	}
 
-	if err := s.pagoRepo.MarcarEventoProcesado(ctx, model.ProveedorCulqi, eventoID); err != nil {
+	if err := s.pagoRepo.MarcarEventoProcesado(ctx, proveedor, eventoID); err != nil {
 		return true, err
 	}
 	return true, nil

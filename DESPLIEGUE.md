@@ -65,10 +65,25 @@ Regístrate en <https://culqi.com> → panel → Desarrollo → Llaves. Necesita
 
 El webhook apunta a `https://TU-DOMINIO/webhook/culqi`.
 
-> MercadoPago tiene cliente escrito (`mercadopago_client.go`) y variables
-> declaradas (`MP_PUBLIC_KEY`, `MP_ACCESS_TOKEN`, `MP_WEBHOOK_SECRET`,
-> `MP_API_URL`), pero **no está conectado al servicio de pagos**. Culqi es el
-> camino corto; MercadoPago requiere trabajo de integración.
+### Mercado Pago (suscripción recurrente)
+
+Las dos pasarelas cubren casos distintos y conviene tener ambas: Culqi cobra
+una vez con tarjeta, Mercado Pago cobra **todos los meses solo**. Para un SaaS
+lo segundo es lo que sostiene el negocio.
+
+Panel de Mercado Pago → Tus integraciones → Credenciales de producción:
+
+| Variable | Dónde sale |
+|---|---|
+| `MP_PUBLIC_KEY` | Public key |
+| `MP_ACCESS_TOKEN` | Access token |
+| `MP_WEBHOOK_SECRET` | Al configurar la notificación |
+| `MP_API_URL` | `https://api.mercadopago.com` |
+
+Webhook: `https://TU-DOMINIO/webhook/mercadopago`
+
+> Si dejas `MP_WEBHOOK_SECRET` vacío la firma **no se verifica** y cualquiera
+> podría enviar avisos falsos de pago. Rellénalo antes de cobrar de verdad.
 
 ### 5. Limpiar los datos de prueba
 
