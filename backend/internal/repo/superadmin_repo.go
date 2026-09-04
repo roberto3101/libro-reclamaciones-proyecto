@@ -82,7 +82,7 @@ func (r *SuperAdminRepo) ListarTodos(ctx context.Context) ([]model.SuperAdmin, e
 	}
 	defer rows.Close()
 
-	var admins []model.SuperAdmin
+	admins := []model.SuperAdmin{}
 	for rows.Next() {
 		var sa model.SuperAdmin
 		if err := rows.Scan(

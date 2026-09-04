@@ -118,7 +118,7 @@ func (r *SuscripcionRepo) GetHistorial(ctx context.Context, tenantID uuid.UUID) 
 	}
 	defer rows.Close()
 
-	var suscripciones []model.Suscripcion
+	suscripciones := []model.Suscripcion{}
 	for rows.Next() {
 		s, err := scanSuscripcionConUsuario(rows)
 		if err != nil {
@@ -143,7 +143,7 @@ func (r *SuscripcionRepo) ListarTrialsVencidos(ctx context.Context) ([]model.Sus
 	}
 	defer rows.Close()
 
-	var suscripciones []model.Suscripcion
+	suscripciones := []model.Suscripcion{}
 	for rows.Next() {
 		s, err := scanSuscripcion(rows)
 		if err != nil {

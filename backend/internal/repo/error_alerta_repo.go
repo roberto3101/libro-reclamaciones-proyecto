@@ -46,7 +46,7 @@ func (r *ErrorAlertaRepo) ListarSinVer(ctx context.Context) ([]ErrorAlerta, erro
 	}
 	defer rows.Close()
 
-	var alertas []ErrorAlerta
+	alertas := []ErrorAlerta{}
 	for rows.Next() {
 		var a ErrorAlerta
 		if err := rows.Scan(&a.ID, &a.Fingerprint, &a.Tipo, &a.Mensaje, &a.Visto, &a.Fecha); err != nil {

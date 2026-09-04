@@ -143,7 +143,7 @@ func (r *RolRepo) scanOne(ctx context.Context, query string, args ...interface{}
 }
 
 func (r *RolRepo) scanRoles(rows *sql.Rows) ([]model.RolTenant, error) {
-	var roles []model.RolTenant
+	roles := []model.RolTenant{}
 	for rows.Next() {
 		var rol model.RolTenant
 		if err := rows.Scan(

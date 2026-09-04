@@ -170,7 +170,7 @@ func (r *UsuarioRepo) BuscarEnCuentaPorEmail(ctx context.Context, cuentaID uuid.
 	}
 	defer rows.Close()
 
-	var accesos []AccesoUsuarioEnCuenta
+	accesos := []AccesoUsuarioEnCuenta{}
 	for rows.Next() {
 		var a AccesoUsuarioEnCuenta
 		if err := rows.Scan(&a.TenantID, &a.RazonSocial, &a.Rol, &a.NombreCompleto, &a.PasswordHash, &a.Activo); err != nil {
@@ -374,7 +374,7 @@ func (r *UsuarioRepo) ObtenerActivosPorEmailEnCuenta(ctx context.Context, email 
 	}
 	defer rows.Close()
 
-	var usuarios []model.UsuarioAdmin
+	usuarios := []model.UsuarioAdmin{}
 	for rows.Next() {
 		var u model.UsuarioAdmin
 		if err := rows.Scan(
@@ -403,7 +403,7 @@ func (r *UsuarioRepo) ObtenerTodosPorEmailGlobal(ctx context.Context, email stri
 	}
 	defer rows.Close()
 
-	var usuarios []model.UsuarioAdmin
+	usuarios := []model.UsuarioAdmin{}
 	for rows.Next() {
 		var u model.UsuarioAdmin
 		if err := rows.Scan(
@@ -556,7 +556,7 @@ func (r *UsuarioRepo) CountActivos(ctx context.Context, tenantID uuid.UUID) (int
 }
 
 func (r *UsuarioRepo) scanUsuarios(rows *sql.Rows) ([]model.UsuarioAdmin, error) {
-	var usuarios []model.UsuarioAdmin
+	usuarios := []model.UsuarioAdmin{}
 	for rows.Next() {
 		var u model.UsuarioAdmin
 		if err := rows.Scan(

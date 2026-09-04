@@ -77,7 +77,7 @@ func (r *APIMetricasRepo) ObtenerRendimientoPorRuta(ctx context.Context) ([]Rend
 	}
 	defer rows.Close()
 
-	var resultado []RendimientoRuta
+	resultado := []RendimientoRuta{}
 	for rows.Next() {
 		var rr RendimientoRuta
 		if err := rows.Scan(&rr.Ruta, &rr.Metodo, &rr.Peticiones, &rr.PromedioMs, &rr.P95Ms, &rr.P99Ms); err != nil {

@@ -97,7 +97,7 @@ func (r *AssistantRepo) GetReclamosPorEstado(ctx context.Context, tenantID uuid.
 	}
 	defer rows.Close()
 
-	var reclamos []ReclamoResumen
+	reclamos := []ReclamoResumen{}
 	for rows.Next() {
 		var rec ReclamoResumen
 		if err := rows.Scan(
@@ -248,7 +248,7 @@ func (r *AssistantRepo) GetUsuariosActivos(ctx context.Context, tenantID uuid.UU
 	}
 	defer rows.Close()
 
-	var usuarios []UsuarioActivo
+	usuarios := []UsuarioActivo{}
 	for rows.Next() {
 		var u UsuarioActivo
 		if err := rows.Scan(&u.ID, &u.NombreCompleto, &u.Email, &u.Rol); err != nil {
@@ -267,7 +267,7 @@ func (r *AssistantRepo) scanReclamos(ctx context.Context, query string, tenantID
 	}
 	defer rows.Close()
 
-	var reclamos []ReclamoResumen
+	reclamos := []ReclamoResumen{}
 	for rows.Next() {
 		var rec ReclamoResumen
 		if err := rows.Scan(

@@ -57,7 +57,7 @@ func (r *ChatbotRepo) GetByTenant(ctx context.Context, tenantID uuid.UUID) ([]mo
 	}
 	defer rows.Close()
 
-	var chatbots []model.Chatbot
+	chatbots := []model.Chatbot{}
 	for rows.Next() {
 		c, err := scanChatbot(rows)
 		if err != nil {

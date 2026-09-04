@@ -71,7 +71,7 @@ func (r *CuentaRepo) ListarActivas(ctx context.Context, offset, limite int) ([]m
 	}
 	defer rows.Close()
 
-	var cuentas []model.Cuenta
+	cuentas := []model.Cuenta{}
 	for rows.Next() {
 		var c model.Cuenta
 		if err := rows.Scan(
@@ -104,7 +104,7 @@ func (r *CuentaRepo) ListarTodas(ctx context.Context, offset, limite int) ([]mod
 	}
 	defer rows.Close()
 
-	var cuentas []model.Cuenta
+	cuentas := []model.Cuenta{}
 	for rows.Next() {
 		var c model.Cuenta
 		if err := rows.Scan(
@@ -183,7 +183,7 @@ func (r *CuentaRepo) BuscarPorEmailONombre(ctx context.Context, termino string, 
 	}
 	defer rows.Close()
 
-	var cuentas []model.Cuenta
+	cuentas := []model.Cuenta{}
 	for rows.Next() {
 		var c model.Cuenta
 		if err := rows.Scan(

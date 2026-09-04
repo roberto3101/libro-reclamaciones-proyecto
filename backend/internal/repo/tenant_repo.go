@@ -168,7 +168,7 @@ func (r *TenantRepo) GetByCuentaID(ctx context.Context, cuentaID uuid.UUID) ([]m
 	}
 	defer rows.Close()
 
-	var tenants []model.TenantResumen
+	tenants := []model.TenantResumen{}
 	for rows.Next() {
 		var t model.TenantResumen
 		if err := rows.Scan(&t.TenantID, &t.RazonSocial, &t.RUC, &t.Slug, &t.LogoURL, &t.Activo); err != nil {
@@ -203,7 +203,7 @@ func (r *TenantRepo) GetByTenantIDs(ctx context.Context, ids []uuid.UUID) ([]mod
 	}
 	defer rows.Close()
 
-	var tenants []model.TenantResumen
+	tenants := []model.TenantResumen{}
 	for rows.Next() {
 		var t model.TenantResumen
 		if err := rows.Scan(&t.TenantID, &t.RazonSocial, &t.RUC, &t.Slug, &t.LogoURL, &t.Activo); err != nil {
@@ -254,7 +254,7 @@ func (r *TenantRepo) ListAll(ctx context.Context, offset, limit int) ([]model.Te
 	}
 	defer rows.Close()
 
-	var tenants []model.TenantResumen
+	tenants := []model.TenantResumen{}
 	for rows.Next() {
 		var t model.TenantResumen
 		if err := rows.Scan(&t.TenantID, &t.RazonSocial, &t.RUC, &t.Slug, &t.LogoURL, &t.Activo); err != nil {

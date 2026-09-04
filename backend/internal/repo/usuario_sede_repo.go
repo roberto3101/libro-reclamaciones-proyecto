@@ -27,7 +27,7 @@ func (r *UsuarioSedeRepo) ObtenerSedesPorUsuario(ctx context.Context, tenantID, 
 	}
 	defer rows.Close()
 
-	var sedes []uuid.UUID
+	sedes := []uuid.UUID{}
 	for rows.Next() {
 		var sedeID uuid.UUID
 		if err := rows.Scan(&sedeID); err != nil {

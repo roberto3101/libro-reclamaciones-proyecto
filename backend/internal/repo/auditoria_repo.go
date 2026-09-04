@@ -305,7 +305,7 @@ func (r *AuditoriaRepo) GetByTenant(ctx context.Context, tenantID uuid.UUID, lim
 	}
 	defer rows.Close()
 
-	var auditorias []model.Auditoria
+	auditorias := []model.Auditoria{}
 	for rows.Next() {
 		var a model.Auditoria
 		if err := rows.Scan(

@@ -178,7 +178,7 @@ func (r *PlanRepo) ContarSuscripcionesActivas(ctx context.Context, planID uuid.U
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 func scanPlanes(rows *sql.Rows) ([]model.Plan, error) {
-	var planes []model.Plan
+	planes := []model.Plan{}
 	for rows.Next() {
 		p, err := scanPlan(rows)
 		if err != nil {

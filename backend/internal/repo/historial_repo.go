@@ -39,7 +39,7 @@ func (r *HistorialRepo) GetByReclamo(ctx context.Context, tenantID, reclamoID uu
 	}
 	defer rows.Close()
 
-	var historial []model.Historial
+	historial := []model.Historial{}
 	for rows.Next() {
 		var h model.Historial
 		if err := rows.Scan(

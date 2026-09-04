@@ -44,7 +44,7 @@ func (r *MensajeAtencionRepo) ListarPorSolicitud(ctx context.Context, tenantID, 
 	}
 	defer rows.Close()
 
-	var mensajes []model.MensajeAtencion
+	mensajes := []model.MensajeAtencion{}
 	for rows.Next() {
 		var m model.MensajeAtencion
 		if err := rows.Scan(

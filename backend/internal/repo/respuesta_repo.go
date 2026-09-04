@@ -41,7 +41,7 @@ func (r *RespuestaRepo) GetByReclamo(ctx context.Context, tenantID, reclamoID uu
 	}
 	defer rows.Close()
 
-	var respuestas []model.Respuesta
+	respuestas := []model.Respuesta{}
 	for rows.Next() {
 		var resp model.Respuesta
 		if err := rows.Scan(

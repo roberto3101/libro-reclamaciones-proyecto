@@ -45,7 +45,7 @@ func (r *CuentaNotasRepo) ListarPorCuenta(ctx context.Context, cuentaID uuid.UUI
 	}
 	defer rows.Close()
 
-	var notas []CuentaNota
+	notas := []CuentaNota{}
 	for rows.Next() {
 		var n CuentaNota
 		if err := rows.Scan(&n.ID, &n.CuentaID, &n.Contenido, &n.AutorID, &n.AutorNombre, &n.Fecha); err != nil {

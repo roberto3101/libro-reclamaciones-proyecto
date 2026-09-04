@@ -153,7 +153,7 @@ func (r *PlantillaEmailRepo) scanOne(ctx context.Context, query string, args ...
 }
 
 func (r *PlantillaEmailRepo) scanPlantillas(rows *sql.Rows) ([]model.PlantillaEmail, error) {
-	var plantillas []model.PlantillaEmail
+	plantillas := []model.PlantillaEmail{}
 	for rows.Next() {
 		var p model.PlantillaEmail
 		var varsRaw string

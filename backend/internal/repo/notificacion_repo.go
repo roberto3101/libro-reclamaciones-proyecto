@@ -100,7 +100,7 @@ func (r *NotificacionRepo) ListarPorUsuarioPaginado(tenantID, usuarioID uuid.UUI
 	}
 	defer rows.Close()
 
-	var resultado []model.Notificacion
+	resultado := []model.Notificacion{}
 	for rows.Next() {
 		var n model.Notificacion
 		var datosExtra []byte

@@ -78,7 +78,7 @@ func (r *AsistenteHistorialRepo) ListarConversaciones(ctx context.Context, tenan
 	}
 	defer rows.Close()
 
-	var conversaciones []ConversacionResumen
+	conversaciones := []ConversacionResumen{}
 	for rows.Next() {
 		var c ConversacionResumen
 		if err := rows.Scan(
@@ -186,7 +186,7 @@ func (r *AsistenteHistorialRepo) ListarMensajes(ctx context.Context, tenantID, c
 	}
 	defer rows.Close()
 
-	var mensajes []MensajeHistorial
+	mensajes := []MensajeHistorial{}
 	for rows.Next() {
 		var m MensajeHistorial
 		if err := rows.Scan(

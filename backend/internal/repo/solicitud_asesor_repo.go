@@ -317,7 +317,7 @@ func (r *SolicitudAsesorRepo) scanMultiples(ctx context.Context, query string, a
 }
 
 func (r *SolicitudAsesorRepo) scanRows(rows *sql.Rows) ([]model.SolicitudAsesor, error) {
-	var solicitudes []model.SolicitudAsesor
+	solicitudes := []model.SolicitudAsesor{}
 	for rows.Next() {
 		s, err := scanSolicitudAsesor(rows)
 		if err != nil {

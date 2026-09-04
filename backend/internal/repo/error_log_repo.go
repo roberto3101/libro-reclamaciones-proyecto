@@ -124,7 +124,7 @@ func (r *ErrorLogRepo) Listar(ctx context.Context, limite, offset int, filtros E
 	}
 	defer rows.Close()
 
-	var entries []ErrorLogEntry
+	entries := []ErrorLogEntry{}
 	for rows.Next() {
 		var e ErrorLogEntry
 		if err := rows.Scan(&e.ID, &e.Nivel, &e.Origen, &e.TenantID, &e.UsuarioID,
@@ -214,7 +214,7 @@ func (r *ErrorLogRepo) Resumen(ctx context.Context, filtros ErrorLogFiltros) (*E
 		rango string
 		dest  *int
 	}
-	var contadores []contador
+	contadores := []contador{}
 	var extraArgs []interface{}
 	usarDesdeHasta := filtros.Desde != "" && filtros.Hasta != ""
 
@@ -349,7 +349,7 @@ func (r *ErrorLogRepo) ListarAgrupados(ctx context.Context, limite, offset int, 
 	}
 	defer rows.Close()
 
-	var resultado []ErrorLogAgrupado
+	resultado := []ErrorLogAgrupado{}
 	for rows.Next() {
 		var e ErrorLogAgrupado
 		var ruta *string
@@ -396,7 +396,7 @@ func (r *ErrorLogRepo) ObtenerTimeline(ctx context.Context, intervalo string, di
 	}
 	defer rows.Close()
 
-	var puntos []PuntoTimeline
+	puntos := []PuntoTimeline{}
 	for rows.Next() {
 		var p PuntoTimeline
 		if err := rows.Scan(&p.Periodo, &p.Conteo); err != nil {

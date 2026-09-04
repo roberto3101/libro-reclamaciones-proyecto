@@ -260,7 +260,7 @@ func (r *AuditoriaSARepo) Listar(ctx context.Context, limite, offset int) ([]Aud
 	}
 	defer rows.Close()
 
-	var entries []AuditoriaSAEntry
+	entries := []AuditoriaSAEntry{}
 	for rows.Next() {
 		var e AuditoriaSAEntry
 		if err := rows.Scan(&e.ID, &e.SuperAdminID, &e.Accion, &e.Entidad, &e.EntidadID, &e.Detalles, &e.IPAddress, &e.Fecha); err != nil {

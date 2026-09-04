@@ -34,7 +34,7 @@ func (r *MensajeRepo) GetByReclamo(ctx context.Context, tenantID, reclamoID uuid
 	}
 	defer rows.Close()
 
-	var mensajes []model.Mensaje
+	mensajes := []model.Mensaje{}
 	for rows.Next() {
 		var m model.Mensaje
 		if err := rows.Scan(

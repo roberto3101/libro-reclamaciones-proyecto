@@ -66,7 +66,7 @@ func (r *CanalWhatsAppRepo) GetByTenant(ctx context.Context, tenantID uuid.UUID)
 	}
 	defer rows.Close()
 
-	var canales []model.CanalWhatsApp
+	canales := []model.CanalWhatsApp{}
 	for rows.Next() {
 		c, err := scanCanalWA(rows)
 		if err != nil {

@@ -35,7 +35,7 @@ func (r *ChatbotAPIKeyRepo) GetByChatbot(ctx context.Context, tenantID, chatbotI
 	}
 	defer rows.Close()
 
-	var keys []model.APIKey
+	keys := []model.APIKey{}
 	for rows.Next() {
 		var k model.APIKey
 		if err := rows.Scan(

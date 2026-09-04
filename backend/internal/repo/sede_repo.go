@@ -214,7 +214,7 @@ func (r *SedeRepo) CountActivas(ctx context.Context, tenantID uuid.UUID) (int, e
 // ── Scanner ──
 
 func (r *SedeRepo) scanSedes(rows *sql.Rows) ([]model.Sede, error) {
-	var sedes []model.Sede
+	sedes := []model.Sede{}
 	for rows.Next() {
 		var s model.Sede
 		if err := rows.Scan(

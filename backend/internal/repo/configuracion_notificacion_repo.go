@@ -31,7 +31,7 @@ func (r *ConfiguracionNotificacionRepo) ObtenerPorRol(tenantID, rolID uuid.UUID)
 	}
 	defer rows.Close()
 
-	var configs []model.ConfiguracionNotificacionRol
+	configs := []model.ConfiguracionNotificacionRol{}
 	for rows.Next() {
 		var c model.ConfiguracionNotificacionRol
 		if err := rows.Scan(&c.TenantID, &c.ID, &c.RolID, &c.TipoNotificacion, &c.Habilitado); err != nil {
@@ -126,7 +126,7 @@ func (r *ConfiguracionNotificacionRepo) ObtenerUsuariosDestinatariosPorTipoNotif
 	}
 	defer rows.Close()
 
-	var usuarios []uuid.UUID
+	usuarios := []uuid.UUID{}
 	for rows.Next() {
 		var id uuid.UUID
 		if err := rows.Scan(&id); err != nil {

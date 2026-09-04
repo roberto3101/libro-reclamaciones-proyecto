@@ -283,7 +283,7 @@ func (r *ReclamoRepo) GetByCodigoPublico(ctx context.Context, tenantID uuid.UUID
 
 
 func (r *ReclamoRepo) scanReclamos(rows *sql.Rows) ([]model.Reclamo, error) {
-	var reclamos []model.Reclamo
+	reclamos := []model.Reclamo{}
 	for rows.Next() {
 		var rec model.Reclamo
 		if err := rows.Scan(
@@ -415,7 +415,7 @@ func (r *ReclamoRepo) ObtenerParaExportacion(ctx context.Context, filtros Filtro
 	}
 	defer rows.Close()
 
-	var reclamos []model.Reclamo
+	reclamos := []model.Reclamo{}
 	for rows.Next() {
 		var rec model.Reclamo
 		if err := rows.Scan(
