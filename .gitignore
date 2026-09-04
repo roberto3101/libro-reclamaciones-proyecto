@@ -39,3 +39,10 @@ Docs/Ejecucion_notificaciones_test.md
 # Logs
 logs/
 *.log
+
+# Archivos de credenciales personales.
+# GitHub bloqueó un push por encontrar tokens vivos aquí dentro. Los
+# archivos siguen en disco; simplemente no se versionan.
+SSH_GITHUB/
+docs/token*.md
+docs/token_*.md
