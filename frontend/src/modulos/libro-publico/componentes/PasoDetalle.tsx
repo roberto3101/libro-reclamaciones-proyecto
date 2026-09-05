@@ -46,6 +46,9 @@ export function PasoDetalle({ form, actualizar, alAnterior, alEnviar, enviando, 
     }
   };
 
+    /* Si no hay clave de sitio, no hay captcha que completar. */
+  const CAPTCHA_ACTIVO = Boolean(import.meta.env.VITE_TURNSTILE_SITE_KEY);
+
   const validarFecha = (fecha: dayjs.Dayjs | null): string | null => {
     if (!fecha || !fecha.isValid()) return null;
     if (fecha.isAfter(dayjs())) return 'La fecha no puede ser posterior a hoy';
@@ -120,7 +123,15 @@ export function PasoDetalle({ form, actualizar, alAnterior, alEnviar, enviando, 
         esValido = false;
     }
 
-    if (!form.turnstile_token) {
+    /* El captcha solo se exige si está configurado.
+
+       Sin clave de sitio, el widget de Turnstile nunca llega a emitir un
+       token, así que exigirlo dejaba el libro público inservible: el botón
+       de enviar no hacía nada y el aviso pedía revisar «los campos en
+       rojo», que no existían porque el que faltaba es invisible.
+
+       Con clave puesta, se sigue exigiendo igual que antes. */
+    if (CAPTCHA_ACTIVO && !form.turnstile_token) {
         nuevosErrores.turnstile_token = 'Completa la verificación de seguridad';
         esValido = false;
     }
@@ -259,13 +270,16 @@ export function PasoDetalle({ form, actualizar, alAnterior, alEnviar, enviando, 
             <ErrorTexto mensaje={errores.acepta_terminos} />
           </UiCaja>
 
-          {/* CAPTCHA Cloudflare Turnstile */}
-          <UiCaja sx={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', maxWidth: '100%' }}>
-            <Turnstile
-              siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
-              onSuccess={onTurnstileToken}
-            />
-          </UiCaja>
+          {/* Captcha de Cloudflare. Sin clave configurada no se pinta:
+              un recuadro que nunca carga solo confunde. */}
+          {CAPTCHA_ACTIVO && (
+            <UiCaja sx={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', maxWidth: '100%' }}>
+              <Turnstile
+                siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+                onSuccess={onTurnstileToken}
+              />
+            </UiCaja>
+          )}
 
           <UiPila direccion="fila" sx={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
             <UiBoton texto="Anterior" variante="contorno" alHacerClick={alAnterior} />
