@@ -1,6 +1,7 @@
 package router
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 
@@ -102,6 +103,14 @@ func RegisterRoutes(r *gin.Engine, cfg *config.Config, db *sql.DB, concentradorW
 	onboardingService := service.NewOnboardingService(db, planRepo, tenantRepo, sedeRepo, usuarioRepo, suscripcionRepo, rolRepo)
 	_ = controller.NewOnboardingController(onboardingService) // onboarding público eliminado, SA usa el servicio internamente
 
+	// --- Demostración pública ---
+	// Reutiliza el mismo alta que usa el SA: crea empresa, sede, usuario y
+	// roles de una vez. La diferencia es que los datos los inventa el
+	// sistema, la empresa cuelga de la cuenta de demos y caduca a las 48 h.
+	demoService := service.NewDemoService(db, onboardingService, cfg.JWT)
+	demoCtrl := controller.NewDemoController(demoService)
+	demoService.IniciarLimpiezaPeriodica(context.Background())
+
 	// --- SuperAdmin ---
 	saRepo := repo.NewSuperAdminRepo(db)
 	auditSARepo := repo.NewAuditoriaSARepo(db)
@@ -147,6 +156,7 @@ func RegisterRoutes(r *gin.Engine, cfg *config.Config, db *sql.DB, concentradorW
 	RegisterPublicRoutes(r, publicCtrl, limitadorConsultaDocumento)
 	// Onboarding público ELIMINADO — solo el SA crea empresas bajo cuentas
 	// RegisterOnboardingRoutes(r, onboardingCtrl)
+	RegisterDemoRoutes(r, demoCtrl)
 
 	// --- Rutas SuperAdmin (JWT de SA, sin tenant) ---
 	RegisterSuperAdminRoutes(r, saCtrl, saAuthMw)

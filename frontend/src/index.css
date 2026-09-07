@@ -1037,3 +1037,66 @@ select.lr-campo {
   line-height: 1.5;
   color: var(--ui-texto-2);
 }
+
+/* ── Acceso: separador y demostración ──────────────────────────────────
+   El botón de demo va debajo del de entrar, no encima: quien ya es cliente
+   viene a iniciar sesión, y ponerle delante una alternativa lo distrae.
+   Para el visitante nuevo, en cambio, es lo único que va a pulsar.       */
+
+.login-separador {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-e-3);
+  margin: var(--ui-e-5) 0 var(--ui-e-4);
+  color: var(--ui-texto-3);
+  font-size: var(--ui-t-xs);
+}
+
+.login-separador::before,
+.login-separador::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--ui-borde-sutil);
+}
+
+.login-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 16px;
+  border: 1px solid var(--ui-borde);
+  border-radius: var(--ui-r-md);
+  background: var(--ui-superficie);
+  color: var(--ui-texto);
+  font-family: inherit;
+  font-size: var(--ui-t-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--ui-trans-rapida), background-color var(--ui-trans-rapida);
+}
+
+.login-demo:hover:not(:disabled) {
+  border-color: var(--ui-borde-fuerte);
+  background: var(--ui-hover);
+}
+
+.login-demo:focus-visible {
+  outline: none;
+  border-color: var(--ui-foco);
+  box-shadow: 0 0 0 3px var(--ui-foco-halo);
+}
+
+.login-demo:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.login-demo-nota {
+  margin: 8px 0 0;
+  font-size: var(--ui-t-xs);
+  line-height: 1.45;
+  color: var(--ui-texto-3);
+}

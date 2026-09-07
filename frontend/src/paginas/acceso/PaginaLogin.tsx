@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { usarAuth } from '@/aplicacion/ganchos/usarAuth';
 import { usarEstadoAuth } from '@/aplicacion/estado/estadoAuth';
 import { usarTema } from '@/ui';
 import { AccesoRapidoDev } from '@/componentes/ui/AccesoRapidoDev';
+import { guardarSesion } from '@/aplicacion/helpers/sesion';
+import { http } from '@/api/http';
 
 /* ── Iconos SVG inline ── */
 const IconoCorreo = () => (
@@ -34,6 +36,46 @@ const IconoOjoCerrado = () => (
 );
 
 export default function PaginaLogin() {
+  const navegar = useNavigate();
+  const [entrandoDemo, setEntrandoDemo] = useState(false);
+
+  /* Entrar a la demostración.
+
+     El visitante que llega desde un anuncio no conoce la marca todavía, así
+     que pedirle RUC y contraseña antes de enseñarle nada es pedirle una
+     confianza que aún no tiene. Esto le crea una empresa desechable —con
+     sedes y reclamos dentro, porque un panel vacío no explica nada— y lo
+     mete directamente. */
+  const entrarDemo = async () => {
+    if (entrandoDemo) return;
+    setEntrandoDemo(true);
+    try {
+      const { data } = await http.post('/demo');
+      const d = data?.data;
+      if (!d?.token) throw new Error('respuesta sin sesión');
+
+      guardarSesion(d.token, {
+        id: '',
+        tenant_id: d.tenant_id,
+        tenant_slug: d.slug,
+        email: d.email,
+        nombre_completo: 'Administrador de la demostración',
+        rol: 'ADMIN',
+        sede_ids: [],
+        debe_cambiar_password: false,
+      });
+      // Recarga completa: así el estado de sesión se inicializa desde cero
+      // y no arrastra nada de una sesión anterior en la misma pestaña.
+      window.location.href = '/dashboard';
+    } catch {
+      setErrores((prev) => ({
+        ...prev,
+        general: 'No pudimos abrir la demostración. Intenta de nuevo en un momento.',
+      }));
+      setEntrandoDemo(false);
+    }
+  };
+
   const { autenticado } = usarEstadoAuth();
   const { iniciarSesion } = usarAuth();
   const { tema, alternarTema } = usarTema();
@@ -180,6 +222,23 @@ export default function PaginaLogin() {
             {cargando && <div className="login-spinner" />}
             {cargando ? 'Ingresando...' : 'Iniciar Sesión'}
           </button>
+
+          {/* Separador y demostración. Va después del acceso normal porque
+              quien ya es cliente viene a entrar, no a probar. */}
+          <div className="login-separador"><span>o</span></div>
+
+          <button
+            type="button"
+            onClick={entrarDemo}
+            disabled={entrandoDemo || cargando}
+            className="login-demo"
+          >
+            {entrandoDemo && <div className="login-spinner" />}
+            {entrandoDemo ? 'Preparando tu demostración…' : 'Probar sin registrarme'}
+          </button>
+          <p className="login-demo-nota">
+            Entras a un negocio de ejemplo con reclamos ya cargados. No pedimos datos.
+          </p>
 
           {/* ── Acceso rápido (solo desarrollo) ── */}
           <AccesoRapidoDev
