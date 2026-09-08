@@ -19,6 +19,7 @@ import { usarEstadoAuth } from '@/aplicacion/estado/estadoAuth';
 import { usarEstadoUI } from '@/aplicacion/estado/estadoUI';
 import { usarPermisos } from '@/aplicacion/ganchos/usarPermisos';
 import { usarTenant } from '@/modulos/tenant/ganchos/usarTenant';
+import { usarCapacidades, type Capacidades } from '@/aplicacion/ganchos/usarCapacidades';
 import { ModalSesionExpirada } from '@/componentes/ui/ModalSesionExpirada';
 
 import BannerTrial from '@/aplicacion/componentes/BannerTrial';
@@ -58,6 +59,8 @@ export default function LayoutPrincipal() {
     navegar('/acceso');
   };
 
+  const capacidades = usarCapacidades();
+
   const elementosMenu = useMemo(() => {
     // Helper: verificar si un item debe mostrarse según permisos
     const visible = (modulo?: string) => !modulo || tienePermiso(modulo, 'ver');
@@ -68,10 +71,14 @@ export default function LayoutPrincipal() {
       etiqueta: string,
       icono: React.ReactNode,
       ruta: string,
-      opciones?: { modulo?: string; externo?: boolean },
+      opciones?: { modulo?: string; externo?: boolean; capacidad?: keyof Capacidades },
     ) => {
-      const { modulo, externo } = opciones ?? {};
+      const { modulo, externo, capacidad } = opciones ?? {};
       if (!visible(modulo)) return null;
+      /* El plan puede incluir el módulo y el rol dar permiso, pero si este
+         servidor no lo tiene configurado sus rutas ni existen. Mostrarlo
+         solo llevaría al usuario a un 404 y a pensar que está roto. */
+      if (capacidad && !capacidades[capacidad]) return null;
       return {
         id,
         etiqueta,
@@ -113,14 +120,14 @@ export default function LayoutPrincipal() {
 
       // 3. IA (desplegable)
       crearGrupo('grupo-ia', 'Inteligencia Artificial', <UiIcono nombre="smart_toy" />, [
-        crearItem('asistente', 'Asistente IA', <UiIcono nombre="psychology" />, '/asistente', { modulo: 'asistente' }),
-        crearItem('chatbots', 'Chatbots', <UiIconoChat />, '/chatbots', { modulo: 'chatbots' }),
+        crearItem('asistente', 'Asistente IA', <UiIcono nombre="psychology" />, '/asistente', { modulo: 'asistente', capacidad: 'asistente' }),
+        crearItem('chatbots', 'Chatbots', <UiIconoChat />, '/chatbots', { modulo: 'chatbots', capacidad: 'chatbots' }),
       ]),
 
       // 4. Plantillas / Canales (desplegable)
       crearGrupo('grupo-canales', 'Canales', <UiIconoCorreo />, [
         crearItem('plantillas-email', 'Plantillas Email', <UiIconoCorreo />, '/plantillas-email', { modulo: 'plantillas_email' }),
-        crearItem('canales-whatsapp', 'WhatsApp', <UiIcono nombre="chat" />, '/canales-whatsapp', { modulo: 'canales_whatsapp' }),
+        crearItem('canales-whatsapp', 'WhatsApp', <UiIcono nombre="chat" />, '/canales-whatsapp', { modulo: 'canales_whatsapp', capacidad: 'whatsapp' }),
       ]),
 
       // 5. Organización (desplegable)
@@ -142,7 +149,7 @@ export default function LayoutPrincipal() {
     ];
 
     return menu.filter(Boolean) as Exclude<(typeof menu)[number], null>[];
-  }, [ubicacion.pathname, navegar, usuario, tienePermiso, barraLateralColapsada]);
+  }, [ubicacion.pathname, navegar, usuario, tienePermiso, barraLateralColapsada, capacidades]);
 
   return (
     <>

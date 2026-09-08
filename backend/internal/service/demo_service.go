@@ -59,6 +59,10 @@ func NewDemoService(db *sql.DB, onboarding *OnboardingService, jwt config.JWTCon
 type ResultadoDemo struct {
 	Token       string    `json:"token"`
 	TenantID    uuid.UUID `json:"tenant_id"`
+	// El navegador lo necesita para armar la sesión igual que en un login
+	// normal. Sin él, las pantallas que filtran por usuario —"Mis
+	// asignaciones", por ejemplo— no llegan ni a pedir datos.
+	UsuarioID   uuid.UUID `json:"usuario_id"`
 	Slug        string    `json:"slug"`
 	RazonSocial string    `json:"razon_social"`
 	Email       string    `json:"email"`
@@ -188,6 +192,7 @@ func (s *DemoService) Crear(ctx context.Context) (*ResultadoDemo, error) {
 	return &ResultadoDemo{
 		Token:       token,
 		TenantID:    res.TenantID,
+		UsuarioID:   res.Usuario.ID,
 		Slug:        res.Slug,
 		RazonSocial: negocio.Razon,
 		Email:       email,

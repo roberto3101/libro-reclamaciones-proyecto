@@ -103,6 +103,18 @@ func RegisterRoutes(r *gin.Engine, cfg *config.Config, db *sql.DB, concentradorW
 	onboardingService := service.NewOnboardingService(db, planRepo, tenantRepo, sedeRepo, usuarioRepo, suscripcionRepo, rolRepo)
 	_ = controller.NewOnboardingController(onboardingService) // onboarding público eliminado, SA usa el servicio internamente
 
+	// Qué módulos opcionales quedan realmente encendidos. Se va rellenando
+	// según se registran, y al final se publica para que el menú del panel
+	// no ofrezca lo que este servidor no tiene montado.
+	caps := Capacidades{
+		// El host no sirve para decidirlo: la configuración le pone
+		// smtp.gmail.com por defecto, así que nunca está vacío. Lo que
+		// determina si se puede enviar un correo son las credenciales.
+		Correo:   cfg.SMTP.User != "" && cfg.SMTP.Pass != "",
+		Adjuntos: cfg.Storage.APIURL != "",
+		Cobros:   cfg.Culqi.Enabled || cfg.MP.Enabled,
+	}
+
 	// --- Demostración pública ---
 	// Reutiliza el mismo alta que usa el SA: crea empresa, sede, usuario y
 	// roles de una vez. La diferencia es que los datos los inventa el
@@ -248,6 +260,7 @@ func RegisterRoutes(r *gin.Engine, cfg *config.Config, db *sql.DB, concentradorW
 		}
 		fmt.Printf("[INFO] WhatsApp webhook activo en /webhook/whatsapp (multi-tenant + IA: %s)\n", iaStatus)
 		fmt.Println("[INFO] WhatsApp config admin en /api/v1/canales/whatsapp")
+		caps.WhatsApp = true
 	}
 
 	// --- Asistente IA interno (panel admin) ---
@@ -289,4 +302,7 @@ func RegisterRoutes(r *gin.Engine, cfg *config.Config, db *sql.DB, concentradorW
 	} else {
 		fmt.Println("[INFO] Asistente IA desactivado (AI_PROVIDER no configurado)")
 	}
+
+	// Se publica al final, cuando ya se sabe qué quedó montado.
+	RegisterCapacidadesRoutes(r, caps, authMw)
 }

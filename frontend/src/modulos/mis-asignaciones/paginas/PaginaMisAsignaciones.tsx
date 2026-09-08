@@ -133,7 +133,10 @@ export default function PaginaMisAsignaciones() {
     : usuarioId;
 
   const cargarReclamos = useCallback(async () => {
-    if (!usuarioId) return;
+    // Sin usuario no hay nada que pedir, pero la carga debe apagarse
+    // igual: salir dejándola encendida deja la pantalla girando para
+    // siempre, y parece colgada.
+    if (!usuarioId) { setCargandoReclamos(false); return; }
     setCargandoReclamos(true);
     try {
       const respuesta = await misAsignacionesApi.obtenerReclamosAsignados(
@@ -149,7 +152,7 @@ export default function PaginaMisAsignaciones() {
   }, [usuarioId, idFiltroUsuario, paginaReclamos, filtroEstadoReclamo]);
 
   const cargarSolicitudes = useCallback(async () => {
-    if (!usuarioId) return;
+    if (!usuarioId) { setCargandoSolicitudes(false); return; }
     setCargandoSolicitudes(true);
     try {
       const respuesta = await misAsignacionesApi.obtenerSolicitudesAsignadas(

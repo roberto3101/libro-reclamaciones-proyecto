@@ -55,7 +55,7 @@ export default function PaginaLogin() {
       if (!d?.token) throw new Error('respuesta sin sesión');
 
       guardarSesion(d.token, {
-        id: '',
+        id: d.usuario_id,
         tenant_id: d.tenant_id,
         tenant_slug: d.slug,
         email: d.email,
